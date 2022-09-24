@@ -1,0 +1,26 @@
+plugins {
+    id "io.freefair.lombok" version "6.5.0.2" apply false
+    id 'org.springframework.boot' version '2.7.2' apply false
+    id "io.spring.dependency-management" version "1.0.12.RELEASE" apply false
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    group 'by.kovzov.uis'
+    version '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    ext {
+        junitVersion = '5.8.1'
+    }
+
+    dependencies {
+        testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    }
+}

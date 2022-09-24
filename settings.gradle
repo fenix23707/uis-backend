@@ -1,0 +1,6 @@
+rootProject.name = 'uis-backend'
+include 'uis-repository'
+include 'uis-service'
+include 'uis-api'
+include 'uis-domain'
+
