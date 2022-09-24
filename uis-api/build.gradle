@@ -4,10 +4,20 @@ plugins {
     id "io.spring.dependency-management"
 }
 
+ext {
+    swaggerVersion = '2.9.2'
+}
+
 dependencies {
     implementation project(':uis-domain')
+    implementation project(':uis-service')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 }
 
 test {
