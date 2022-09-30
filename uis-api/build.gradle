@@ -5,7 +5,7 @@ plugins {
 }
 
 ext {
-    swaggerVersion = '2.9.2'
+    openapiVersion = '1.6.11'
 }
 
 dependencies {
@@ -13,11 +13,13 @@ dependencies {
     implementation project(':uis-service')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
 
-    implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
-    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+    implementation "org.springdoc:springdoc-openapi-ui:${openapiVersion}"
+    implementation "org.springdoc:springdoc-openapi-data-rest:${openapiVersion}"
+    implementation "org.springdoc:springdoc-openapi-security:${openapiVersion}"
 }
 
 test {

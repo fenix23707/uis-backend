@@ -9,6 +9,7 @@ dependencies {
     implementation project(':uis-repository')
 
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 }
 
 test {
