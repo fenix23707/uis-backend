@@ -45,6 +45,7 @@ public class SecurityConfig {
             .authorizeRequests(auth -> auth
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)))

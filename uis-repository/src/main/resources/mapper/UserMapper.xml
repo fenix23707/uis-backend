@@ -2,17 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="by.kovzov.uis.repository.mybatis.mapper.UserMapper">
-    <select id="findByUsername" resultMap="user">
-        select id, username, password from users where username = #{username}
-    </select>
 
-    <select id="findById" resultMap="user">
-        select id, username, password from users where id = #{id}
-    </select>
-
-    <resultMap id="user" type="by.kovzov.uis.domain.model.user.User" >
+    <resultMap id="userResultMap" type="by.kovzov.uis.domain.model.user.User" >
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
+        <result column="status" property="status"/>
+        <collection property="roles" resultMap="userRoleResultMap" javaType="java.util.HashSet" column="user_id" ofType="by.kovzov.uis.domain.model.user.UserRole"/>
     </resultMap>
+    
+    <resultMap id="userRoleResultMap" type="by.kovzov.uis.domain.model.user.UserRole">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    
+    <sql id="userColumnList">
+        u.id, u.username, u.password, u.status
+    </sql>
+
+    <sql id="userRoleColumnList">
+        r.id, r.name
+    </sql>
+
+
+    <select id="findByUsername" resultMap="userResultMap">
+        select
+        <include refid="userColumnList"/>,
+        <include refid="userRoleColumnList"/>
+        from users u
+        left join users_roles ur on ur.user_id = u.id
+        left join roles r on ur.role_id = r.id
+        where username = #{username}
+    </select>
+
+    <select id="findById" resultMap="userResultMap">
+        select id, username, password from users where id = #{id}
+    </select>
 </mapper>

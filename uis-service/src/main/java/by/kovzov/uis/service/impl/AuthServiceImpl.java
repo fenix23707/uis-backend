@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private static final Set<UserRole> DEFAULT_ROLES = Set.of(new UserRole(1L, UserRoleName.ROLE_ADMIN)); //TODO use real default role
+    private static final Set<UserRole> DEFAULT_ROLES = Set.of(new UserRole(1L, UserRoleName.ADMIN)); //TODO use real default role
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;

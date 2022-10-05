@@ -7,14 +7,14 @@ create table users (
     primary key(id)
 );
 
-create table roles(
+create table roles (
     id serial,
     name varchar(30) unique not null,
 
     primary key(id)
 );
 
-create table users_roles(
+create table users_roles (
     user_id bigint,
     role_id int,
 
