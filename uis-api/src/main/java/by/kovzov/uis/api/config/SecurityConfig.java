@@ -51,7 +51,7 @@ public class SecurityConfig {
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .csrf().disable()
-            .cors().disable()//TODO: learn cors and crfs
+            .cors().and()//TODO: learn cors and crfs
             .httpBasic().disable()
             .exceptionHandling((exceptions) -> exceptions
                 .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())

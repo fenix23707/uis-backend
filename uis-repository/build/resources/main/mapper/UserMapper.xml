@@ -38,6 +38,4 @@
     <select id="findById" resultMap="userResultMap">
         select id, username, password from users where id = #{id}
     </select>
-
-
 </mapper>
