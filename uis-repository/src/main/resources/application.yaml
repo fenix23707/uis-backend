@@ -15,12 +15,13 @@ spring:
 
 
 mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  configuration:
-    cache-enabled: true
-    default-statement-timeout: 3000
-    map-underscore-to-camel-case: true
-    use-generated-keys: true
+  config-location: classpath:mybatis-config.xml
+#  mapper-locations: classpath:mapper/*.xml
+#  configuration:
+#    cache-enabled: true
+#    default-statement-timeout: 3000
+#    map-underscore-to-camel-case: true
+#    use-generated-keys: true
 
 #  type-handlers-package: io.spring.infrastructure.mybatis
 

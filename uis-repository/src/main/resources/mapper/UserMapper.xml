@@ -3,12 +3,12 @@
 
 <mapper namespace="by.kovzov.uis.repository.mybatis.mapper.UserMapper">
 
-    <resultMap id="userResultMap" type="by.kovzov.uis.domain.model.user.User" >
+    <resultMap id="userResultMap" type="User" >
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
         <result column="status" property="status"/>
-        <collection property="roles" resultMap="userRoleResultMap" javaType="java.util.HashSet" column="user_id" ofType="by.kovzov.uis.domain.model.user.UserRole"/>
+        <collection property="roles" resultMap="userRoleResultMap" javaType="java.util.HashSet" column="user_id" ofType="userRole"/>
     </resultMap>
     
     <resultMap id="userRoleResultMap" type="by.kovzov.uis.domain.model.user.UserRole">
@@ -24,18 +24,44 @@
         r.id, r.name
     </sql>
 
-
-    <select id="findByUsername" resultMap="userResultMap">
+    <sql id="selectUserSql">
         select
         <include refid="userColumnList"/>,
         <include refid="userRoleColumnList"/>
         from users u
         left join users_roles ur on ur.user_id = u.id
         left join roles r on ur.role_id = r.id
+    </sql>
+
+    <select id="findByUsername" resultMap="userResultMap">
+        <include refid="selectUserSql"/>
         where username = #{username}
     </select>
 
     <select id="findById" resultMap="userResultMap">
-        select id, username, password from users where id = #{id}
+        <include refid="selectUserSql"/>
+        where u.id = #{id}
     </select>
+
+    <insert id="insert" parameterType="User" keyProperty="id" useGeneratedKeys="true">
+        insert into users (
+            username,
+            password,
+            status
+        ) values (
+            #{username},
+            #{password},
+            #{status}
+        )
+    </insert>
+
+    <insert id="insertUserRoles" parameterType="java.util.HashSet">
+        insert into users_roles (
+            user_id, role_id
+        ) values
+        <foreach collection="roles" item="role" open="(" separator="),(" close=")">
+            #{userId},
+            #{role.id}
+        </foreach>
+    </insert>
 </mapper>

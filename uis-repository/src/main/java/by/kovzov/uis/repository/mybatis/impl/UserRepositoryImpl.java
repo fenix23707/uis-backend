@@ -1,6 +1,7 @@
 package by.kovzov.uis.repository.mybatis.impl;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,7 +27,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public Long create(User user) {
-        return null;
+        userMapper.insert(user);
+        userMapper.insertUserRoles(user.getId(), user.getRoles());
+        return user.getId();
     }
 }

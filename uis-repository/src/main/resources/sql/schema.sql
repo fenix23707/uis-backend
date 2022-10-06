@@ -1,7 +1,7 @@
 create table users (
     id bigserial,
     username varchar(80) unique not null,
-    password varchar(100) not null,
+    password varchar(120) not null,
     status varchar(30),
 
     primary key(id)

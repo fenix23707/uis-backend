@@ -37,7 +37,7 @@ public class UserSecurity implements UserDetails {
 
     private static Collection<GrantedAuthority> mapToAuthorities(Collection<UserRole> roles) {
         return roles.stream()
-            .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
             .collect(Collectors.toList());
     }
 
