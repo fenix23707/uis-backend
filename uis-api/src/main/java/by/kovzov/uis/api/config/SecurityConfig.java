@@ -29,6 +29,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import by.kovzov.uis.api.security.JwtToUserConverter;
 import by.kovzov.uis.api.security.RsaKeyProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -51,13 +56,23 @@ public class SecurityConfig {
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter)))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .csrf().disable()
-            .cors().and()//TODO: learn cors and crfs
+            .cors().and()
             .httpBasic().disable()
             .exceptionHandling((exceptions) -> exceptions
                 .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                 .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
             )
             .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
