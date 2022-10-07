@@ -89,12 +89,12 @@ public class SecurityConfig {
         return new NimbusJwtEncoder(jwkSource);
     }
 
-    @Bean(name = "jwtRefreshTokenDecoder")
+    @Bean
     public JwtDecoder jwtRefreshTokenDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.refreshTokenPublicKey()).build();
     }
 
-    @Bean(name = "jwtRefreshTokenEncoder")
+    @Bean
     public JwtEncoder jwtRefreshTokenEncoder() {
         JWK jwk = new RSAKey.Builder(rsaKeys.refreshTokenPublicKey()).privateKey(rsaKeys.refreshTokenPrivateKey()).build();
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
@@ -102,8 +102,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationProvider jwtAuthenticationProvider() {
-        JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtAccessTokenDecoder());
+    public JwtAuthenticationProvider jwtRefreshTokenAuthProvider() {
+        JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder());
         provider.setJwtAuthenticationConverter(jwtToUserConverter);
         return provider;
     }
