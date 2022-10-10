@@ -1,7 +1,4 @@
-package by.kovzov.uis.domain.exception;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+package by.kovzov.uis.service.exception;
 
 import java.text.MessageFormat;
 
