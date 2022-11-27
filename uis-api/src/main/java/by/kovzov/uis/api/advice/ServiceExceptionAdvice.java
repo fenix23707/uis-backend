@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import by.kovzov.uis.domain.dto.ApiErrorMessageDto;
+import by.kovzov.uis.domain.dto.error.ApiErrorMessageDto;
 import by.kovzov.uis.service.exception.ServiceException;
 
 @RestControllerAdvice

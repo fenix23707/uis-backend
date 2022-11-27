@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import by.kovzov.uis.domain.entity.User;
+import by.kovzov.uis.service.exception.ServiceException;
 import by.kovzov.uis.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +17,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserSecurity loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userServiceImpl.getByUsername(username);
-        return UserSecurity.from(user);
+        try {
+            User user = userServiceImpl.getByUsername(username);
+            return UserSecurity.from(user);
+        } catch (ServiceException e) {
+            throw new UsernameNotFoundException(e.getReason());
+        }
     }
 }
