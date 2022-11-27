@@ -2,9 +2,10 @@ package by.kovzov.uis.domain.dto.request;
 
 import javax.validation.constraints.NotBlank;
 
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class LoginRequest {
 
     @NotBlank(message = "${validation.error.empty}")

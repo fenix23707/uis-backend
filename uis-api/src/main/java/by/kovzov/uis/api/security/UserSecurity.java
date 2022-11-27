@@ -4,12 +4,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import by.kovzov.uis.domain.model.user.User;
-import by.kovzov.uis.domain.model.user.UserRole;
-import by.kovzov.uis.domain.model.user.UserStatus;
+import by.kovzov.uis.domain.entity.User;
+import by.kovzov.uis.domain.entity.UserRole;
+import by.kovzov.uis.domain.entity.UserStatus;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -37,7 +38,11 @@ public class UserSecurity implements UserDetails {
 
     private static Collection<GrantedAuthority> mapToAuthorities(Collection<UserRole> roles) {
         return roles.stream()
-            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
+            .map(UserRole::getPermissions)
+            .flatMap(Collection::stream)
+            .distinct()
+            .map(permission -> MessageFormat.format("{0}_{1}", permission.getScope(), permission.getAction()))
+            .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
 

@@ -10,24 +10,15 @@ spring:
         path: /h2
   sql:
     init:
+      mode: always
       schema-locations: classpath:sql/schema.sql
       data-locations: classpath:sql/data.sql
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
 
 
-mybatis:
-  config-location: classpath:mybatis-config.xml
-#  mapper-locations: classpath:mapper/*.xml
-#  configuration:
-#    cache-enabled: true
-#    default-statement-timeout: 3000
-#    map-underscore-to-camel-case: true
-#    use-generated-keys: true
 
-#  type-handlers-package: io.spring.infrastructure.mybatis
-
-logging:
-  level:
-    com:
-      spring:
-        ibatis: DEBUG
 
