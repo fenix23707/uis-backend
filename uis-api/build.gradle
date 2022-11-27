@@ -6,6 +6,7 @@ plugins {
 
 ext {
     openapiVersion = '1.6.11'
+    commonsLangVersion = '3.12.0'
 }
 
 dependencies {
@@ -20,6 +21,8 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-ui:${openapiVersion}"
     implementation "org.springdoc:springdoc-openapi-data-rest:${openapiVersion}"
     implementation "org.springdoc:springdoc-openapi-security:${openapiVersion}"
+
+    implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
 }
 
 test {

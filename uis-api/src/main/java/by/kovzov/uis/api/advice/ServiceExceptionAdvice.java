@@ -1,15 +1,15 @@
-package by.kovzov.uis.api.handler;
+package by.kovzov.uis.api.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import by.kovzov.uis.domain.dto.response.ApiErrorResponse;
+import by.kovzov.uis.domain.dto.ApiErrorMessageDto;
 import by.kovzov.uis.service.exception.ServiceException;
 
 @RestControllerAdvice
-public class ServiceExceptionHandler {
+public class ServiceExceptionAdvice {
 
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<?> serviceExceptionHandler(ServiceException e) {
@@ -17,7 +17,7 @@ public class ServiceExceptionHandler {
     }
 
     private ResponseEntity<?> buildResponseEntity(ServiceException e, HttpStatus status) {
-        ApiErrorResponse response = ApiErrorResponse.builder()
+        ApiErrorMessageDto response = ApiErrorMessageDto.builder()
             .reason(e.getReason())
             .status(status.getReasonPhrase())
             .description(e.getMessage())

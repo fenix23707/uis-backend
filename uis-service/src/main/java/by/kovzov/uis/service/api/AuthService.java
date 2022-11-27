@@ -1,9 +1,9 @@
 package by.kovzov.uis.service.api;
 
-import by.kovzov.uis.domain.dto.request.SignupRequest;
+import by.kovzov.uis.domain.dto.auth.SignupDto;
 import by.kovzov.uis.domain.entity.User;
 
 public interface AuthService {
 
-    User signup(SignupRequest signupRequest);
+    User signup(SignupDto signupDto);
 }

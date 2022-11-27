@@ -3,7 +3,7 @@ package by.kovzov.uis.service.impl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import by.kovzov.uis.domain.dto.request.SignupRequest;
+import by.kovzov.uis.domain.dto.auth.SignupDto;
 import by.kovzov.uis.domain.entity.User;
 import by.kovzov.uis.domain.entity.UserStatus;
 import by.kovzov.uis.service.api.AuthService;
@@ -18,11 +18,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User signup(SignupRequest signupRequest) {
+    public User signup(SignupDto signupDto) {
         User user = new User();
-        user.setUsername(signupRequest.getUsername());
+        user.setUsername(signupDto.getUsername());
         user.setStatus(UserStatus.ACTIVE);
-        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        user.setPassword(passwordEncoder.encode(signupDto.getPassword()));
         userService.create(user);
         return user;
     }

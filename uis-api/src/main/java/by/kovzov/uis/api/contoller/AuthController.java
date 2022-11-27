@@ -15,9 +15,9 @@ import javax.validation.Valid;
 
 import by.kovzov.uis.api.security.TokenService;
 import by.kovzov.uis.api.security.UserSecurity;
-import by.kovzov.uis.domain.dto.request.LoginRequest;
-import by.kovzov.uis.domain.dto.request.RefreshTokenRequest;
-import by.kovzov.uis.domain.dto.request.SignupRequest;
+import by.kovzov.uis.domain.dto.auth.LoginDto;
+import by.kovzov.uis.domain.dto.auth.RefreshTokenDto;
+import by.kovzov.uis.domain.dto.auth.SignupDto;
 import by.kovzov.uis.service.api.AuthService;
 import lombok.RequiredArgsConstructor;
 
@@ -32,25 +32,25 @@ public class AuthController {
     private final JwtAuthenticationProvider jwtRefreshTokenAuthProvider;
 
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody SignupRequest signupRequest) {
-        UserSecurity user = UserSecurity.from(authService.signup(signupRequest));
+    public ResponseEntity signup(@RequestBody SignupDto signupDto) {
+        UserSecurity user = UserSecurity.from(authService.signup(signupDto));
         Authentication authentication = UsernamePasswordAuthenticationToken
-            .authenticated(user, signupRequest.getPassword(), user.getAuthorities());
+            .authenticated(user, signupDto.getPassword(), user.getAuthorities());
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity login(@Valid @RequestBody LoginDto loginDto) {
         Authentication authentication = daoAuthenticationProvider.authenticate(
-            UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getUsername(), loginRequest.getPassword()));
+            UsernamePasswordAuthenticationToken.unauthenticated(loginDto.getUsername(), loginDto.getPassword()));
 
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity refresh(@RequestBody RefreshTokenDto refreshTokenDto) {
         Authentication authentication =
-            jwtRefreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshTokenRequest.getRefreshToken()));
+            jwtRefreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshTokenDto.getRefreshToken()));
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 }

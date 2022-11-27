@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import by.kovzov.uis.domain.dto.response.JwtAuthenticationResponse;
+import by.kovzov.uis.domain.dto.auth.JwtAuthenticationDto;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,12 +26,12 @@ public class TokenServiceImpl implements TokenService{
     private final JwtEncoder refreshTokenEncoder;
 
     @Override
-    public JwtAuthenticationResponse createToken(Authentication authentication) {
+    public JwtAuthenticationDto createToken(Authentication authentication) {
         if (!(authentication.getPrincipal() instanceof UserSecurity userSecurity)) {
             throw new BadCredentialsException(
                 MessageFormat.format("Principal {0} is not of UserSecurity type", authentication.getPrincipal().getClass()));
         }
-        return JwtAuthenticationResponse.builder()
+        return JwtAuthenticationDto.builder()
             .id(userSecurity.getId())
             .accessToken(createAccessToken(authentication))
             .refreshToken(updateRefreshToken(authentication))
