@@ -1,7 +1,6 @@
 package by.kovzov.uis.domain.dto.auth;
 
-import javax.validation.constraints.NotBlank;
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
