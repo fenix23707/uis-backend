@@ -1,8 +1,9 @@
---drop table roles_permissions;
---drop table users_roles;
---drop table permissions;
---drop table users;
---drop table roles;
+drop table IF EXISTS roles_permissions;
+drop table IF EXISTS users_roles;
+drop table IF EXISTS permissions;
+drop table IF EXISTS users;
+drop table IF EXISTS roles;
+drop table if exists specializations;
 
 create table permissions (
     id serial,
@@ -46,3 +47,20 @@ create table users_roles (
     foreign key (user_id) references users (id) on delete cascade on update cascade,
     foreign key (role_id) references roles (id) on delete cascade on update cascade
 );
+
+create table specializations (
+    id bigserial,
+    name varchar(100) not null unique,
+    short_name varchar(50) not null unique,
+    cipher varchar(100) not null,
+    parent_id bigint null,
+
+    primary key (id),
+    foreign key (parent_id) references specializations (id) on delete cascade on update cascade
+);
+
+-- sequence
+
+drop sequence if exists specializations_seq;
+
+--create sequence specializations_seq start 1 increment 50;
