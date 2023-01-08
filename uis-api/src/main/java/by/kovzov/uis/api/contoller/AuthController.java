@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 
 import by.kovzov.uis.api.security.TokenService;
 import by.kovzov.uis.api.security.UserSecurity;
@@ -19,6 +18,7 @@ import by.kovzov.uis.domain.dto.auth.LoginDto;
 import by.kovzov.uis.domain.dto.auth.RefreshTokenDto;
 import by.kovzov.uis.domain.dto.auth.SignupDto;
 import by.kovzov.uis.service.api.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
