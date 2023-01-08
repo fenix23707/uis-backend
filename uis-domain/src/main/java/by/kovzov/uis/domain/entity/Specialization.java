@@ -43,3 +43,4 @@ public class Specialization {
     @JsonIgnore
     private Set<Specialization> children;
 }
+
