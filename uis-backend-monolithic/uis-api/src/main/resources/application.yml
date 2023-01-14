@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: dev
+
+jwt:
+  access-token-private-key: ${ACCESS_TOKEN_PRIVATE_KEY_PATH}
+  access-token-public-key:  ${ACCESS_TOKEN_PUBLIC_KEY_PATH}
+  refresh-token-private-key: ${REFRESH_TOKEN_PRIVATE_KEY_PATH}
+  refresh-token-public-key: ${REFRESH_TOKEN_PUBLIC_KEY_PATH}
+
+springdoc:
+  show-login-endpoint: true
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+server:
+  port: 8080
