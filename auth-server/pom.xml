@@ -6,10 +6,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>auth-server-domain</module>
-        <module>auth-server-rest</module>
-        <module>auth-server-service</module>
-        <module>auth-server-repository</module>
+        <module>security-server-domain</module>
+        <module>security-server-rest</module>
+        <module>security-server-service</module>
+        <module>security-server-repository</module>
     </modules>
 
     <parent>
@@ -19,10 +19,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>by.kovzov.uis.auth</groupId>
-    <artifactId>auth-server</artifactId>
+    <groupId>by.kovzov.uis.security</groupId>
+    <artifactId>security-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>auth-server</name>
+    <name>security-server</name>
 
     <properties>
         <java.version>17</java.version>
