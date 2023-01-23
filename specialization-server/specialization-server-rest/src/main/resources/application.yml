@@ -18,4 +18,4 @@ logging:
     org.springframework.security: DEBUG
 
 server:
-  port: 8081
+  port: 8080

@@ -4,11 +4,11 @@ spring:
 #    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver  # TODO user real db
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:root}
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:sql/schema.sql
-      data-locations: classpath:sql/data.sql
+#  sql:
+#    init:
+#      mode: always
+#      schema-locations: classpath:sql/schema.sql
+#      data-locations: classpath:sql/data.sql
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true

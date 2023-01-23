@@ -1,4 +1,4 @@
-package by.kovzov.uis.security;
+package by.kovzov.uis.security.rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
