@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: gateway-server
+
+  cloud:
+    gateway:
+      routes:
+        - id: specialization-server
+          uri: ${SPECIALIZATION_SERVER_URL:localhost:8082}
+          predicates:
+            - Path=/api/specializations/**
