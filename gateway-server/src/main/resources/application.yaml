@@ -6,6 +6,11 @@ spring:
     gateway:
       routes:
         - id: specialization-server
-          uri: ${SPECIALIZATION_SERVER_URL:localhost:8082}
+          uri: ${SPECIALIZATION_SERVER_URL:http://localhost:8082}/
           predicates:
             - Path=/api/specializations/**
+
+logging:
+  level:
+    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: TRACE
+    org.springframework.cloud.gateway: INFO
