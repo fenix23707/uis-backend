@@ -24,6 +24,16 @@ services:
     depends_on:
       - postgres-uis
 
+  gateway-server:
+    container_name: gateway-server
+    image: fenix23707/gateway-server:latest
+    environment:
+      - SPECIALIZATION_SERVER_URL=http://specialization-server:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-uis
+
   postgres-uis:
     container_name: postgres-order
     image: postgres:15
