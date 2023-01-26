@@ -24,19 +24,8 @@
         </dependency>
 
         <dependency>
-            <groupId>by.kovzov.uis.auth</groupId> <!--TODO: remove-->
-            <artifactId>auth-server-rest</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <!--<exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>-->
-               <!-- <exclusion>
-                    <groupId>by.kovzov.uis.auth</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>-->
-            </exclusions>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
