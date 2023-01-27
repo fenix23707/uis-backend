@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>by.kovzov.uis.specialization</groupId>
-            <artifactId>specialization-server-domain</artifactId>
+            <artifactId>specialization-server-dto</artifactId>
             <version>${project.version}</version>
         </dependency>
 
