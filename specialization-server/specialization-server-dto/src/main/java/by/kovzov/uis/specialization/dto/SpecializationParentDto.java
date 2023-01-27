@@ -1,4 +1,4 @@
-package by.kovzov.uis.specialization.domain.dto;
+package by.kovzov.uis.specialization.dto;
 
 import lombok.Builder;
 import lombok.Value;

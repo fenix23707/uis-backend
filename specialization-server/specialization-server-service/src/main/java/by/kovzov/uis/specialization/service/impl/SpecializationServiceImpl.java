@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.kovzov.uis.specialization.domain.dto.SpecializationParentDto;
+import by.kovzov.uis.specialization.dto.SpecializationParentDto;
 import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
 import by.kovzov.uis.specialization.service.api.SpecializationService;
 import by.kovzov.uis.specialization.service.mapper.SpecializationMapper;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import by.kovzov.uis.specialization.domain.dto.SpecializationParentDto;
+import by.kovzov.uis.specialization.dto.SpecializationParentDto;
 import by.kovzov.uis.specialization.service.api.SpecializationService;
 import lombok.AllArgsConstructor;
 

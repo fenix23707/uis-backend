@@ -3,7 +3,7 @@ package by.kovzov.uis.specialization.service.api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import by.kovzov.uis.specialization.domain.dto.SpecializationParentDto;
+import by.kovzov.uis.specialization.dto.SpecializationParentDto;
 
 public interface SpecializationService {
 
