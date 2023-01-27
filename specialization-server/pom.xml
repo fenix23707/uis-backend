@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>specialization-server-domain</module>
+        <module>specialization-server-dto</module>
         <module>specialization-server-repository</module>
         <module>specialization-server-service</module>
         <module>specialization-server-rest</module>
