@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-import by.kovzov.uis.specialization.domain.entity.Specialization;
+import by.kovzov.uis.specialization.repository.entity.Specialization;
 
 public interface SpecializationRepository extends JpaRepository<Specialization, Long> {
 
@@ -16,4 +16,6 @@ public interface SpecializationRepository extends JpaRepository<Specialization, 
 
     @Query("from Specialization s where s.parent.id is null")
     Page<Specialization> findAllParents(Pageable pageable);
+
+    long countByParentId(Long parentId);
 }

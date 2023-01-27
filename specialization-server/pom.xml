@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>specialization-server-domain</module>
+        <module>specialization-server-dto</module>
         <module>specialization-server-repository</module>
         <module>specialization-server-service</module>
         <module>specialization-server-rest</module>
@@ -25,6 +25,7 @@
         <java.version>17</java.version>
         <springdoc-openapi.version>1.6.11</springdoc-openapi.version>
         <jackson.version>2.14.1</jackson.version>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
         <testcontainers.version>1.17.6</testcontainers.version>
     </properties>
 
@@ -41,6 +42,18 @@
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>

@@ -1,10 +1,11 @@
 package by.kovzov.uis.specialization.service.api;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import by.kovzov.uis.specialization.domain.dto.pageable.SpecializationPageableDto;
+import by.kovzov.uis.specialization.dto.SpecializationParentDto;
 
 public interface SpecializationService {
 
-    SpecializationPageableDto getAllParents(Pageable pageable);
+    Page<SpecializationParentDto> getAllParents(Pageable pageable);
 }

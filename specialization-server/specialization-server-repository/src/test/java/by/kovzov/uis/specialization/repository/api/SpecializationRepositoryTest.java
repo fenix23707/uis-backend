@@ -14,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Collections;
 import java.util.List;
 
-import by.kovzov.uis.specialization.domain.entity.Specialization;
+import by.kovzov.uis.specialization.repository.entity.Specialization;
 import by.kovzov.uis.specialization.repository.AbstractIntegrationRepositoryTest;
 
 @DataJpaTest
