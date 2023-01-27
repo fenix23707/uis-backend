@@ -1,4 +1,4 @@
-package by.kovzov.uis.specialization.domain.entity;
+package by.kovzov.uis.specialization.repository.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
