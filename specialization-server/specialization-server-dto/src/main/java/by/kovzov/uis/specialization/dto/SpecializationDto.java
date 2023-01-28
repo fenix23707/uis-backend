@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder(toBuilder = true)
-public class SpecializationParentDto {
+public class SpecializationDto {
     Long id;
     String name;
     String shortName;

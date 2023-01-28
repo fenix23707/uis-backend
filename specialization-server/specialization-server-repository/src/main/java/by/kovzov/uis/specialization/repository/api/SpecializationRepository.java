@@ -14,12 +14,13 @@ import by.kovzov.uis.specialization.repository.entity.Specialization;
 
 public interface SpecializationRepository extends JpaRepository<Specialization, Long> {
 
-    List<Specialization> findAllChildrenByParentId(Long parentId);
-
     @Query("select s.id from Specialization s where s.parent.id is null")
     Page<Long> findAllParentIds(Pageable pageable);
 
     @Query("from Specialization s where s.id in :ids")
     @EntityGraph(attributePaths = "children")
-    List<Specialization> findAllWithChildrenByIds(Set<Long> ids, Sort sort);
+    List<Specialization> findAllByIds(Set<Long> ids, Sort sort);
+
+    @EntityGraph(attributePaths = "children")
+    Set<Specialization> findAllChildrenByParentId(Long parentId, Sort sort);
 }
