@@ -1,7 +1,9 @@
 package by.kovzov.uis.specialization.service.impl;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,9 +34,13 @@ public class SpecializationServiceImpl implements SpecializationService {
                 .build();
         };
 
-        Page<Long> parentIds = specializationRepository.findAllParentIds(pageable);
-        List<Specialization> content = specializationRepository.findAllWithChildrenByIds(parentIds.toSet());
+        Page<Long> parentIds = specializationRepository.findAllParentIds(pageableWithoutSort(pageable));
+        List<Specialization> content = specializationRepository.findAllWithChildrenByIds(parentIds.toSet(), pageable.getSort());
         return PageableExecutionUtils.getPage(content, pageable, () -> parentIds.getTotalElements())
             .map(mapToParentDto);
+    }
+
+    private Pageable pageableWithoutSort(Pageable pageable) {
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.unsorted());
     }
 }

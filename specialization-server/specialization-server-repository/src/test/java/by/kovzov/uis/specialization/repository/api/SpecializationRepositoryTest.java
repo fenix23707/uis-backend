@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -78,8 +79,9 @@ class SpecializationRepositoryTest extends AbstractIntegrationRepositoryTest {
         Pageable pageable = Pageable.ofSize(SPECIALIZATIONS_PARENTS_COUNT);
 
         Set<Long> ids = specializationRepository.findAllParentIds(pageable).toSet();
-        List<Specialization> parentsWithChildren = specializationRepository.findAllWithChildrenByIds(ids);
+        List<Specialization> parentsWithChildren = specializationRepository.findAllWithChildrenByIds(ids, Sort.unsorted());
 
+        assertEquals(ids.size(), parentsWithChildren.size());
         assertEquals(SPECIALIZATIONS_PARENTS_COUNT, parentsWithChildren.size());
         parentsWithChildren.forEach(this::verifySpecialization);
         Set<Specialization> children = parentsWithChildren.stream()
