@@ -2,25 +2,36 @@ package by.kovzov.uis.specialization.repository.api;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import by.kovzov.uis.specialization.repository.entity.Specialization;
 import by.kovzov.uis.specialization.repository.AbstractIntegrationRepositoryTest;
+import by.kovzov.uis.specialization.repository.entity.Specialization;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class SpecializationRepositoryTest extends AbstractIntegrationRepositoryTest {
-    private static final int SPECIALIZATIONS_COUNT = 5;
+    private static final int SPECIALIZATIONS_COUNT = 11;
+    private static final int SPECIALIZATIONS_PARENTS_COUNT = 3;
     private static final Long PARENT_ID = 1L;
 
     @Autowired
@@ -45,6 +56,43 @@ class SpecializationRepositoryTest extends AbstractIntegrationRepositoryTest {
             assertEquals(PARENT_ID, child.getParent().getId());
             verifyChildSpecialization(child);
         });
+    }
+
+    @Test
+    void testFindPageableAllParentIds() {
+        int size = 2;
+        int pageNumber = 0;
+        Pageable pageable = PageRequest.of(pageNumber, size);
+
+        Page<Long> page = specializationRepository.findAllParentIds(pageable);
+
+        assertEquals(size ,page.getContent().size());
+        assertEquals(SPECIALIZATIONS_PARENTS_COUNT ,page.getTotalElements());
+        assertEquals(SPECIALIZATIONS_PARENTS_COUNT / size + 1, page.getTotalPages());
+        assertEquals(pageNumber , page.getNumber());
+        assertTrue(page.isFirst());
+        assertFalse(page.isEmpty());
+    }
+
+    @Test
+    void testFindAllParentsWithChildren() {
+        Pageable pageable = Pageable.ofSize(SPECIALIZATIONS_PARENTS_COUNT);
+
+        Set<Long> ids = specializationRepository.findAllParentIds(pageable).toSet();
+        List<Specialization> parentsWithChildren = specializationRepository.findAllWithChildrenByIds(ids, Sort.unsorted());
+
+        assertEquals(ids.size(), parentsWithChildren.size());
+        assertEquals(SPECIALIZATIONS_PARENTS_COUNT, parentsWithChildren.size());
+        parentsWithChildren.forEach(this::verifySpecialization);
+        Set<Specialization> children = parentsWithChildren.stream()
+            .map(Specialization::getChildren)
+            .filter(specializationChildren -> !specializationChildren.isEmpty())
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
+        children.stream()
+            .peek(this::verifySpecialization)
+            .map(Specialization::getId)
+            .forEach(Assertions::assertNotNull);
     }
 
     @Test
