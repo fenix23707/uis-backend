@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: master-pull-request-security-server-pipeline
+name: security-server-master-pull-request-pipeline
 
 on:
   pull_request:
