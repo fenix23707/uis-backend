@@ -21,3 +21,4 @@
 2. ``mvn spring-boot:run``
 
 To test that it works, open a browser at http://localhost:8080/swagger-ui/index.html .
+
