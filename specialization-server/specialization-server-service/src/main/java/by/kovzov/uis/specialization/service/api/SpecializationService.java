@@ -2,10 +2,15 @@ package by.kovzov.uis.specialization.service.api;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
-import by.kovzov.uis.specialization.dto.SpecializationParentDto;
+import java.util.List;
+
+import by.kovzov.uis.specialization.dto.SpecializationDto;
 
 public interface SpecializationService {
 
-    Page<SpecializationParentDto> getAllParents(Pageable pageable);
+    Page<SpecializationDto> getAllParents(Pageable pageable);
+
+    List<SpecializationDto> getAllChildrenByParentId(Long id, Sort sort);
 }

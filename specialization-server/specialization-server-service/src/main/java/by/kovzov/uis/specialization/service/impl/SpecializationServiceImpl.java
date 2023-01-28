@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import by.kovzov.uis.specialization.dto.SpecializationParentDto;
+import by.kovzov.uis.specialization.dto.SpecializationDto;
 import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
 import by.kovzov.uis.specialization.repository.entity.Specialization;
 import by.kovzov.uis.specialization.service.api.SpecializationService;
@@ -27,17 +27,26 @@ public class SpecializationServiceImpl implements SpecializationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<SpecializationParentDto> getAllParents(Pageable pageable) {
-        Function<Specialization, SpecializationParentDto> mapToParentDto = entity -> {
-            return specializationMapper.toParentDto(entity).toBuilder()
-                .hasChildren(!entity.getChildren().isEmpty())
-                .build();
-        };
-
-        Page<Long> parentIds = specializationRepository.findAllParentIds(pageableWithoutSort(pageable));
-        List<Specialization> content = specializationRepository.findAllWithChildrenByIds(parentIds.toSet(), pageable.getSort());
+    public Page<SpecializationDto> getAllParents(Pageable pageable) {
+                Page<Long> parentIds = specializationRepository.findAllParentIds(pageableWithoutSort(pageable));
+        List<Specialization> content = specializationRepository.findAllByIds(parentIds.toSet(), pageable.getSort());
         return PageableExecutionUtils.getPage(content, pageable, () -> parentIds.getTotalElements())
-            .map(mapToParentDto);
+            .map(this::mapToParentDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SpecializationDto> getAllChildrenByParentId(Long parentId, Sort sort) {
+        // TODO add check if parent with id exists
+        return specializationRepository.findAllChildrenByParentId(parentId, sort).stream()
+            .map(this::mapToParentDto)
+            .collect(Collectors.toList());
+    }
+
+    private SpecializationDto mapToParentDto(Specialization entity) {
+        return specializationMapper.toParentDto(entity).toBuilder()
+            .hasChildren(!entity.getChildren().isEmpty())
+            .build();
     }
 
     private Pageable pageableWithoutSort(Pageable pageable) {

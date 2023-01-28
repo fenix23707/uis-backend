@@ -79,7 +79,7 @@ class SpecializationRepositoryTest extends AbstractIntegrationRepositoryTest {
         Pageable pageable = Pageable.ofSize(SPECIALIZATIONS_PARENTS_COUNT);
 
         Set<Long> ids = specializationRepository.findAllParentIds(pageable).toSet();
-        List<Specialization> parentsWithChildren = specializationRepository.findAllWithChildrenByIds(ids, Sort.unsorted());
+        List<Specialization> parentsWithChildren = specializationRepository.findAllByIds(ids, Sort.unsorted());
 
         assertEquals(ids.size(), parentsWithChildren.size());
         assertEquals(SPECIALIZATIONS_PARENTS_COUNT, parentsWithChildren.size());
@@ -97,7 +97,7 @@ class SpecializationRepositoryTest extends AbstractIntegrationRepositoryTest {
 
     @Test
     void testFindAllChildrenByParentId() {
-        List<Specialization> children = specializationRepository.findAllChildrenByParentId(PARENT_ID);
+        Set<Specialization> children = specializationRepository.findAllChildrenByParentId(PARENT_ID, Sort.unsorted());
 
         children.forEach(child -> {
             assertEquals(PARENT_ID, child.getParent().getId());
