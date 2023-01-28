@@ -41,6 +41,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Build and Push to DockerHub
-      run: mvn clean install
-      docker build -t fenix23707/specialization-server:dev .
-      docker push fenix23707/specialization-server:dev
+      run: |
+        mvn clean install
+        docker build -t fenix23707/specialization-server:dev .
+        docker push fenix23707/specialization-server:dev
