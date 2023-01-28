@@ -19,7 +19,7 @@ defaults:
     working-directory: security-server
 
 jobs:
-  build:
+  continuous-integration:
     
     runs-on: ubuntu-latest
 

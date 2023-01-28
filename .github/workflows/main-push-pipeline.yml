@@ -6,17 +6,11 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: gateway-server-master-pull-request-pipeline
+name: main-push-pipeline
 
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
-    paths: 
-      - gateway-server/**
-
-defaults:
-  run:
-    working-directory: gateway-server
 
 jobs:
   continuous-integration:
@@ -40,8 +34,26 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push to DockerHub
+    - name: Gateway Server Build and Push to DockerHub
       run: |
+        cd gateway-server
         mvn clean install
-        docker build -t fenix23707/gateway-server:dev .
-        docker push fenix23707/gateway-server:dev
+        docker build -t fenix23707/gateway-server .
+        docker push fenix23707/gateway-server
+        cd ..
+
+    - name: Security Server Build and Push to DockerHub
+      run: |
+        cd security-server
+        mvn clean install
+        docker build -t fenix23707/security-server .
+        docker push fenix23707/security-server
+        cd ..
+
+    - name: Specialization Server Build and Push to DockerHub
+      run: |
+        cd specialization-server
+        mvn clean install
+        docker build -t fenix23707/specialization-server .
+        docker push fenix23707/specialization-server
+        cd ..
