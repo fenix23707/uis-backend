@@ -9,6 +9,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,5 +34,11 @@ public class SpecializationController {
     @GetMapping("/{parentId}/children")
     public List<SpecializationDto> getAllChildren(@PathVariable Long parentId, @SortDefault("name") Sort sort) {
         return specializationService.getAllChildrenByParentId(parentId, sort);
+    }
+
+    @GetMapping("/search")
+    public Page<SpecializationDto> search(@RequestParam String query,
+                                          @PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
+        return specializationService.search(query, pageable);
     }
 }

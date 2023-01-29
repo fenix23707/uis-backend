@@ -13,4 +13,11 @@ public interface SpecializationService {
     Page<SpecializationDto> getAllParents(Pageable pageable);
 
     List<SpecializationDto> getAllChildrenByParentId(Long id, Sort sort);
+
+    /**
+     * Case-insensitive search by all available fields using or operator
+     * @param query any string
+     * @return List of Specializations which has at least one field that contains query
+     */
+    Page<SpecializationDto> search(String query, Pageable pageable);
 }
