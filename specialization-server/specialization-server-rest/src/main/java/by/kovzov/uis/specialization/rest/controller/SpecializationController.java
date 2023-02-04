@@ -26,6 +26,11 @@ public class SpecializationController {
 
     private final SpecializationService specializationService;
 
+    @GetMapping("/{id}")
+    public SpecializationDto getById(@PathVariable Long id) {
+        return specializationService.getById(id);
+    }
+
     @GetMapping("/parents")
     public Page<SpecializationDto> getAllParents(@PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
         return specializationService.getAllParents(pageable);

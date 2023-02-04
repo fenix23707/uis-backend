@@ -20,4 +20,6 @@ public interface SpecializationService {
      * @return List of Specializations which has at least one field that contains query
      */
     Page<SpecializationDto> search(String query, Pageable pageable);
+
+    SpecializationDto getById(Long id);
 }

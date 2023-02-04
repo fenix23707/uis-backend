@@ -22,7 +22,7 @@ public class ExceptionResponseDto {
     private String status;
 
     @Builder.Default
-    private String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUri().getPath();
+    private String path = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPath();
 
     @Builder.Default
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
