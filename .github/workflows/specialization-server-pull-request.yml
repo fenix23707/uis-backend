@@ -13,6 +13,10 @@ on:
     branches: [ "main" ]
     paths: 
       - specialization-server/**
+  workflow_run:
+    workflows: ["build-dependencies"]
+    types:
+      - completed
 
 defaults:
   run:
