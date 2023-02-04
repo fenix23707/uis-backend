@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,10 @@ class SpecializationRepositoryTest extends AbstractIntegrationRepositoryTest {
 
     @Test
     void testFindById() {
-        Specialization parent = specializationRepository.findById(PARENT_ID).get();
+        Optional<Specialization> optional = specializationRepository.findWithChildrenById(PARENT_ID);
+
+        assertTrue(optional.isPresent());
+        Specialization parent = specializationRepository.findWithChildrenById(PARENT_ID).get();
 
         assertEquals(PARENT_ID, parent.getId());
         verifyParentSpecialization(parent);
@@ -119,7 +123,10 @@ class SpecializationRepositoryTest extends AbstractIntegrationRepositoryTest {
 
     @Test
     void testSaveNewChild() {
-        Specialization parent = specializationRepository.findById(PARENT_ID).get();
+        Optional<Specialization> optional = specializationRepository.findWithChildrenById(PARENT_ID);
+
+        assertTrue(optional.isPresent());
+        Specialization parent = specializationRepository.findWithChildrenById(PARENT_ID).get();
         Specialization child = buildSpecialization();
         child.setParent(parent);
         assertNull(child.getId());

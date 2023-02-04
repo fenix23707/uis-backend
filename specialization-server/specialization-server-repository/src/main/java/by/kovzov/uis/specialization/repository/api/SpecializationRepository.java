@@ -3,13 +3,13 @@ package by.kovzov.uis.specialization.repository.api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import by.kovzov.uis.specialization.repository.entity.Specialization;
@@ -26,4 +26,7 @@ public interface SpecializationRepository
 
     @EntityGraph(attributePaths = "children")
     Set<Specialization> findAllChildrenByParentId(Long parentId, Sort sort);
+
+    @EntityGraph(attributePaths = "children")
+    Optional<Specialization> findWithChildrenById(Long id);
 }

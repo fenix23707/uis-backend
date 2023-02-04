@@ -22,6 +22,11 @@
             <artifactId>specialization-server-repository</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>by.kovzov.uis.common</groupId>
+            <artifactId>common-exceptions</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
