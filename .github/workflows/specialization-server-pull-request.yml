@@ -35,7 +35,7 @@ jobs:
         cache: maven
 
     - name: Build dependencies
-      uses: ./.github/workflows/build-dependencies.yml
+      uses: fenix237070/uis-backend/.github/workflows/build-dependencies.yml
 
     - name: Login to DockerHub
       uses: docker/login-action@v2
