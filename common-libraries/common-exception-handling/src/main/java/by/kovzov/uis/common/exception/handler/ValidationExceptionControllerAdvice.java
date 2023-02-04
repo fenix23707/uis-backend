@@ -6,7 +6,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -15,10 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ControllerAdvice
-public class ValidationExceptionAdvice {
+public class ValidationExceptionControllerAdvice {
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<?> validationExceptionHandler(BindException e) {
+    public ResponseEntity<ExceptionResponseDto> validationExceptionHandler(BindException e) {
         log.debug("Validation error", e);
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
