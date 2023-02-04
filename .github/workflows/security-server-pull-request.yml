@@ -19,9 +19,12 @@ defaults:
     working-directory: security-server
 
 jobs:
+  build-dependencies:
+    uses: ./.github/workflows/build-dependencies.yml
+
   continuous-integration:
-    
     runs-on: ubuntu-latest
+    needs: build-dependencies
 
     steps:
     - name: Clone Repo
