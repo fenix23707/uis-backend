@@ -2,9 +2,12 @@ package by.kovzov.uis.specialization.service.impl;
 
 import static java.text.MessageFormat.format;
 
-import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.hasCipherLike;
-import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.hasNameLike;
-import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.hasShortNameLike;
+import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.cipherEquals;
+import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.cipherLike;
+import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.mameLike;
+import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.shortNameEquals;
+import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.shortNameLike;
+import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.nameEquals;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import by.kovzov.uis.common.exception.AlreadyExistsException;
 import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.specialization.dto.SpecializationDto;
+import by.kovzov.uis.specialization.dto.SpecializationRequestDto;
 import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
 import by.kovzov.uis.specialization.repository.entity.Specialization;
 import by.kovzov.uis.specialization.service.api.SpecializationService;
@@ -41,7 +47,7 @@ public class SpecializationServiceImpl implements SpecializationService {
         Page<Long> parentIds = specializationRepository.findAllParentIds(pageableWithoutSort(pageable));
         List<Specialization> content = specializationRepository.findAllByIds(parentIds.toSet(), pageable.getSort());
         return PageableExecutionUtils.getPage(content, pageable, parentIds::getTotalElements)
-            .map(this::mapToParentDto);
+            .map(this::mapToDto);
     }
 
     @Override
@@ -51,36 +57,63 @@ public class SpecializationServiceImpl implements SpecializationService {
             throw new NotFoundException(format(NOT_FOUND_MESSAGE, parentId));
         }
         return specializationRepository.findAllChildrenByParentId(parentId, sort).stream()
-            .map(this::mapToParentDto)
+            .map(this::mapToDto)
             .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<SpecializationDto> search(String query, Pageable pageable) {
-        Specification<Specialization> specification = hasNameLike(query)
-            .or(hasShortNameLike(query))
-            .or(hasCipherLike(query));
+        Specification<Specialization> specification = mameLike(query)
+            .or(shortNameLike(query))
+            .or(cipherLike(query));
         //TODO: use entity graph or projection
         Page<Long> ids = specializationRepository.findAll(specification, pageableWithoutSort(pageable))
             .map(Specialization::getId);
         List<Specialization> content = specializationRepository.findAllByIds(ids.toSet(), pageable.getSort());
         return PageableExecutionUtils.getPage(content, pageable, ids::getTotalElements)
-            .map(this::mapToParentDto);
+            .map(this::mapToDto);
     }
 
     @Override
     @Transactional(readOnly = true)
     public SpecializationDto getById(Long id) {
         return specializationRepository.findWithChildrenById(id)
-            .map(this::mapToParentDto)
+            .map(this::mapToDto)
             .orElseThrow(() -> new NotFoundException(format(NOT_FOUND_MESSAGE, id)));
     }
 
-    private SpecializationDto mapToParentDto(Specialization entity) {
-        return specializationMapper.toParentDto(entity).toBuilder()
+    @Override
+    @Transactional
+    public SpecializationDto create(SpecializationRequestDto requestDto) {
+        Specialization entity = specializationMapper.toEntity(requestDto);
+        checkUniqueFields(entity);
+        if (Objects.nonNull(requestDto.getParentId())) {
+            Specialization parent = specializationRepository.findById(requestDto.getParentId())
+                .orElseThrow(() -> new NotFoundException(format(NOT_FOUND_MESSAGE, requestDto.getParentId())));
+            entity.setParent(parent);
+        }
+        specializationRepository.save(entity);
+        return specializationMapper.toDto(entity).toBuilder()
+            .hasChildren(false)
+            .build();
+    }
+
+    private SpecializationDto mapToDto(Specialization entity) {
+        return specializationMapper.toDto(entity).toBuilder()
             .hasChildren(!entity.getChildren().isEmpty())
             .build();
+    }
+
+    private void checkUniqueFields(Specialization specialization) {
+        Specification<Specialization> specification = nameEquals(specialization.getName())
+            .or(shortNameEquals(specialization.getShortName()))
+            .or(cipherEquals(specialization.getCipher()));
+
+        if (specializationRepository.findOne(specification).isPresent()) {
+            throw new AlreadyExistsException(format("Specialization with name = {0} or short name = {1} or cipher = {2} already exists.",
+                specialization.getName(), specialization.getShortName(), specialization.getCipher()));
+        }
     }
 
     private Pageable pageableWithoutSort(Pageable pageable) {

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 import by.kovzov.uis.specialization.dto.SpecializationDto;
+import by.kovzov.uis.specialization.dto.SpecializationRequestDto;
 
 public interface SpecializationService {
 
@@ -22,4 +23,6 @@ public interface SpecializationService {
     Page<SpecializationDto> search(String query, Pageable pageable);
 
     SpecializationDto getById(Long id);
+
+    SpecializationDto create(SpecializationRequestDto specializationRequestDto);
 }
