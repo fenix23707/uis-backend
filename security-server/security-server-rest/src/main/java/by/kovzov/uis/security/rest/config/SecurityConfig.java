@@ -40,6 +40,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private static final String[] EXPOSED_ENDPOINTS =
+        {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/auth/**"};
+
     private final JwtToUserConverter jwtToUserConverter;
     private final UserDetailsService userDetailsService;
     private final RsaKeyProperties rsaKeys;
@@ -50,9 +53,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests(authorize  -> authorize
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/").permitAll()
+                .requestMatchers(EXPOSED_ENDPOINTS).permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2
@@ -109,7 +110,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationProvider jwtRefreshTokenauthProvider() {
+    public JwtAuthenticationProvider jwtRefreshTokenAuthProvider() {
         JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder());
         provider.setJwtAuthenticationConverter(jwtToUserConverter);
         return provider;

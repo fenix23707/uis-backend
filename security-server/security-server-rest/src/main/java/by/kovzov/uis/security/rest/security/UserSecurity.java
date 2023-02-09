@@ -8,9 +8,9 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import by.kovzov.uis.security.domain.entity.User;
-import by.kovzov.uis.security.domain.entity.UserRole;
-import by.kovzov.uis.security.domain.entity.UserStatus;
+import by.kovzov.uis.security.repository.entity.User;
+import by.kovzov.uis.security.repository.entity.UserRole;
+import by.kovzov.uis.security.repository.entity.UserStatus;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

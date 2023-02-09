@@ -22,6 +22,11 @@
             <artifactId>security-server-service</artifactId>
             <version>${project.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>by.kovzov.uis.common</groupId>-->
+<!--            <artifactId>common-exception-handling</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

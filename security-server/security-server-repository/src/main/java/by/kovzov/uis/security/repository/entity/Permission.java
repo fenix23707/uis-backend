@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.domain.entity;
+package by.kovzov.uis.security.repository.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

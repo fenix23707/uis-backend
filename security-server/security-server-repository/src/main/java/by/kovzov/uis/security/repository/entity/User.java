@@ -1,8 +1,11 @@
-package by.kovzov.uis.security.domain.entity;
+package by.kovzov.uis.security.repository.entity;
+
 
 import java.util.Set;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,20 +18,25 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "roles")
-public class UserRole {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    private String name;
+    private String username;
+
+    private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "roles_permissions",
-        joinColumns = @JoinColumn(name = "role_id"),
-        inverseJoinColumns = @JoinColumn(name = "permission_id")
+        name = "users_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Permission> permissions;
+    private Set<UserRole> roles;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 }
