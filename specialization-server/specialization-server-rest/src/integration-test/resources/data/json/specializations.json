@@ -1,0 +1,61 @@
+[
+  {
+    "id": 1,
+    "name": "Applied Computer Science",
+    "shortName": "ACS",
+    "cipher": "PI cipher",
+    "parent": null
+  },
+  {
+    "id": 2,
+    "name": "Computer systems software",
+    "shortName": "CSS",
+    "cipher": "CSS cipher",
+    "parent": {
+      "id": 1
+    }
+  },
+  {
+    "id": 3,
+    "name": "Web programming & computer design",
+    "shortName": "WPACD",
+    "cipher": "WPACD cipher",
+    "parent": {
+      "id": 1
+    }
+  },
+  {
+    "id": 4,
+    "name": "Mathematics - Logic And Foundations Of Mathematics",
+    "shortName": "MLFOM",
+    "cipher": "MLFOM cipher",
+    "parent": null
+  },
+  {
+    "id": 5,
+    "name": "Mechanical Engineering",
+    "shortName": "ME",
+    "cipher": "ME cipher",
+    "parent": {
+      "id": 4
+    }
+  },
+  {
+    "id": 6,
+    "name": "Biology - Paleobiology",
+    "shortName": "BP",
+    "cipher": "BP cipher",
+    "parent": {
+      "id": 5
+    }
+  },
+  {
+    "id": 7,
+    "name": "Education - Curriculum And Instruction",
+    "shortName": "ECI",
+    "cipher": "ECI cipher",
+    "parent": {
+      "id": 6
+    }
+  }
+]
