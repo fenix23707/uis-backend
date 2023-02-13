@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Spanish",
+    "shortName": "sp"
+  },
+  {
+    "id": 2,
+    "name": "MaTh",
+    "shortName": "mt"
+  },
+  {
+    "id": 3,
+    "name": "Physical Education",
+    "shortName": "Pe"
+  }
+]

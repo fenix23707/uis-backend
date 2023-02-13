@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DisciplineServiceImpl implements DisciplineService {
 
-    private static final String NOT_FOUND_MESSAGE = "Discipline with id = ${} not found.";
+    private static final String NOT_FOUND_MESSAGE = "Discipline with id = {0} not found.";
 
     private final DisciplineMapper disciplineMapper;
     private final DisciplineRepository disciplineRepository;
