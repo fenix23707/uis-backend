@@ -24,9 +24,6 @@ import lombok.Setter;
 class SpecializationControllerIT extends AbstractIntegrationTest {
 
     @Autowired
-    private DataLoader dataLoader;
-
-    @Autowired
     private SpecializationRepository specializationRepository;
 
     private List<Specialization> specializations;
