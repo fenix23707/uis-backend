@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "shortName": {
+            "type": "string"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "shortName",
+          "categories"
+        ]
+      }
+    },
+    "pageable": {
+      "type": "object",
+      "properties": {
+        "sort": {
+          "type": "object",
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            },
+            "sorted": {
+              "type": "boolean"
+            },
+            "unsorted": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "empty",
+            "sorted",
+            "unsorted"
+          ]
+        },
+        "offset": {
+          "type": "integer"
+        },
+        "pageNumber": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "paged": {
+          "type": "boolean"
+        },
+        "unpaged": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "sort",
+        "offset",
+        "pageNumber",
+        "pageSize",
+        "paged",
+        "unpaged"
+      ]
+    },
+    "totalElements": {
+      "type": "integer"
+    },
+    "totalPages": {
+      "type": "integer"
+    },
+    "last": {
+      "type": "boolean"
+    },
+    "size": {
+      "type": "integer"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "sort": {
+      "type": "object",
+      "properties": {
+        "empty": {
+          "type": "boolean"
+        },
+        "sorted": {
+          "type": "boolean"
+        },
+        "unsorted": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "empty",
+        "sorted",
+        "unsorted"
+      ]
+    },
+    "numberOfElements": {
+      "type": "integer"
+    },
+    "first": {
+      "type": "boolean"
+    },
+    "empty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "content",
+    "totalElements",
+    "totalPages",
+    "size"
+  ]
+}

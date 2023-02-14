@@ -1,13 +1,17 @@
 package by.kovzov.uis.specialization.rest.controller;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 import static java.text.MessageFormat.format;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -16,6 +20,7 @@ import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
 import by.kovzov.uis.specialization.repository.entity.Discipline;
 import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
 import io.restassured.http.ContentType;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 
@@ -62,5 +67,50 @@ class DisciplineControllerIT extends AbstractIntegrationTest {
             .statusCode(404)
             .body("message", is(format("Discipline with id = {0} not found.", id)))
             .body("path", is(BASE_URL + id));
+    }
+
+    @Test
+    void getByIdReturnValidJsonSchema() {
+        int id = 1;
+
+        given()
+            .contentType(ContentType.JSON)
+            .when()
+            .get(BASE_URL + id)
+            .then()
+            .statusCode(200)
+            .body(matchesJsonSchemaInClasspath("schema/discipline.json"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "'',    4",
+        "P,    2",
+        "' ',    1",
+        "MT',    1",
+    })
+    void searchReturnContentCountAccordingToQuery(String query, int expectedSize) {
+        given()
+            .contentType(ContentType.JSON)
+            .queryParam("query", query)
+            .queryParam("size", expectedSize)
+            .when()
+            .get(BASE_URL + "search")
+            .then()
+            .statusCode(200)
+            .body("content", hasSize(expectedSize))
+            .body("totalElements", is(expectedSize));
+    }
+
+    @Test
+    void searchReturnValidJsonSchema() {
+        given()
+            .contentType(ContentType.JSON)
+            .queryParam("query", "")
+            .when()
+            .get(BASE_URL + "search")
+            .then()
+            .statusCode(200)
+            .body(matchesJsonSchemaInClasspath("schema/disciplines-with-pagination.json"));
     }
 }
