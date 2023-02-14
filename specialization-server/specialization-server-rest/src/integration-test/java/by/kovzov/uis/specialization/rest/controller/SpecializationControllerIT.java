@@ -17,7 +17,6 @@ import java.util.List;
 import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
 import by.kovzov.uis.specialization.repository.entity.Specialization;
 import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
-import by.kovzov.uis.specialization.rest.common.DataLoader;
 import lombok.Setter;
 
 @Setter

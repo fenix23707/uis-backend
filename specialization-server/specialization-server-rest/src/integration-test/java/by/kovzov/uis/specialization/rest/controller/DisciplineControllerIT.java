@@ -20,8 +20,6 @@ import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
 import by.kovzov.uis.specialization.repository.entity.Discipline;
 import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
 import io.restassured.http.ContentType;
-import io.restassured.module.jsv.JsonSchemaValidator;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 
 @Setter
@@ -85,15 +83,14 @@ class DisciplineControllerIT extends AbstractIntegrationTest {
     @ParameterizedTest
     @CsvSource({
         "'',    4",
-        "P,    2",
-        "' ',    1",
-        "MT',    1",
+        "P,     2",
+        "' ',   2",
+        "MT,    1",
     })
     void searchReturnContentCountAccordingToQuery(String query, int expectedSize) {
         given()
             .contentType(ContentType.JSON)
             .queryParam("query", query)
-            .queryParam("size", expectedSize)
             .when()
             .get(BASE_URL + "search")
             .then()
