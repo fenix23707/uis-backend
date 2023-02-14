@@ -1,4 +1,5 @@
 drop table if exists specializations;
+drop table if exists disciplines;
 
 create table specializations (
     id bigserial,
@@ -11,8 +12,10 @@ create table specializations (
     foreign key (parent_id) references specializations (id) on delete cascade on update cascade
 );
 
--- sequence
+create table disciplines (
+    id bigserial,
+    name varchar(200) not null unique,
+    short_name varchar(50) not null unique,
 
---drop sequence if exists specializations_seq;
-
---create sequence specializations_seq start 1 increment 50;
+    primary key(id)
+);

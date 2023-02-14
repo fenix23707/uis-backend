@@ -3,6 +3,7 @@ package by.kovzov.uis.specialization.rest.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -27,6 +28,9 @@ public abstract class AbstractIntegrationTest {
 
     @LocalServerPort
     protected int localServerPort;
+
+    @Autowired
+    protected DataLoader dataLoader;
 
     @DynamicPropertySource
     public static void setupTestContainers(DynamicPropertyRegistry registry) {
