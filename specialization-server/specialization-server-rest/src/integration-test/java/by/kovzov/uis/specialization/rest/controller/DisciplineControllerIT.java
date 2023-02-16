@@ -1,7 +1,11 @@
 package by.kovzov.uis.specialization.rest.controller;
 
+import static org.hamcrest.Matchers.blankOrNullString;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 
 import static java.text.MessageFormat.format;
 
@@ -13,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -43,7 +48,6 @@ class DisciplineControllerIT extends AbstractIntegrationTest {
         int id = 1;
 
         given()
-            .contentType(ContentType.JSON)
             .when()
             .get(BASE_URL + id)
             .then()
@@ -58,7 +62,6 @@ class DisciplineControllerIT extends AbstractIntegrationTest {
         int id = 999999;
 
         given()
-            .contentType(ContentType.JSON)
             .when()
             .get(BASE_URL + id)
             .then()
@@ -72,7 +75,6 @@ class DisciplineControllerIT extends AbstractIntegrationTest {
         int id = 1;
 
         given()
-            .contentType(ContentType.JSON)
             .when()
             .get(BASE_URL + id)
             .then()
@@ -89,7 +91,6 @@ class DisciplineControllerIT extends AbstractIntegrationTest {
     })
     void searchReturnContentCountAccordingToQuery(String query, int expectedSize) {
         given()
-            .contentType(ContentType.JSON)
             .queryParam("query", query)
             .when()
             .get(BASE_URL + "search")
@@ -102,12 +103,63 @@ class DisciplineControllerIT extends AbstractIntegrationTest {
     @Test
     void searchReturnValidJsonSchema() {
         given()
-            .contentType(ContentType.JSON)
             .queryParam("query", "")
             .when()
             .get(BASE_URL + "search")
             .then()
             .statusCode(200)
             .body(matchesJsonSchemaInClasspath("schema/disciplines-with-pagination.json"));
+    }
+
+    @Test
+    @Transactional
+    void createShouldReturnValidJson() {
+        given()
+            .contentType(ContentType.JSON)
+            .body(buildDiscipline(null))
+            .when()
+            .post(BASE_URL)
+            .then()
+            .statusCode(201)
+            .body("id", not(emptyOrNullString()))
+            .body(matchesJsonSchemaInClasspath("schema/discipline.json"));
+    }
+
+    @Test
+    @Transactional
+    void createShouldReturnErrorIfDisciplineAlreadyExist() {
+        Discipline discipline = buildDiscipline(null);
+        disciplineRepository.save(discipline);
+        given()
+            .contentType(ContentType.JSON)
+            .body(discipline)
+            .when()
+            .post(BASE_URL)
+            .then()
+            .statusCode(409)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(BASE_URL));
+    }
+
+    @Test
+    @Transactional
+    void createShouldReturnErrorIfJsonSchemaIsNotValid() {
+        given()
+            .contentType(ContentType.JSON)
+            .body("""
+                    "name": ""
+                """)
+            .when()
+            .post(BASE_URL)
+            .then()
+            .statusCode(404);
+    }
+
+    private Discipline buildDiscipline(Long id) {
+        Discipline discipline = new Discipline();
+        discipline.setId(id);
+        discipline.setName("test discipline name");
+        discipline.setShortName("test discipline short name");
+        return discipline;
     }
 }
