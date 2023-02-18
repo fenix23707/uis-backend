@@ -38,6 +38,7 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
     void setUp() {
         disciplines = dataLoader.loadJson(Discipline.class, "data/json/disciplines.json");
         disciplineRepository.saveAll(disciplines);
+        disciplineRepository.findAll().forEach(System.out::println);
     }
 
     @Test
