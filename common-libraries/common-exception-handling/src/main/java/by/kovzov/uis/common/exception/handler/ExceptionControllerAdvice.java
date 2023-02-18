@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
-@Order
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class ExceptionControllerAdvice {
 
     @ExceptionHandler(AccessDeniedException.class)
