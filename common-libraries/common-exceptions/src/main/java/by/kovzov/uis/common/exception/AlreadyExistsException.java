@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class AlreadyExistsException extends ServiceException{
 
-    private static final HttpStatus HTTP_STATUS = HttpStatus.BAD_REQUEST;
+    private static final HttpStatus HTTP_STATUS = HttpStatus.CONFLICT;
 
     public AlreadyExistsException(String message) {
         super(message, HTTP_STATUS);

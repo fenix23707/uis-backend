@@ -1,7 +1,5 @@
 package by.kovzov.uis.specialization.repository.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Set;
 
 import jakarta.persistence.Entity;
