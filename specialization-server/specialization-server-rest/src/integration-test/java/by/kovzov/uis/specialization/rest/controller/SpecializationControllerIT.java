@@ -11,13 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.List;
 
 import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
 import by.kovzov.uis.specialization.repository.entity.Specialization;
 import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
-import by.kovzov.uis.specialization.rest.common.DataLoader;
 import lombok.Setter;
 
 @Setter
@@ -27,6 +28,11 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
     private SpecializationRepository specializationRepository;
 
     private List<Specialization> specializations;
+
+    @DynamicPropertySource
+    static void overrideProperties(DynamicPropertyRegistry registry) {
+        overridePropertiesInternal(registry);
+    }
 
     @BeforeEach
     void setUp() {

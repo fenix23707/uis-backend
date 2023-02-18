@@ -5,9 +5,9 @@ import static java.text.MessageFormat.format;
 import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.cipherEquals;
 import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.cipherLike;
 import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.mameLike;
+import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.nameEquals;
 import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.shortNameEquals;
 import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.shortNameLike;
-import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.nameEquals;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

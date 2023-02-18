@@ -8,12 +8,14 @@ import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "disciplines")
+@ToString
 public class Discipline {
 
     @Id

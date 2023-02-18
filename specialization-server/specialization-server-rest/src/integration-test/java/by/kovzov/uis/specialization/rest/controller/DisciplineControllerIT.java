@@ -1,66 +1,91 @@
 package by.kovzov.uis.specialization.rest.controller;
 
+import static org.hamcrest.Matchers.blankOrNullString;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.is;
-
-import static java.text.MessageFormat.format;
+import static org.hamcrest.Matchers.not;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
 import by.kovzov.uis.specialization.repository.entity.Discipline;
 import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
 import io.restassured.http.ContentType;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 
 @Setter
-class DisciplineControllerIT extends AbstractIntegrationTest {
+public class DisciplineControllerIT extends AbstractIntegrationTest {
 
-    private static final String BASE_URL = "/api/disciplines/";
+    private static final String BASE_URL = "/api/disciplines";
 
     @Autowired
     private DisciplineRepository disciplineRepository;
 
-    private List<Discipline> disciplines;
+    @DynamicPropertySource
+    static void overrideProperties(DynamicPropertyRegistry registry) {
+        overridePropertiesInternal(registry);
+    }
 
-    @BeforeEach
-    void setUp() {
-        disciplines = dataLoader.loadJson(Discipline.class, "data/json/disciplines.json");
-        disciplineRepository.saveAll(disciplines);
+    @AfterEach
+    void tearDown() {
+        disciplineRepository.deleteAll();
     }
 
     @Test
-    void getByIdReturnValidResponse() {
-        int id = 1;
-
+    void createShouldReturnValidJson() {
         given()
             .contentType(ContentType.JSON)
+            .body(buildDiscipline(null))
             .when()
-            .get(BASE_URL + id)
+            .post(BASE_URL)
             .then()
-            .statusCode(200)
-            .body("id", is(id))
-            .body("name", is("Spanish"))
-            .body("shortName", is("sp"));
+            .statusCode(201)
+            .body("id", not(emptyOrNullString()))
+            .body(matchesJsonSchemaInClasspath("schema/discipline.json"));
     }
 
     @Test
-    void getByIdReturnNotFoundWhenIdNotExist() {
-        int id = 999999;
-
+    void createShouldReturnErrorIfDisciplineAlreadyExist() {
+        Discipline discipline = buildDiscipline(null);
+        disciplineRepository.save(discipline);
         given()
             .contentType(ContentType.JSON)
+            .body(discipline)
             .when()
-            .get(BASE_URL + id)
+            .post(BASE_URL)
             .then()
-            .statusCode(404)
-            .body("message", is(format("Discipline with id = {0} not found.", id)))
-            .body("path", is(BASE_URL + id));
+            .statusCode(409)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(BASE_URL));
+    }
+
+    @Test
+    void createShouldReturnErrorIfJsonSchemaIsNotValid() {
+        given()
+            .contentType(ContentType.JSON).body(""" 
+                {
+                    "name": "",
+                    "shortName": ""
+                }
+                """)
+            .when()
+            .post(BASE_URL)
+            .then()
+            .statusCode(400);
+    }
+
+    private Discipline buildDiscipline(Long id) {
+        Discipline discipline = new Discipline();
+        discipline.setId(id);
+        discipline.setName("test discipline name");
+        discipline.setShortName("test discipline short name");
+        return discipline;
     }
 }

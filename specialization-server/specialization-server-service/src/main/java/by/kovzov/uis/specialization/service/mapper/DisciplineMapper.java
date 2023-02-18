@@ -9,4 +9,6 @@ import by.kovzov.uis.specialization.repository.entity.Discipline;
 public interface DisciplineMapper {
 
     DisciplineDto toDto(Discipline entity);
+
+    Discipline toEntity(DisciplineDto disciplineDto);
 }
