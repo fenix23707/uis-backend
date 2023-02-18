@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import by.kovzov.uis.common.exception.AlreadyExistsException;
 import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.specialization.dto.DisciplineDto;
 import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
@@ -41,5 +42,24 @@ public class DisciplineServiceImpl implements DisciplineService {
             .or(DisciplineSpecifications.shortNameLike(query));
         return disciplineRepository.findAll(specification, pageable)
             .map(disciplineMapper::toDto);
+    }
+
+    @Override
+    public DisciplineDto create(DisciplineDto disciplineDto) {
+        Discipline entity = disciplineMapper.toEntity(disciplineDto);
+        checkUniqueFields(entity);
+        return disciplineMapper.toDto(disciplineRepository.save(entity));
+    }
+
+    private void checkUniqueFields(Discipline entity) {
+        Specification<Discipline> specification = DisciplineSpecifications.nameEquals(entity.getName())
+            .or(DisciplineSpecifications.shortNameEquals(entity.getShortName()));
+
+        if (disciplineRepository.exists(specification)) {
+            throw new AlreadyExistsException(
+                format("Discipline with name = {0} or shortName = {1} already exists.",
+                entity.getName(),
+                entity.getShortName()));
+        }
     }
 }

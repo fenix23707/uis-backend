@@ -10,4 +10,6 @@ public interface DisciplineService {
     DisciplineDto getById(Long id);
 
     Page<DisciplineDto> search(String query, Pageable pageable);
+
+    DisciplineDto create(DisciplineDto disciplineDto);
 }
