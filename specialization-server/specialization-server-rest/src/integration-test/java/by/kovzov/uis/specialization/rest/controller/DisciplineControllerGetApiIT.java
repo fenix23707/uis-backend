@@ -1,18 +1,17 @@
 package by.kovzov.uis.specialization.rest.controller;
 
-import static org.hamcrest.Matchers.blankOrNullString;
-import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 import static java.text.MessageFormat.format;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +21,10 @@ import java.util.List;
 import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
 import by.kovzov.uis.specialization.repository.entity.Discipline;
 import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
-import io.restassured.http.ContentType;
 import lombok.Setter;
 
 @Setter
+@TestInstance(Lifecycle.PER_CLASS)
 class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
 
     private static final String BASE_URL = "/api/disciplines/";
@@ -35,7 +34,7 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
 
     private List<Discipline> disciplines;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         disciplines = dataLoader.loadJson(Discipline.class, "data/json/disciplines.json");
         disciplineRepository.saveAll(disciplines);
