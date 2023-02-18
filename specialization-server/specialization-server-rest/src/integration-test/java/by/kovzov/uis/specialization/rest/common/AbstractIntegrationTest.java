@@ -2,6 +2,7 @@ package by.kovzov.uis.specialization.rest.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,8 +13,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.MountableFile;
 
@@ -23,10 +22,8 @@ import io.restassured.RestAssured;
     webEnvironment = WebEnvironment.RANDOM_PORT
 )
 @ComponentScan(basePackages = "by.kovzov.uis.specialization.rest")
-@Testcontainers
 public abstract class AbstractIntegrationTest {
 
-    @Container
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15-alpine")
         .withCopyFileToContainer(MountableFile.forClasspathResource("schema.sql"),
             "/docker-entrypoint-initdb.d/1-schema.sql");
@@ -50,6 +47,11 @@ public abstract class AbstractIntegrationTest {
     public void setUpAbstractIntegrationTest() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.baseURI = "http://localhost:" + localServerPort;
+    }
+
+    @AfterAll
+    static void afterAll() {
+        postgreSQLContainer.stop();
     }
 
     @Bean
