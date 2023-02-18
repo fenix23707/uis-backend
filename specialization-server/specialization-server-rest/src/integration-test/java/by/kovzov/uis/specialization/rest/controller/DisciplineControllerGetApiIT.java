@@ -15,6 +15,8 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.List;
 
@@ -34,12 +36,15 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
 
     private List<Discipline> disciplines;
 
+    @DynamicPropertySource
+    static void overrideProperties(DynamicPropertyRegistry registry) {
+        overridePropertiesInternal(registry);
+    }
+
     @BeforeAll
     void setUp() {
         disciplines = dataLoader.loadJson(Discipline.class, "data/json/disciplines.json");
-        System.out.println(disciplines.size());
         disciplineRepository.saveAllAndFlush(disciplines);
-        System.out.println(disciplineRepository.count());
     }
 
     @Test

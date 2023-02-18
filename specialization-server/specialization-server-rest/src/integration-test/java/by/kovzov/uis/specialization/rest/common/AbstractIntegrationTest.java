@@ -11,7 +11,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.MountableFile;
@@ -25,8 +24,7 @@ import io.restassured.RestAssured;
 public abstract class AbstractIntegrationTest {
 
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15-alpine")
-        .withCopyFileToContainer(MountableFile.forClasspathResource("schema.sql"),
-            "/docker-entrypoint-initdb.d/1-schema.sql");
+        .withCopyFileToContainer(MountableFile.forClasspathResource("schema.sql"), "/docker-entrypoint-initdb.d/1-schema.sql");
 
     @LocalServerPort
     protected int localServerPort;
@@ -34,8 +32,7 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     protected DataLoader dataLoader;
 
-    @DynamicPropertySource
-    public static void setupTestContainers(DynamicPropertyRegistry registry) {
+    protected static void overridePropertiesInternal(DynamicPropertyRegistry registry) {
         Startables.deepStart(postgreSQLContainer).join();
 
         registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
