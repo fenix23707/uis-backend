@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.MountableFile;
 
@@ -21,6 +22,7 @@ import io.restassured.RestAssured;
     webEnvironment = WebEnvironment.RANDOM_PORT
 )
 @ComponentScan(basePackages = "by.kovzov.uis.specialization.rest")
+@Testcontainers
 public abstract class AbstractIntegrationTest {
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15-alpine")
         .withCopyFileToContainer(MountableFile.forClasspathResource("schema.sql"),
