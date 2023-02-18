@@ -9,6 +9,7 @@ spring:
           uri: ${SPECIALIZATION_SERVER_URL:http://localhost:8082}/
           predicates:
             - Path=/api/specializations/**
+            - Path=/api/disciplines/**
 
 logging:
   level:
