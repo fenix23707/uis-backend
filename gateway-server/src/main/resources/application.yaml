@@ -14,6 +14,3 @@ logging:
   level:
     org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: TRACE
     org.springframework.cloud.gateway: INFO
-
-server:
-  port: 0
