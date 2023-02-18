@@ -1,5 +1,7 @@
 package by.kovzov.uis.specialization.dto;
 
+import ch.qos.logback.core.testUtil.RandomUtil;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,8 +25,9 @@ public class DisciplineDto {
 
     //TODO update to real categories
     @Nullable
-    List<Long> categories = Stream.generate(() -> Math.random() % 20)
-        .limit((long) (Math.random() % 5))
-        .map(Double::longValue)
+    @Builder.Default
+    List<Long> categories = Stream.generate(() -> RandomUtil.getPositiveInt() % 20)
+        .limit(RandomUtil.getPositiveInt() % 5)
+        .map(Integer::longValue)
         .toList();
 }
