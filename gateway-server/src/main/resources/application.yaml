@@ -4,6 +4,11 @@ spring:
 
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: '*'
+            allowedMethods: '*'
       routes:
         - id: specialization-server
           uri: ${SPECIALIZATION_SERVER_URL:http://localhost:8082}/
