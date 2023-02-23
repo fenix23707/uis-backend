@@ -13,9 +13,13 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+
+import java.util.List;
 
 import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
 import by.kovzov.uis.specialization.repository.entity.Discipline;
@@ -69,15 +73,12 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
             .body("path", is(BASE_URL));
     }
 
-    @Test
-    void createShouldReturnErrorIfJsonSchemaIsNotValid() {
+    @ParameterizedTest
+    @MethodSource("invalidJsonSchemas")
+    void createShouldReturnErrorIfJsonSchemaIsNotValid(String json) {
         given()
-            .contentType(ContentType.JSON).body(""" 
-                {
-                    "name": "",
-                    "shortName": ""
-                }
-                """)
+            .contentType(ContentType.JSON)
+            .body(json)
             .when()
             .post(BASE_URL)
             .then()
@@ -160,6 +161,22 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
             .statusCode(409)
             .body("message", not(blankOrNullString()))
             .body("path", is(path));
+    }
+
+    private static List<String> invalidJsonSchemas() {
+        return List.of(
+            """ 
+                {
+                    "name": "asfafs",
+                    "shortName": ""
+                }
+                """,
+            """ 
+                {
+                    "name": "asfafs"
+                }
+                """
+        );
     }
 
     private Discipline buildDiscipline(Long id) {
