@@ -5,6 +5,9 @@ import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+import static java.text.MessageFormat.format;
+
+import static io.restassured.RestAssured.form;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
@@ -79,6 +82,84 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
             .post(BASE_URL)
             .then()
             .statusCode(400);
+    }
+
+    @Test
+    void updateShouldReturnValidJsonSchema() {
+        Discipline entity = buildDiscipline(null);
+        long id = disciplineRepository.save(entity).getId();
+        String path = format("{0}/{1}", BASE_URL, id);
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(buildDiscipline(id))
+            .when()
+            .put(path)
+            .then()
+            .statusCode(200)
+            .body(matchesJsonSchemaInClasspath("schema/discipline.json"));
+    }
+
+    @Test
+    void updateShouldAcceptPartOfDocument() {
+        Discipline entity = buildDiscipline(null);
+        long id = disciplineRepository.save(entity).getId();
+        String path = format("{0}/{1}", BASE_URL, id);
+        String json = """ 
+            {
+                "name": "asfa"
+            }
+            """;
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(json)
+            .when()
+            .put(path)
+            .then()
+            .statusCode(200);
+    }
+
+    @Test
+    void updateShouldReturnErrorIfIdNotExists() {
+        long notExistedId = 0;
+        String path = format("{0}/{1}", BASE_URL, notExistedId);
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(buildDiscipline(notExistedId))
+            .when()
+            .put(path)
+            .then()
+            .statusCode(404)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(path));
+    }
+
+    @Test
+    void updateShouldReturnErrorIfFieldIsNotUnique() {
+        String existingName = "existing name";
+        Discipline entity = buildDiscipline(null);
+        entity.setName(existingName);
+        disciplineRepository.save(entity);
+        Discipline discipline = buildDiscipline(null);
+        long id = disciplineRepository.save(discipline).getId();
+        String path = format("{0}/{1}", BASE_URL, id);
+        String json = """
+                {
+                    "name": %s
+                }
+            """.formatted(existingName);
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(json)
+            .when()
+            .put(path)
+            .then()
+            .statusCode(409)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(path));
     }
 
     private Discipline buildDiscipline(Long id) {
