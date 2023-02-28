@@ -49,6 +49,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     @Override
     public DisciplineDto create(DisciplineDto disciplineDto) {
         Discipline entity = disciplineMapper.toEntity(disciplineDto);
+        entity.setId(null);
         uniqueValidationService.checkEntity(entity, disciplineRepository);
         return disciplineMapper.toDto(disciplineRepository.save(entity));
     }
