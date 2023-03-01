@@ -1,5 +1,6 @@
 package by.kovzov.uis.specialization.repository.entity;
 
+import by.kovzov.uis.specialization.repository.annotation.Unique;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +23,9 @@ public class Discipline {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Unique
     private String name;
 
+    @Unique
     private String shortName;
 }

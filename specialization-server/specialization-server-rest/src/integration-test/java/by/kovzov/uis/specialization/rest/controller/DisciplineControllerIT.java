@@ -5,14 +5,20 @@ import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+import static java.text.MessageFormat.format;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+
+import java.util.stream.Stream;
 
 import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
 import by.kovzov.uis.specialization.repository.entity.Discipline;
@@ -66,19 +72,111 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
             .body("path", is(BASE_URL));
     }
 
-    @Test
-    void createShouldReturnErrorIfJsonSchemaIsNotValid() {
+    @ParameterizedTest
+    @MethodSource("invalidJsonSchemas")
+    void createShouldReturnErrorIfJsonSchemaIsNotValid(String json) {
         given()
-            .contentType(ContentType.JSON).body(""" 
-                {
-                    "name": "",
-                    "shortName": ""
-                }
-                """)
+            .contentType(ContentType.JSON)
+            .body(json)
             .when()
             .post(BASE_URL)
             .then()
             .statusCode(400);
+    }
+
+    @Test
+    void updateShouldReturnValidJsonSchema() {
+        String path = generateUpdatePath();
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(buildDiscipline(null))
+            .when()
+            .put(path)
+            .then()
+            .statusCode(200)
+            .body(matchesJsonSchemaInClasspath("schema/discipline.json"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidJsonSchemas")
+    void updateShouldReturnErrorIfJsonSchemaIsNotValid(String json) {
+        String path = generateUpdatePath();
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(json)
+            .when()
+            .put(path)
+            .then()
+            .statusCode(400)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(path));
+    }
+
+    @Test
+    void updateShouldReturnErrorIfIdNotExists() {
+        long notExistedId = 0;
+        String path = format("{0}/{1}", BASE_URL, notExistedId);
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(buildDiscipline(notExistedId))
+            .when()
+            .put(path)
+            .then()
+            .statusCode(404)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(path));
+    }
+
+    @Test
+    void updateShouldReturnErrorIfFieldIsNotUnique() {
+        String existingName = "existing name";
+        Discipline entity = buildDiscipline(null);
+        entity.setName(existingName);
+        disciplineRepository.save(entity);
+        String json = """
+                {
+                    "name": "%s",
+                    "shortName": "asf"
+                }
+            """.formatted(existingName);
+        String path = generateUpdatePath();
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(json)
+            .when()
+            .put(path)
+            .then()
+            .statusCode(409)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(path));
+    }
+
+    static Stream<String> invalidJsonSchemas() {
+        return Stream.of(
+            """ 
+                {
+                    "name": "asfafs",
+                    "shortName": ""
+                }
+                """,
+            """ 
+                {
+                    "name": "asfafs"
+                }
+                """
+        );
+    }
+
+    private String generateUpdatePath() {
+        Discipline entity = buildDiscipline(null);
+        entity.setName("unique name");
+        entity.setShortName("unique short name");
+        long id = disciplineRepository.save(entity).getId();
+        return format("{0}/{1}", BASE_URL, id);
     }
 
     private Discipline buildDiscipline(Long id) {

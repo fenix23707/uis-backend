@@ -8,13 +8,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.kovzov.uis.common.exception.AlreadyExistsException;
 import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.specialization.dto.DisciplineDto;
 import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
 import by.kovzov.uis.specialization.repository.entity.Discipline;
 import by.kovzov.uis.specialization.repository.specification.DisciplineSpecifications;
 import by.kovzov.uis.specialization.service.api.DisciplineService;
+import by.kovzov.uis.specialization.service.api.UniqueValidationService;
 import by.kovzov.uis.specialization.service.mapper.DisciplineMapper;
 import lombok.AllArgsConstructor;
 
@@ -26,6 +26,8 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     private final DisciplineMapper disciplineMapper;
     private final DisciplineRepository disciplineRepository;
+
+    private final UniqueValidationService uniqueValidationService;
 
     @Override
     @Transactional(readOnly = true)
@@ -47,19 +49,17 @@ public class DisciplineServiceImpl implements DisciplineService {
     @Override
     public DisciplineDto create(DisciplineDto disciplineDto) {
         Discipline entity = disciplineMapper.toEntity(disciplineDto);
-        checkUniqueFields(entity);
+        entity.setId(null);
+        uniqueValidationService.checkEntity(entity, disciplineRepository);
         return disciplineMapper.toDto(disciplineRepository.save(entity));
     }
 
-    private void checkUniqueFields(Discipline entity) {
-        Specification<Discipline> specification = DisciplineSpecifications.nameEquals(entity.getName())
-            .or(DisciplineSpecifications.shortNameEquals(entity.getShortName()));
-
-        if (disciplineRepository.exists(specification)) {
-            throw new AlreadyExistsException(
-                format("Discipline with name = {0} or shortName = {1} already exists.",
-                entity.getName(),
-                entity.getShortName()));
-        }
+    @Override
+    public DisciplineDto update(Long id, DisciplineDto disciplineDto) {
+        getById(id); // will throw an exception if id is not exist
+        Discipline entity = disciplineMapper.toEntity(disciplineDto);
+        entity.setId(id);
+        uniqueValidationService.checkEntity(entity, disciplineRepository);
+        return disciplineMapper.toDto(disciplineRepository.save(entity));
     }
 }

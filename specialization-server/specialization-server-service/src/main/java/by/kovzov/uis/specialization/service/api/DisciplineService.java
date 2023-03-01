@@ -12,4 +12,6 @@ public interface DisciplineService {
     Page<DisciplineDto> search(String query, Pageable pageable);
 
     DisciplineDto create(DisciplineDto disciplineDto);
+
+    DisciplineDto update(Long id, DisciplineDto disciplineDto);
 }
