@@ -29,6 +29,7 @@ import by.kovzov.uis.specialization.dto.SpecializationRequestDto;
 import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
 import by.kovzov.uis.specialization.repository.entity.Specialization;
 import by.kovzov.uis.specialization.service.api.SpecializationService;
+import by.kovzov.uis.specialization.service.api.UniqueValidationService;
 import by.kovzov.uis.specialization.service.mapper.SpecializationMapper;
 import lombok.AllArgsConstructor;
 
@@ -40,6 +41,8 @@ public class SpecializationServiceImpl implements SpecializationService {
 
     private final SpecializationRepository specializationRepository;
     private final SpecializationMapper specializationMapper;
+
+    private final UniqueValidationService uniqueValidationService;
 
     @Override
     @Transactional(readOnly = true)
@@ -87,33 +90,44 @@ public class SpecializationServiceImpl implements SpecializationService {
     @Transactional
     public SpecializationDto create(SpecializationRequestDto requestDto) {
         Specialization entity = specializationMapper.toEntity(requestDto);
-        checkUniqueFields(entity);
-        if (Objects.nonNull(requestDto.getParentId())) {
-            Specialization parent = specializationRepository.findById(requestDto.getParentId())
-                .orElseThrow(() -> new NotFoundException(format(NOT_FOUND_MESSAGE, requestDto.getParentId())));
-            entity.setParent(parent);
-        }
+        entity.setId(null);
+        uniqueValidationService.checkEntity(entity, specializationRepository);
+        updateParent(entity, requestDto.getParentId());
         specializationRepository.save(entity);
         return specializationMapper.toDto(entity).toBuilder()
             .hasChildren(false)
             .build();
     }
 
+    @Override
+    public SpecializationDto update(Long id, SpecializationRequestDto requestDto) {
+        SpecializationDto specializationDto = getById(id);
+        Specialization entity = specializationMapper.toEntity(requestDto);
+        entity.setId(id);
+        uniqueValidationService.checkEntity(entity, specializationRepository);
+        updateParent(entity, requestDto.getParentId());
+        specializationRepository.save(entity);
+        return specializationMapper.toDto(entity).toBuilder()
+            .hasChildren(specializationDto.isHasChildren())
+            .build();
+    }
+
+    private Specialization findById(Long id) {
+        return specializationRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(format(NOT_FOUND_MESSAGE, id)));
+    }
+
+    private void updateParent(Specialization entity, Long parentId) {
+        if (Objects.nonNull(parentId)) {
+            Specialization parent = findById(parentId);
+            entity.setParent(parent);
+        }
+    }
+
     private SpecializationDto mapToDto(Specialization entity) {
         return specializationMapper.toDto(entity).toBuilder()
             .hasChildren(!entity.getChildren().isEmpty())
             .build();
-    }
-
-    private void checkUniqueFields(Specialization specialization) {
-        Specification<Specialization> specification = nameEquals(specialization.getName())
-            .or(shortNameEquals(specialization.getShortName()))
-            .or(cipherEquals(specialization.getCipher()));
-
-        if (specializationRepository.findOne(specification).isPresent()) {
-            throw new AlreadyExistsException(format("Specialization with name = {0} or short name = {1} or cipher = {2} already exists.",
-                specialization.getName(), specialization.getShortName(), specialization.getCipher()));
-        }
     }
 
     private Pageable pageableWithoutSort(Pageable pageable) {
