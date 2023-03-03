@@ -1,74 +1,197 @@
 package by.kovzov.uis.specialization.rest.controller;
 
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.blankOrNullString;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
-import java.util.List;
+import java.util.stream.Stream;
 
+import by.kovzov.uis.specialization.dto.SpecializationRequestDto;
 import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
 import by.kovzov.uis.specialization.repository.entity.Specialization;
 import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
+import by.kovzov.uis.specialization.service.mapper.SpecializationMapper;
+import io.restassured.http.ContentType;
 import lombok.Setter;
 
 @Setter
 class SpecializationControllerIT extends AbstractIntegrationTest {
 
+    private static final String BASE_URL = "/api/specializations";
+
     @Autowired
     private SpecializationRepository specializationRepository;
 
-    private List<Specialization> specializations;
+    @Autowired
+    private SpecializationMapper specializationMapper;
+
+    private Long specializationId;
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
         overridePropertiesInternal(registry);
     }
 
-    @BeforeEach
-    void setUp() {
-        specializations = dataLoader.loadJson(Specialization.class, "data/json/specializations.json");
-        specializationRepository.saveAll(specializations);
+    @AfterEach
+    void tearDown() {
+        specializationRepository.deleteAll();
     }
 
     @Test
-    void searchReturnAllIfQueryIsEmpty() {
+    void createShouldReturnValidJson() {
         given()
+            .contentType(ContentType.JSON)
+            .body(buildSpecializationRequestDto())
             .when()
-            .queryParam("query", "")
-            .queryParam("size", specializations.size())
-            .get("/api/specializations/search")
+            .post(BASE_URL)
             .then()
-            .statusCode(200)
-            .body("content", hasSize(specializations.size()))
-            .body("totalElements", is(specializations.size()));
+            .statusCode(201)
+            .body("id", not(emptyOrNullString()))
+            .body(matchesJsonSchemaInClasspath("schema/specialization.json"));
+    }
+
+    @Test
+    void createShouldReturnErrorIfSpecializationAlreadyExist() {
+        Specialization specialization = buildSpecialization(null);
+        specializationRepository.save(specialization);
+        given()
+            .contentType(ContentType.JSON)
+            .body(specializationMapper.toDto(specialization))
+            .when()
+            .post(BASE_URL)
+            .then()
+            .statusCode(409)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(BASE_URL));
     }
 
     @ParameterizedTest
-    @CsvSource({
-        "'d ',      4",
-        "cipher,    7",
-        "MATH,      1",
-        "asfa,      0"
-    })
-    void searchReturnCountAccordingToQuery(String query, int expectedSize) {
+    @MethodSource("invalidSpecializationRequestDtos")
+    void createShouldReturnErrorIfDtoIsNotValid(SpecializationRequestDto dto) {
         given()
-            .queryParam("query", query)
-            .queryParam("size", specializations.size())
+            .contentType(ContentType.JSON)
+            .body(dto)
             .when()
-            .get("/api/specializations/search")
+            .post(BASE_URL)
+            .then()
+            .statusCode(400);
+    }
+
+    @Test
+    void updateShouldReturnValidJsonSchema() {
+        String path = generateUpdatePath();
+        SpecializationRequestDto dto = buildSpecializationRequestDto().toBuilder()
+            .parentId(specializationId)
+            .build();
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(dto)
+            .when()
+            .put(path)
             .then()
             .statusCode(200)
-            .body("content", hasSize(expectedSize))
-            .body("totalElements", is(expectedSize));
+            .body(matchesJsonSchemaInClasspath("schema/specialization.json"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidSpecializationRequestDtos")
+    void updateShouldReturnErrorIfDtoIsNotValid(SpecializationRequestDto dto) {
+        String path = generateUpdatePath();
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(dto)
+            .when()
+            .put(path)
+            .then()
+            .statusCode(400)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(path));
+    }
+
+    @Test
+    void updateShouldReturnErrorIfIdNotExists() {
+        long notExistedId = 0;
+        String path = "%s/%s".formatted(BASE_URL, notExistedId);
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(buildSpecializationRequestDto())
+            .when()
+            .put(path)
+            .then()
+            .statusCode(404)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(path));
+    }
+
+    @Test
+    void updateShouldReturnErrorIfFieldAreNotUnique() {
+        String existingName = "existing name";
+        Specialization entity = buildSpecialization(null);
+        entity.setName(existingName);
+        specializationRepository.save(entity);
+        SpecializationRequestDto dto = buildSpecializationRequestDto().toBuilder()
+            .name(existingName)
+            .build();
+        String path = generateUpdatePath();
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(dto)
+            .when()
+            .put(path)
+            .then()
+            .statusCode(409)
+            .body("message", not(blankOrNullString()))
+            .body("path", is(path));
+    }
+
+    static Stream<SpecializationRequestDto> invalidSpecializationRequestDtos() {
+        return Stream.of(
+            SpecializationRequestDto.builder().name("  ").build(),
+            SpecializationRequestDto.builder().build(),
+            SpecializationRequestDto.builder().name("").shortName("").cipher("").build()
+        );
+    }
+
+    private String generateUpdatePath() {
+        Specialization specialization = buildSpecialization(null);
+        specialization.setName("unique name");
+        specialization.setShortName("unique shortName");
+        specialization.setCipher("unique cipher");
+        specializationId = specializationRepository.save(specialization).getId();
+        return "%s/%s".formatted(BASE_URL, specializationId);
+    }
+
+    private Specialization buildSpecialization(Long id) {
+        Specialization specialization = new Specialization();
+        specialization.setId(id);
+        specialization.setName("specialization test name");
+        specialization.setShortName("specialization test short name");
+        specialization.setCipher("test cipher");
+        return specialization;
+    }
+
+    private SpecializationRequestDto buildSpecializationRequestDto() {
+        return SpecializationRequestDto.builder()
+            .name("specialization dto test name")
+            .shortName("specialization dto test short name")
+            .cipher("specialization dto test cipher")
+            .build();
     }
 }

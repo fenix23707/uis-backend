@@ -2,6 +2,7 @@ package by.kovzov.uis.specialization.repository.entity;
 
 import java.util.Set;
 
+import by.kovzov.uis.specialization.repository.annotation.Unique;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,10 +28,13 @@ public class Specialization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Unique
     private String name;
 
+    @Unique
     private String shortName;
 
+    @Unique
     private String cipher;
 
     @ManyToOne(fetch = FetchType.LAZY)

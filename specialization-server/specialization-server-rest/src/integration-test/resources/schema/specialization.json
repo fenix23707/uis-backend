@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "shortName": {
+      "type": "string"
+    },
+    "cipher": {
+      "type": "string"
+    },
+    "hasChildren": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "shortName",
+    "cipher",
+    "hasChildren"
+  ]
+}

@@ -25,4 +25,6 @@ public interface SpecializationService {
     SpecializationDto getById(Long id);
 
     SpecializationDto create(SpecializationRequestDto specializationRequestDto);
+
+    SpecializationDto update(Long id, SpecializationRequestDto specializationRequestDto);
 }

@@ -6,12 +6,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 import by.kovzov.uis.specialization.dto.SpecializationDto;
 import by.kovzov.uis.specialization.dto.SpecializationRequestDto;
 import by.kovzov.uis.specialization.service.api.SpecializationService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 // Help https://www.baeldung.com/spring-data-web-support
@@ -51,7 +55,14 @@ public class SpecializationController {
     }
 
     @PostMapping
-    public SpecializationDto create(@RequestBody SpecializationRequestDto specializationRequestDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public SpecializationDto create(@RequestBody @Valid SpecializationRequestDto specializationRequestDto) {
         return specializationService.create(specializationRequestDto);
+    }
+
+    @PutMapping("/{id}")
+    public SpecializationDto update(@PathVariable Long id,
+                                    @RequestBody @Valid SpecializationRequestDto specializationRequestDto) {
+        return specializationService.update(id, specializationRequestDto);
     }
 }
