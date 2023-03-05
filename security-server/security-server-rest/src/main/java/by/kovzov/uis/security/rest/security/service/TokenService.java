@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.rest.security;
+package by.kovzov.uis.security.rest.security.service;
 
 import org.springframework.security.core.Authentication;
 

@@ -14,33 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 import by.kovzov.uis.security.domain.dto.JwtAuthenticationDto;
 import by.kovzov.uis.security.domain.dto.LoginDto;
 import by.kovzov.uis.security.domain.dto.RefreshTokenDto;
-import by.kovzov.uis.security.domain.dto.SignupDto;
-import by.kovzov.uis.security.rest.security.TokenService;
-import by.kovzov.uis.security.rest.security.UserSecurity;
-import by.kovzov.uis.security.service.api.AuthService;
+import by.kovzov.uis.security.rest.security.service.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/security/tokens")
 @RequiredArgsConstructor
-public class AuthController {
+public class TokenController {
 
     private final TokenService tokenService;
-    private final AuthService authService;
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final JwtAuthenticationProvider jwtRefreshTokenAuthProvider;
 
-    @PostMapping("/signup")
-    public JwtAuthenticationDto signup(@RequestBody SignupDto signupDto) {
-        UserSecurity user = UserSecurity.from(authService.signup(signupDto));
-        Authentication authentication = UsernamePasswordAuthenticationToken
-            .authenticated(user, signupDto.getPassword(), user.getAuthorities());
-        return tokenService.createTokens(authentication);
-    }
-
-    @PostMapping("/login")
-    public JwtAuthenticationDto login(@Valid @RequestBody LoginDto loginDto) {
+    @PostMapping("/create")
+    public JwtAuthenticationDto create(@RequestBody @Valid LoginDto loginDto) {
         Authentication authentication = daoAuthenticationProvider.authenticate(
             UsernamePasswordAuthenticationToken.unauthenticated(loginDto.getUsername(), loginDto.getPassword()));
 
