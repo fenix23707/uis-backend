@@ -1,18 +1,18 @@
 version: "3.9"
 services:
-#  security-server:
-#    container_name: security-server
-#    image: fenix23707/security-server:latest
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-uis:5432/${POSTGRES_DB}
-#      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
-#      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-#    ports:
-#      - "8081:8080"
-#    restart: on-failure
-#    depends_on:
-#      postgres-uis:
-#        condition: service_healthy
+  security-server:
+    container_name: security-server
+    image: fenix23707/security-server:latest
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-uis:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "8081:8080"
+    restart: on-failure
+    depends_on:
+      postgres-uis:
+        condition: service_healthy
 
   specialization-server:
     container_name: specialization-server
