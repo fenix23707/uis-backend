@@ -1,15 +1,8 @@
 package by.kovzov.uis.security.rest.config;
 
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,21 +11,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
-
-import by.kovzov.uis.security.rest.security.AccessDeniedExceptionHandler;
-import by.kovzov.uis.security.rest.security.JwtToUserConverter;
-import by.kovzov.uis.security.rest.security.RsaKeyProperties;
+import by.kovzov.uis.security.rest.security.exception.AccessDeniedExceptionHandler;
+import by.kovzov.uis.security.rest.security.converter.JwtAuthenticationTokenConverter;
+import by.kovzov.uis.security.rest.security.converter.JwtRefreshTokenAuthenticationConverter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -41,83 +26,50 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private static final String[] EXPOSED_ENDPOINTS =
-        {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/auth/**"};
-
-    private final JwtToUserConverter jwtToUserConverter;
-    private final UserDetailsService userDetailsService;
-    private final RsaKeyProperties rsaKeys;
-    private final AuthenticationEntryPoint authenticationEntryPoint;
-    private final AccessDeniedExceptionHandler accessDeniedExceptionHandler;
+        {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/security/tokens/**"};
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-            .authorizeHttpRequests(authorize  -> authorize
-                .requestMatchers(EXPOSED_ENDPOINTS).permitAll()
-                .anyRequest().authenticated()
-            )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtToUserConverter))
-                .authenticationEntryPoint(authenticationEntryPoint)
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .csrf().disable()
+    public SecurityFilterChain basicSecurityFilterChain(HttpSecurity http,
+                                                        AccessDeniedExceptionHandler accessDeniedExceptionHandler,
+                                                        AuthenticationEntryPoint authenticationEntryPoint)
+        throws Exception {
+        http.authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(EXPOSED_ENDPOINTS).permitAll()
+            .anyRequest().authenticated()
+        );
+        http.exceptionHandling((exceptions) -> exceptions
+            .authenticationEntryPoint(authenticationEntryPoint)
+            .accessDeniedHandler(accessDeniedExceptionHandler)
+        );
+        http.csrf().disable()
             .cors().and()
-            .httpBasic().disable()
-            .exceptionHandling((exceptions) -> exceptions
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .accessDeniedHandler(accessDeniedExceptionHandler)
-            )
-            .build();
+            .httpBasic().disable();
+
+        return http.build();
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    public SecurityFilterChain oauthSecurityFilterChain(HttpSecurity http,
+                                                        @Qualifier("jwtRefreshTokenDecoder") JwtDecoder jwtAccessTokenDecoder,
+                                                        JwtAuthenticationTokenConverter converter) throws Exception {
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2ResourceServer()
+            .jwt()
+            .jwtAuthenticationConverter(converter)
+            .decoder(jwtAccessTokenDecoder);
+        return http.build();
     }
 
     @Bean
-    @Primary
-    public JwtDecoder jwtAccessTokenDecoder() {
-        return NimbusJwtDecoder.withPublicKey(rsaKeys.accessTokenPublicKey()).build();
-    }
-
-    @Bean
-    @Primary
-    public JwtEncoder jwtAccessTokenEncoder() {
-        JWK jwk =
-            new RSAKey.Builder(rsaKeys.accessTokenPublicKey()).privateKey(rsaKeys.accessTokenPrivateKey()).build();
-        JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
-        return new NimbusJwtEncoder(jwkSource);
-    }
-
-    @Bean
-    public JwtDecoder jwtRefreshTokenDecoder() {
-        return NimbusJwtDecoder.withPublicKey(rsaKeys.refreshTokenPublicKey()).build();
-    }
-
-    @Bean
-    public JwtEncoder jwtRefreshTokenEncoder() {
-        JWK jwk =
-            new RSAKey.Builder(rsaKeys.refreshTokenPublicKey()).privateKey(rsaKeys.refreshTokenPrivateKey()).build();
-        JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
-        return new NimbusJwtEncoder(jwkSource);
-    }
-
-    @Bean
-    public JwtAuthenticationProvider jwtRefreshTokenAuthProvider() {
-        JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder());
-        provider.setJwtAuthenticationConverter(jwtToUserConverter);
+    public JwtAuthenticationProvider jwtRefreshTokenAuthProvider(@Qualifier("jwtRefreshTokenDecoder") JwtDecoder jwtRefreshTokenDecoder,
+                                                                 JwtRefreshTokenAuthenticationConverter jwtRefreshTokenAuthenticationConverter) {
+        JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder);
+        provider.setJwtAuthenticationConverter(jwtRefreshTokenAuthenticationConverter);
         return provider;
     }
 
     @Bean
-    public DaoAuthenticationProvider daoauthenticationProvider() {
+    public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());

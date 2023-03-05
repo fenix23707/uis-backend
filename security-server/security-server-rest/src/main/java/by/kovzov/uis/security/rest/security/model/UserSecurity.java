@@ -1,83 +1,73 @@
-package by.kovzov.uis.security.rest.security;
+package by.kovzov.uis.security.rest.security.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import by.kovzov.uis.security.repository.entity.User;
 import by.kovzov.uis.security.repository.entity.UserRole;
 import by.kovzov.uis.security.repository.entity.UserStatus;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@Builder
 @EqualsAndHashCode
 public class UserSecurity implements UserDetails {
 
     @Getter
     private final Long id;
-    private final String username;
-    private final String password;
-    private final Collection<GrantedAuthority> authorities;
-    private final boolean isActive;
 
-    public static UserSecurity from(User user) {
-        return UserSecurity.builder()
-            .id(user.getId())
-            .username(user.getUsername())
-            .password(user.getPassword())
-            .authorities(mapToauthorities(user.getRoles()))
-            .isActive(user.getStatus().equals(UserStatus.ACTIVE))
-            .build();
+    private final User user;
+
+    public UserSecurity(User user) {
+        this.user = user;
+        this.id = user.getId();
     }
 
-    private static Collection<GrantedAuthority> mapToauthorities(Collection<UserRole> roles) {
+    private static Collection<GrantedAuthority> mapToAuthorities(Collection<UserRole> roles) {
         return roles.stream()
             .map(UserRole::getPermissions)
             .flatMap(Collection::stream)
             .distinct()
-            .map(permission -> MessageFormat.format("{0}_{1}", permission.getScope(), permission.getAction()))
+            .map(permission -> "%s_%s".formatted(permission.getScope(), permission.getAction()))
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return mapToAuthorities(user.getRoles());
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return user.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return isActive;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isActive;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isActive;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return isActive;
+        return UserStatus.ACTIVE.equals(user.getStatus());
     }
 }
