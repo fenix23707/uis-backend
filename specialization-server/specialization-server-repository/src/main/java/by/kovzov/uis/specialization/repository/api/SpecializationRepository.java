@@ -21,12 +21,12 @@ public interface SpecializationRepository
     Page<Long> findAllParentIds(Pageable pageable);
 
     @Query("from Specialization s where s.id in :ids")
-    @EntityGraph(attributePaths = "children")
+    @EntityGraph("specialization-dto-entity-graph")
     List<Specialization> findAllByIds(Set<Long> ids, Sort sort);
 
-    @EntityGraph(attributePaths = "children")
+    @EntityGraph("specialization-dto-entity-graph")
     Set<Specialization> findAllChildrenByParentId(Long parentId, Sort sort);
 
-    @EntityGraph(attributePaths = "children")
+    @EntityGraph("specialization-dto-entity-graph")
     Optional<Specialization> findWithChildrenById(Long id);
 }
