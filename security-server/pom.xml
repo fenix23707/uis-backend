@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>security-server-domain</module>
+        <module>security-server-dto</module>
         <module>security-server-repository</module>
         <module>security-server-service</module>
         <module>security-server-rest</module>

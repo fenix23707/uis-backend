@@ -16,7 +16,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import by.kovzov.uis.security.domain.dto.JwtAuthenticationDto;
+import by.kovzov.uis.security.dto.JwtAuthenticationDto;
 import by.kovzov.uis.security.rest.security.model.UserSecurity;
 import lombok.RequiredArgsConstructor;
 

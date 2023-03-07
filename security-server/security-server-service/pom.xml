@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>by.kovzov.uis.security</groupId>
-            <artifactId>security-server-domain</artifactId>
+            <artifactId>security-server-dto</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
