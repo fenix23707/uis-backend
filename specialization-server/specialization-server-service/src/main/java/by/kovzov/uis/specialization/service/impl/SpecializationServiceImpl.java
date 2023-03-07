@@ -2,27 +2,15 @@ package by.kovzov.uis.specialization.service.impl;
 
 import static java.text.MessageFormat.format;
 
-import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.cipherEquals;
 import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.cipherLike;
 import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.mameLike;
-import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.nameEquals;
-import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.shortNameEquals;
 import static by.kovzov.uis.specialization.repository.specification.SpecializationSpecifications.shortNameLike;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import by.kovzov.uis.common.exception.AlreadyExistsException;
 import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.specialization.dto.SpecializationDto;
 import by.kovzov.uis.specialization.dto.SpecializationRequestDto;
@@ -32,6 +20,14 @@ import by.kovzov.uis.specialization.service.api.SpecializationService;
 import by.kovzov.uis.specialization.service.api.UniqueValidationService;
 import by.kovzov.uis.specialization.service.mapper.SpecializationMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
