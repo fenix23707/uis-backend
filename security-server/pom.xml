@@ -29,15 +29,9 @@
         <springdoc-openapi.version>1.6.11</springdoc-openapi.version>
         <jackson.version>2.14.1</jackson.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <testcontainers.version>1.17.6</testcontainers.version>
+        <json-schema-validator.version>5.3.0</json-schema-validator.version>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -82,6 +76,20 @@
                 <version>${springdoc-openapi.version}</version>
             </dependency>
 
+<!--            test dependencies -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>json-schema-validator</artifactId>
+                <version>${json-schema-validator.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
