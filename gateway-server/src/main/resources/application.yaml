@@ -16,7 +16,7 @@ spring:
           predicates:
             - Path=/api/specializations/**, /api/disciplines/**
         - id: security-server
-          uri: ${SPECIALIZATION_SERVER_URL:http://localhost:8081}/
+          uri: ${SECURITY_SERVER_URL:http://localhost:8081}/
           predicates:
             - Path=/api/security/**
 
