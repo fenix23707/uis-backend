@@ -10,5 +10,6 @@ public class SpecializationDto {
     String name;
     String shortName;
     String cipher;
+    Long parentId;
     boolean hasChildren;
 }

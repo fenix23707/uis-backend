@@ -1,5 +1,8 @@
 package by.kovzov.uis.specialization.rest.controller;
 
+import static java.text.MessageFormat.format;
+
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
@@ -26,6 +29,8 @@ import lombok.Setter;
 @TestInstance(Lifecycle.PER_CLASS)
 public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
 
+    private static final String BASE_URL = "/api/specializations/";
+
     @Autowired
     private SpecializationRepository specializationRepository;
 
@@ -42,12 +47,64 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
     }
 
     @Test
+    void getByIdShouldReturnValidResponse() {
+        int id = 1;
+
+        given()
+            .when()
+            .get(BASE_URL + id)
+            .then()
+            .statusCode(200)
+            .body("id", is(id))
+            .body("name", is("Applied Computer Science"))
+            .body("shortName", is("ACS"))
+            .body("cipher", is("PI cipher"));
+    }
+
+    @Test
+    void getByIdShouldReturnNotFoundIfIdNotExist() {
+        int id = 999999;
+
+        given()
+            .when()
+            .get(BASE_URL + id)
+            .then()
+            .statusCode(404)
+            .body("message", is(format("Specialization with id = {0} not found.", id)))
+            .body("path", is(BASE_URL + id));
+    }
+
+    @Test
+    void getByIdShouldReturnValidJsonSchema() {
+        int id = 1;
+
+        given()
+            .when()
+            .get(BASE_URL + id)
+            .then()
+            .statusCode(200)
+            .body(matchesJsonSchemaInClasspath("schema/specialization.json"));
+    }
+
+    @Test
+    void getByIdShouldReturnParentId() {
+        int id = 2;
+
+        given()
+            .when()
+            .get(BASE_URL + id)
+            .then()
+            .statusCode(200)
+            .body("parentId", is(1));
+    }
+
+    @Test
     void searchReturnAllIfQueryIsEmpty() {
         given()
             .when()
             .queryParam("query", "")
             .queryParam("size", specializations.size())
-            .get("/api/specializations/search")
+            .get(BASE_URL + "search")
             .then()
             .statusCode(200)
             .body("content", hasSize(specializations.size()))
@@ -66,7 +123,7 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
             .queryParam("query", query)
             .queryParam("size", specializations.size())
             .when()
-            .get("/api/specializations/search")
+            .get(BASE_URL + "search")
             .then()
             .statusCode(200)
             .body("content", hasSize(expectedSize))

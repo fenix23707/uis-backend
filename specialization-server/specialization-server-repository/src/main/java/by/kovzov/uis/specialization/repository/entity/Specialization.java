@@ -10,6 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedEntityGraphs;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
@@ -17,6 +20,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 // HELP: https://medium.com/@kthsingh.ms/modeling-a-child-parent-relationship-in-the-same-table-using-jpa-spring-boot-and-representing-it-15e5a6256dab
+
+@NamedEntityGraphs({
+    @NamedEntityGraph(
+        name = "specialization-dto-entity-graph",
+        attributeNodes = {
+            @NamedAttributeNode(value = "children"),
+        }
+    )
+})
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
