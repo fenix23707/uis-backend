@@ -1,16 +1,18 @@
 insert into permissions(scope, action) values
-    ('SUBJECT', 'READ');
+    ('USER', 'READ'),
+    ('USER', 'SEARCH');
 
 insert into roles(name) values
-    ('student');
+    ('admin');
 
-insert into users(username, password,status) values
-    ('admin', '$2a$10$g8ZjNE897R0QQR1pcsJARun8qvgS8xtMQKBJNNbRLm6.w11P2bt.m','ACTIVE'), -- pass admin
-    ('root', '$2a$10$V.TPYMleRGuZxnmiaE6YqeE2MLckhXtYc5vCGqLreghqB/6.ESoJO', 'ACTIVE'), -- pass root
-    ('test', '$2a$10$makl04WkLsNL93zWEDecNesAdNWXfhwGn9yV.qM0mBlhTrVey.WLu', 'ACTIVE'); -- pass test
+insert into users(username, password,last_activity, creation_time) values
+    ('admin', '$2a$10$g8ZjNE897R0QQR1pcsJARun8qvgS8xtMQKBJNNbRLm6.w11P2bt.m',timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'), -- pass admin
+    ('root', '$2a$10$V.TPYMleRGuZxnmiaE6YqeE2MLckhXtYc5vCGqLreghqB/6.ESoJO', timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'), -- pass root
+    ('test', '$2a$10$makl04WkLsNL93zWEDecNesAdNWXfhwGn9yV.qM0mBlhTrVey.WLu', timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'); -- pass test
 
 insert into roles_permissions(role_id, permission_id) values
-    (1,1);
+    (1,1),
+    (1,2);
 
 insert into users_roles(user_id, role_id) values
     (1,1);

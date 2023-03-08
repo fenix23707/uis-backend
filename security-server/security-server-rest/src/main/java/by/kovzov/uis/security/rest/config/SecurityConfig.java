@@ -1,5 +1,9 @@
 package by.kovzov.uis.security.rest.config;
 
+import by.kovzov.uis.security.rest.security.converter.JwtAuthenticationTokenConverter;
+import by.kovzov.uis.security.rest.security.converter.JwtRefreshTokenAuthenticationConverter;
+import by.kovzov.uis.security.rest.security.exception.AccessDeniedExceptionHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +19,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
-import by.kovzov.uis.security.rest.security.exception.AccessDeniedExceptionHandler;
-import by.kovzov.uis.security.rest.security.converter.JwtAuthenticationTokenConverter;
-import by.kovzov.uis.security.rest.security.converter.JwtRefreshTokenAuthenticationConverter;
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
@@ -29,14 +28,22 @@ public class SecurityConfig {
         {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/security/tokens/**"};
 
     @Bean
-    public SecurityFilterChain basicSecurityFilterChain(HttpSecurity http,
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                        @Qualifier("jwtAccessTokenDecoder") JwtDecoder jwtAccessTokenDecoder,
+                                                        JwtAuthenticationTokenConverter converter,
                                                         AccessDeniedExceptionHandler accessDeniedExceptionHandler,
-                                                        AuthenticationEntryPoint authenticationEntryPoint)
-        throws Exception {
+                                                        AuthenticationEntryPoint authenticationEntryPoint) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
             .requestMatchers(EXPOSED_ENDPOINTS).permitAll()
             .anyRequest().authenticated()
         );
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2ResourceServer()
+            .authenticationEntryPoint(authenticationEntryPoint)
+            .accessDeniedHandler(accessDeniedExceptionHandler)
+            .jwt()
+            .jwtAuthenticationConverter(converter)
+            .decoder(jwtAccessTokenDecoder);
         http.exceptionHandling((exceptions) -> exceptions
             .authenticationEntryPoint(authenticationEntryPoint)
             .accessDeniedHandler(accessDeniedExceptionHandler)
@@ -45,18 +52,6 @@ public class SecurityConfig {
             .cors().and()
             .httpBasic().disable();
 
-        return http.build();
-    }
-
-    @Bean
-    public SecurityFilterChain oauthSecurityFilterChain(HttpSecurity http,
-                                                        @Qualifier("jwtRefreshTokenDecoder") JwtDecoder jwtAccessTokenDecoder,
-                                                        JwtAuthenticationTokenConverter converter) throws Exception {
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .oauth2ResourceServer()
-            .jwt()
-            .jwtAuthenticationConverter(converter)
-            .decoder(jwtAccessTokenDecoder);
         return http.build();
     }
 

@@ -1,7 +1,10 @@
 package by.kovzov.uis.security.service.api;
 
 
+import by.kovzov.uis.security.dto.UserDto;
 import by.kovzov.uis.security.repository.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
@@ -9,5 +12,6 @@ public interface UserService {
 
     User getByUsername(String username);
 
-    User create(User user);
+
+    Page<UserDto> search(String username, Pageable pageable);
 }

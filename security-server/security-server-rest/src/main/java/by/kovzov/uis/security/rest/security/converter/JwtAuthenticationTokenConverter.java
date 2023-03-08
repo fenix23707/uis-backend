@@ -1,13 +1,13 @@
 package by.kovzov.uis.security.rest.security.converter;
 
+import java.util.List;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class JwtAuthenticationTokenConverter implements Converter<Jwt, JwtAuthenticationToken> {

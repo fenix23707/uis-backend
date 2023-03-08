@@ -1,17 +1,15 @@
 package by.kovzov.uis.security.rest.security.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import by.kovzov.uis.security.repository.entity.User;
 import by.kovzov.uis.security.repository.entity.UserRole;
-import by.kovzov.uis.security.repository.entity.UserStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @EqualsAndHashCode
 public class UserSecurity implements UserDetails {
@@ -68,6 +66,6 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserStatus.ACTIVE.equals(user.getStatus());
+        return true;
     }
 }
