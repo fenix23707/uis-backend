@@ -33,6 +33,7 @@ services:
     image: fenix23707/gateway-server:latest
     environment:
       - SPECIALIZATION_SERVER_URL=http://specialization-server:8080
+      - SECURITY_SERVER_URL=http://security-server:8080
     ports:
       - "8080:8080"
 
