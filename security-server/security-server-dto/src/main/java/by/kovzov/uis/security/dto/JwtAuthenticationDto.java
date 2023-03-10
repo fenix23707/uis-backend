@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.domain.dto;
+package by.kovzov.uis.security.dto;
 
 import lombok.Builder;
 import lombok.Builder.Default;

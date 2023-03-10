@@ -26,7 +26,8 @@ create table users (
     id bigserial,
     username varchar(100) not null unique,
     password varchar(100) not null,
-    status varchar(30),
+    last_activity timestamp not null,
+    creation_time timestamp not null,
 
     primary key (id)
 );

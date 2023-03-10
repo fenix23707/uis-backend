@@ -1,0 +1,34 @@
+[
+  {
+    "username": "admin",
+    "password": "any",
+    "lastActivity": "2015-01-10T00:51:14",
+    "creationTime": "2015-01-10T00:51:14",
+    "roles": [
+      {
+        "id": 1,
+        "name": "admin"
+      }
+    ]
+  },
+  {
+    "username": "root",
+    "password": "any",
+    "lastActivity": "2015-01-10T00:51:14",
+    "creationTime": "2015-01-10T00:51:14",
+    "roles": [
+      {
+        "id": 1,
+        "name": "admin"
+      }
+    ]
+  },
+  {
+    "password": "any",
+    "username": "user",
+    "lastActivity": "2015-01-10T00:51:14",
+    "creationTime": "2015-01-10T00:51:14",
+    "roles": [
+    ]
+  }
+]

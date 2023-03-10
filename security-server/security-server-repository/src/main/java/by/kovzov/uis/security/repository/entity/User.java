@@ -1,11 +1,10 @@
 package by.kovzov.uis.security.repository.entity;
 
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +28,10 @@ public class User {
 
     private String password;
 
+    LocalDateTime lastActivity;
+
+    LocalDateTime creationTime;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",
@@ -36,7 +39,4 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<UserRole> roles;
-
-    @Enumerated(EnumType.STRING)
-    private UserStatus status;
 }
