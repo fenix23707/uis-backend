@@ -23,13 +23,18 @@ public class JwtSecurityConfig {
 
     @Bean
     public JwtEncoder jwtAccessTokenEncoder() {
-        JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(accessTokenRsaKey()));
+        JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(accessTokenJwkSet());
         return new NimbusJwtEncoder(jwkSource);
     }
 
     @Bean
     public JwtDecoder jwtAccessTokenDecoder() throws JOSEException {
         return NimbusJwtDecoder.withPublicKey(accessTokenRsaKey().toRSAPublicKey()).build();
+    }
+
+    @Bean
+    public JWKSet accessTokenJwkSet() {
+        return new JWKSet(accessTokenRsaKey());
     }
 
     @Bean
