@@ -6,8 +6,12 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-import static io.restassured.RestAssured.given;
+import java.util.List;
 
+import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
+import by.kovzov.uis.specialization.repository.entity.Specialization;
+import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
+import lombok.Setter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,13 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
-import java.util.List;
-
-import by.kovzov.uis.specialization.repository.api.SpecializationRepository;
-import by.kovzov.uis.specialization.repository.entity.Specialization;
-import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
-import lombok.Setter;
-
 @Setter
 @TestInstance(Lifecycle.PER_CLASS)
 public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
@@ -34,12 +31,13 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
     @Autowired
     private SpecializationRepository specializationRepository;
 
+    private List<Specialization> specializations;
+
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
         overridePropertiesInternal(registry);
     }
 
-    private List<Specialization> specializations;
     @BeforeAll
     void setUp() {
         specializations = dataLoader.loadJson(Specialization.class, "data/json/specializations.json");
@@ -50,7 +48,7 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
     void getByIdShouldReturnValidResponse() {
         int id = 1;
 
-        given()
+        requestSpecification
             .when()
             .get(BASE_URL + id)
             .then()
@@ -65,7 +63,7 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
     void getByIdShouldReturnNotFoundIfIdNotExist() {
         int id = 999999;
 
-        given()
+        requestSpecification
             .when()
             .get(BASE_URL + id)
             .then()
@@ -78,7 +76,7 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
     void getByIdShouldReturnValidJsonSchema() {
         int id = 1;
 
-        given()
+        requestSpecification
             .when()
             .get(BASE_URL + id)
             .then()
@@ -90,7 +88,7 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
     void getByIdShouldReturnParentId() {
         int id = 2;
 
-        given()
+        requestSpecification
             .when()
             .get(BASE_URL + id)
             .then()
@@ -100,10 +98,10 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
 
     @Test
     void searchReturnAllIfQueryIsEmpty() {
-        given()
-            .when()
+        requestSpecification
             .queryParam("query", "")
             .queryParam("size", specializations.size())
+            .when()
             .get(BASE_URL + "search")
             .then()
             .statusCode(200)
@@ -119,7 +117,7 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
         "asfa,      0"
     })
     void searchReturnCountAccordingToQuery(String query, int expectedSize) {
-        given()
+        requestSpecification
             .queryParam("query", query)
             .queryParam("size", specializations.size())
             .when()

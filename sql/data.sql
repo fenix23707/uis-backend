@@ -1,6 +1,13 @@
 insert into permissions(scope, action) values
-    ('USER', 'READ'),
-    ('USER', 'SEARCH');
+    ('SPECIALIZATION', 'GET'),
+    ('SPECIALIZATION', 'SEARCH'),
+    ('SPECIALIZATION', 'CREATE'),
+    ('SPECIALIZATION', 'UPDATE'),
+    ('DISCIPLINE',     'GET'),
+    ('DISCIPLINE',     'SEARCH'),
+    ('DISCIPLINE',     'CREATE'),
+    ('DISCIPLINE',     'UPDATE'),
+    ('USER',           'SEARCH');
 
 insert into roles(name) values
     ('admin');
@@ -12,7 +19,14 @@ insert into users(username, password,last_activity, creation_time) values
 
 insert into roles_permissions(role_id, permission_id) values
     (1,1),
-    (1,2);
+    (1,2),
+    (1,3),
+    (1,4),
+    (1,5),
+    (1,6),
+    (1,7),
+    (1,8),
+    (1,9);
 
 insert into users_roles(user_id, role_id) values
     (1,1);

@@ -1,21 +1,11 @@
 package by.kovzov.uis.specialization.rest.controller;
 
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.blankOrNullString;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-
-import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.stream.Stream;
 
@@ -26,8 +16,18 @@ import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
 import by.kovzov.uis.specialization.service.mapper.SpecializationMapper;
 import io.restassured.http.ContentType;
 import lombok.Setter;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 @Setter
+@TestInstance(Lifecycle.PER_CLASS)
 class SpecializationControllerIT extends AbstractIntegrationTest {
 
     private static final String BASE_URL = "/api/specializations";
@@ -52,7 +52,7 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
 
     @Test
     void createShouldReturnValidJson() {
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(buildSpecializationRequestDto())
             .when()
@@ -67,7 +67,7 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
     void createShouldReturnErrorIfSpecializationAlreadyExist() {
         Specialization specialization = buildSpecialization(null);
         specializationRepository.save(specialization);
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(specializationMapper.toDto(specialization))
             .when()
@@ -81,7 +81,7 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
     @ParameterizedTest
     @MethodSource("invalidSpecializationRequestDtos")
     void createShouldReturnErrorIfDtoIsNotValid(SpecializationRequestDto dto) {
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(dto)
             .when()
@@ -97,7 +97,7 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
             .parentId(specializationId)
             .build();
 
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(dto)
             .when()
@@ -112,7 +112,7 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
     void updateShouldReturnErrorIfDtoIsNotValid(SpecializationRequestDto dto) {
         String path = generateUpdatePath();
 
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(dto)
             .when()
@@ -128,7 +128,7 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
         long notExistedId = 0;
         String path = "%s/%s".formatted(BASE_URL, notExistedId);
 
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(buildSpecializationRequestDto())
             .when()
@@ -150,7 +150,7 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
             .build();
         String path = generateUpdatePath();
 
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(dto)
             .when()

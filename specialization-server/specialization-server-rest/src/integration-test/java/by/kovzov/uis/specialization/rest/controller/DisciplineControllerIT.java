@@ -1,22 +1,12 @@
 package by.kovzov.uis.specialization.rest.controller;
 
+import static java.text.MessageFormat.format;
+
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.blankOrNullString;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-
-import static java.text.MessageFormat.format;
-
-import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.stream.Stream;
 
@@ -25,8 +15,18 @@ import by.kovzov.uis.specialization.repository.entity.Discipline;
 import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
 import io.restassured.http.ContentType;
 import lombok.Setter;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 @Setter
+@TestInstance(Lifecycle.PER_CLASS)
 public class DisciplineControllerIT extends AbstractIntegrationTest {
 
     private static final String BASE_URL = "/api/disciplines";
@@ -46,7 +46,7 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
 
     @Test
     void createShouldReturnValidJson() {
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(buildDiscipline(null))
             .when()
@@ -61,7 +61,7 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
     void createShouldReturnErrorIfDisciplineAlreadyExist() {
         Discipline discipline = buildDiscipline(null);
         disciplineRepository.save(discipline);
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(discipline)
             .when()
@@ -75,7 +75,7 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
     @ParameterizedTest
     @MethodSource("invalidJsonSchemas")
     void createShouldReturnErrorIfJsonSchemaIsNotValid(String json) {
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(json)
             .when()
@@ -88,7 +88,7 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
     void updateShouldReturnValidJsonSchema() {
         String path = generateUpdatePath();
 
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(buildDiscipline(null))
             .when()
@@ -103,7 +103,7 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
     void updateShouldReturnErrorIfJsonSchemaIsNotValid(String json) {
         String path = generateUpdatePath();
 
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(json)
             .when()
@@ -119,7 +119,7 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
         long notExistedId = 0;
         String path = format("{0}/{1}", BASE_URL, notExistedId);
 
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(buildDiscipline(notExistedId))
             .when()
@@ -144,7 +144,7 @@ public class DisciplineControllerIT extends AbstractIntegrationTest {
             """.formatted(existingName);
         String path = generateUpdatePath();
 
-        given()
+        requestSpecification
             .contentType(ContentType.JSON)
             .body(json)
             .when()

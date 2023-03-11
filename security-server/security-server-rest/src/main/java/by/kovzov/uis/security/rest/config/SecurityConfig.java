@@ -25,7 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private static final String[] EXPOSED_ENDPOINTS =
-        {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/security/tokens/**"};
+        {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/security/tokens/**", "/api/security/jwk-set-uri"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
