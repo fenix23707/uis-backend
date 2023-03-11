@@ -1,13 +1,17 @@
 package by.kovzov.uis.specialization.rest.controller;
 
+import static java.text.MessageFormat.format;
+
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-import static java.text.MessageFormat.format;
+import java.util.List;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-
+import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
+import by.kovzov.uis.specialization.repository.entity.Discipline;
+import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
+import lombok.Setter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,13 +21,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-
-import java.util.List;
-
-import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
-import by.kovzov.uis.specialization.repository.entity.Discipline;
-import by.kovzov.uis.specialization.rest.common.AbstractIntegrationTest;
-import lombok.Setter;
 
 @Setter
 @TestInstance(Lifecycle.PER_CLASS)
@@ -51,7 +48,7 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
     void getByIdReturnValidResponse() {
         int id = 1;
 
-        given()
+        requestSpecification
             .when()
             .get(BASE_URL + id)
             .then()
@@ -65,7 +62,7 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
     void getByIdReturnNotFoundWhenIdNotExist() {
         int id = 999999;
 
-        given()
+        requestSpecification
             .when()
             .get(BASE_URL + id)
             .then()
@@ -78,7 +75,7 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
     void getByIdReturnValidJsonSchema() {
         int id = 1;
 
-        given()
+        requestSpecification
             .when()
             .get(BASE_URL + id)
             .then()
@@ -94,7 +91,7 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
         "MT,    1",
     })
     void searchReturnContentCountAccordingToQuery(String query, int expectedSize) {
-        given()
+        requestSpecification
             .queryParam("query", query)
             .when()
             .get(BASE_URL + "search")
@@ -106,7 +103,7 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
 
     @Test
     void searchReturnValidJsonSchema() {
-        given()
+        requestSpecification
             .queryParam("query", "")
             .when()
             .get(BASE_URL + "search")
