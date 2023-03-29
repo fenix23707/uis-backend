@@ -24,8 +24,10 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public User getById(String id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public UserDto getById(Long id) {
+        return userRepository.findById(id)
+            .map(userMapper::toDto)
+            .orElseThrow(() -> new NotFoundException("User with id = %s not found.".formatted(id)));
     }
 
     @Override
