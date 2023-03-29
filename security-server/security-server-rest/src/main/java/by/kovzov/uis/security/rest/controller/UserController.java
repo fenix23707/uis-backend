@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,5 +26,11 @@ public class UserController {
     public Page<UserDto> search(@RequestParam(required = false, defaultValue = "") String username,
                                 @PageableDefault(sort = "username", direction = Direction.ASC) Pageable pageable) {
         return userService.search(username, pageable);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER_READ')")
+    public UserDto getById(@PathVariable Long id) {
+        return userService.getById(id);
     }
 }
