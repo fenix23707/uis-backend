@@ -1,6 +1,6 @@
 package by.kovzov.uis.specialization.repository.entity;
 
-import by.kovzov.uis.specialization.repository.annotation.Unique;
+import by.kovzov.uis.common.validator.unique.Unique;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

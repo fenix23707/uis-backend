@@ -2,6 +2,7 @@ package by.kovzov.uis.specialization.service.impl;
 
 import static java.text.MessageFormat.format;
 
+import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -14,7 +15,6 @@ import by.kovzov.uis.specialization.repository.api.DisciplineRepository;
 import by.kovzov.uis.specialization.repository.entity.Discipline;
 import by.kovzov.uis.specialization.repository.specification.DisciplineSpecifications;
 import by.kovzov.uis.specialization.service.api.DisciplineService;
-import by.kovzov.uis.specialization.service.api.UniqueValidationService;
 import by.kovzov.uis.specialization.service.mapper.DisciplineMapper;
 import lombok.AllArgsConstructor;
 

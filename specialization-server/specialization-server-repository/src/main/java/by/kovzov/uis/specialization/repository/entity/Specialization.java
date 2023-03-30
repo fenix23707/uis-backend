@@ -2,7 +2,7 @@ package by.kovzov.uis.specialization.repository.entity;
 
 import java.util.Set;
 
-import by.kovzov.uis.specialization.repository.annotation.Unique;
+import by.kovzov.uis.common.validator.unique.Unique;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

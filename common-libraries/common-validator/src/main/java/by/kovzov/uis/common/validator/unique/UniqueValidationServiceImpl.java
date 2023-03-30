@@ -1,4 +1,4 @@
-package by.kovzov.uis.specialization.service.impl;
+package by.kovzov.uis.common.validator.unique;
 
 import static java.text.MessageFormat.format;
 
@@ -15,8 +15,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import by.kovzov.uis.common.exception.AlreadyExistsException;
-import by.kovzov.uis.specialization.repository.annotation.Unique;
-import by.kovzov.uis.specialization.service.api.UniqueValidationService;
 import jakarta.persistence.Id;
 import lombok.SneakyThrows;
 

@@ -1,4 +1,4 @@
-package by.kovzov.uis.specialization.service.api;
+package by.kovzov.uis.common.validator.unique;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
