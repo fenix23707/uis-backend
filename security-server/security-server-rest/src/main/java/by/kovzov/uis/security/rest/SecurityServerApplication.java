@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
     "by.kovzov.uis.security",
-    "by.kovzov.uis.common.exception.handler"
+    "by.kovzov.uis.common.exception.handler",
+    "by.kovzov.uis.common.validator"
 })
 @OpenAPIDefinition
 public class SecurityServerApplication {

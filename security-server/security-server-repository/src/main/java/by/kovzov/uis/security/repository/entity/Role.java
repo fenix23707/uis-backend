@@ -2,6 +2,7 @@ package by.kovzov.uis.security.repository.entity;
 
 import java.util.Set;
 
+import by.kovzov.uis.common.validator.unique.Unique;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +23,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Unique
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)

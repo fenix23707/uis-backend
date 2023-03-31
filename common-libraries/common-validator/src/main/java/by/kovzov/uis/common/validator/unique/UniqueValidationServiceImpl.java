@@ -36,7 +36,7 @@ public class UniqueValidationServiceImpl implements UniqueValidationService {
         String suffix = " already exists.";
         return Arrays.stream(entity.getClass().getDeclaredFields())
             .filter(field -> Objects.equals(getFieldValue(field, entity), (getFieldValue(field, existedEntity))))
-            .map(field -> format("{0} = '{1}'", field.getName(), getFieldValue(field, entity)))
+            .map(field -> "%s = '%s'".formatted( field.getName(), getFieldValue(field, entity)))
             .collect(Collectors.joining(", and ", prefix, suffix));
     }
 
