@@ -8,10 +8,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-    UserDto getById(Long id);
+    UserDto getDtoById(Long id);
 
     User getByUsername(String username);
 
 
     Page<UserDto> search(String username, Pageable pageable);
+
+    void grantRole(Long userId, Long roleId);
+
+    void revokeRole(Long userId, Long roleId);
 }

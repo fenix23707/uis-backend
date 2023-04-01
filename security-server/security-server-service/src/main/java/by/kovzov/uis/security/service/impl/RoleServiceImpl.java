@@ -1,6 +1,7 @@
 package by.kovzov.uis.security.service.impl;
 
 
+import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import by.kovzov.uis.security.dto.RoleDto;
 import by.kovzov.uis.security.repository.api.RoleRepository;
@@ -19,6 +20,12 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
     private final UniqueValidationService uniqueValidationService;
+
+    @Override
+    public Role getById(Long id) {
+        return roleRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Role with id = %d not found.".formatted(id)));
+    }
 
     @Override
     public Page<RoleDto> search(String name, Pageable pageable) {
