@@ -23,6 +23,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
+    private static final String ISSUER = "uis";
+    private static final long ACCESS_TOKEN_EXPIRATION_MINUTES = 10;
+    private static final long REFRESH_TOKEN_EXPIRATION_DAYS = 1;
+
     private final @Qualifier("jwtAccessTokenEncoder") JwtEncoder jwtAccessTokenEncoder;
     private final @Qualifier("jwtRefreshTokenEncoder") JwtEncoder jwtRefreshTokenEncoder;
 
@@ -34,12 +38,28 @@ public class TokenServiceImpl implements TokenService {
         return JwtAuthenticationDto.builder()
             .id(userSecurity.getId())
             .accessToken(createAccessToken(userSecurity))
-            .refreshToken(createRefreshToken(userSecurity.getUsername()))
+            .refreshToken(updateRefreshToken(authentication))
             .build();
     }
 
+    private String createAccessToken(UserSecurity userSecurity) {
+        List<?> authorities = userSecurity.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .toList();
+        Instant now = Instant.now();
+        JwtClaimsSet claimsSet = JwtClaimsSet.builder()
+            .issuer(ISSUER)
+            .issuedAt(now)
+            .expiresAt(now.plus(ACCESS_TOKEN_EXPIRATION_MINUTES, ChronoUnit.MINUTES))
+            .subject(userSecurity.getUsername())
+            .claim("authorities", authorities)
+            .claim("user_id", userSecurity.getId())
+            .build();
+        return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
+    }
+
     private String updateRefreshToken(Authentication authentication) {
-        String refreshToken;
+        String refreshToken = null;
         if (authentication.getCredentials() instanceof Jwt jwt) {
             Instant now = Instant.now();
             Instant expiresAt = jwt.getExpiresAt();
@@ -57,27 +77,13 @@ public class TokenServiceImpl implements TokenService {
         return refreshToken;
     }
 
-    private String createAccessToken(UserSecurity userSecurity) {
-        List<?> authorities = userSecurity.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .toList();
-        Instant now = Instant.now();
-        JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-            .issuer("uis")
-            .issuedAt(now)
-            .expiresAt(now.plus(10, ChronoUnit.MINUTES))
-            .subject(userSecurity.getUsername())
-            .claim("authorities", authorities)
-            .build();
-        return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
-    }
 
     private String createRefreshToken(String username) {
         Instant now = Instant.now();
         JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-            .issuer("uis")
+            .issuer(ISSUER)
             .issuedAt(now)
-            .expiresAt(now.plus(1, ChronoUnit.DAYS))
+            .expiresAt(now.plus(REFRESH_TOKEN_EXPIRATION_DAYS, ChronoUnit.DAYS))
             .subject(username)
             .build();
         return jwtRefreshTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();

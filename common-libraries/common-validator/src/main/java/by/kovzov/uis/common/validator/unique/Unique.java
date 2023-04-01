@@ -1,4 +1,4 @@
-package by.kovzov.uis.specialization.repository.annotation;
+package by.kovzov.uis.common.validator.unique;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,6 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation is used to mark field that should be unique
- *
- * @see UniqueValidationEnabled
  */
 @Target( { ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)

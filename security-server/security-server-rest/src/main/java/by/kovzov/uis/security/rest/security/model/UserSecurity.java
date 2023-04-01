@@ -3,8 +3,8 @@ package by.kovzov.uis.security.rest.security.model;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import by.kovzov.uis.security.repository.entity.Role;
 import by.kovzov.uis.security.repository.entity.User;
-import by.kovzov.uis.security.repository.entity.UserRole;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,9 +24,9 @@ public class UserSecurity implements UserDetails {
         this.id = user.getId();
     }
 
-    private static Collection<GrantedAuthority> mapToAuthorities(Collection<UserRole> roles) {
+    private static Collection<GrantedAuthority> mapToAuthorities(Collection<Role> roles) {
         return roles.stream()
-            .map(UserRole::getPermissions)
+            .map(Role::getPermissions)
             .flatMap(Collection::stream)
             .distinct()
             .map(permission -> "%s_%s".formatted(permission.getScope(), permission.getAction()))

@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
     "by.kovzov.uis.specialization",
-    "by.kovzov.uis.common.exception.handler"
+    "by.kovzov.uis.common.exception.handler",
+    "by.kovzov.uis.common.validator",
 })
 public class SpecializationServerApplication {
 

@@ -1,7 +1,9 @@
 package by.kovzov.uis.security.repository.entity;
 
+import java.util.Objects;
 import java.util.Set;
 
+import by.kovzov.uis.common.validator.unique.Unique;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,17 +13,24 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
 
-@Data
 @Entity
 @Table(name = "roles")
-public class UserRole {
+@Getter
+@Setter
+@ToString
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
+    @Unique
+    @NaturalId(mutable = true)
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -30,5 +39,23 @@ public class UserRole {
         joinColumns = @JoinColumn(name = "role_id"),
         inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
+    @ToString.Exclude
     private Set<Permission> permissions;
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        }
+        if (!(that instanceof Role role)) {
+            return false;
+        }
+        return Objects.equals(name, role.name);
+    }
+
 }
