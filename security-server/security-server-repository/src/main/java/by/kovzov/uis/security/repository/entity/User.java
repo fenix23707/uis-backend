@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import by.kovzov.uis.common.validator.unique.Unique;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "users")
@@ -40,6 +42,8 @@ public class User {
 
     LocalDateTime lastActivity;
 
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
     LocalDateTime creationTime;
 
     @ManyToMany(fetch = FetchType.EAGER)
