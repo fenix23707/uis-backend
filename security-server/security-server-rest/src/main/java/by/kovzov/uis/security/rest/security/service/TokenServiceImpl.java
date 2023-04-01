@@ -53,7 +53,7 @@ public class TokenServiceImpl implements TokenService {
             .expiresAt(now.plus(ACCESS_TOKEN_EXPIRATION_MINUTES, ChronoUnit.MINUTES))
             .subject(userSecurity.getUsername())
             .claim("authorities", authorities)
-            .claim("user-id", userSecurity.getId())
+            .claim("user_id", userSecurity.getId())
             .build();
         return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
