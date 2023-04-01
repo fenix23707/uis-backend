@@ -1,6 +1,7 @@
 package by.kovzov.uis.security.service.api;
 
 
+import by.kovzov.uis.security.dto.UserCreateDto;
 import by.kovzov.uis.security.dto.UserDto;
 import by.kovzov.uis.security.repository.entity.User;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ public interface UserService {
     User getByUsername(String username);
 
     Page<UserDto> search(String username, Pageable pageable);
+
+    UserDto create(UserCreateDto userDto);
 
     void grantRole(Long userId, Long roleId);
 

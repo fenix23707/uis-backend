@@ -31,6 +31,7 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <testcontainers.version>1.17.6</testcontainers.version>
         <json-schema-validator.version>5.3.0</json-schema-validator.version>
+        <passay.version>1.6.3</passay.version>
     </properties>
 
     <dependencyManagement>
@@ -58,6 +59,12 @@
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.passay</groupId>
+                <artifactId>passay</artifactId>
+                <version>${passay.version}</version>
             </dependency>
 
             <dependency>

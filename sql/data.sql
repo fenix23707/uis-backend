@@ -7,8 +7,10 @@ insert into permissions(scope, action) values
     ('DISCIPLINE',     'SEARCH'),
     ('DISCIPLINE',     'CREATE'),
     ('DISCIPLINE',     'UPDATE'),
-    ('USER',     '      READ'),
+    ('USER',           'READ'),
     ('USER',           'SEARCH'),
+    ('USER',           'CREATE'),
+    ('USER',           'MANAGE_ROLES'),
     ('ROLE',           'CREATE'),
     ('ROLE',           'READ');
 

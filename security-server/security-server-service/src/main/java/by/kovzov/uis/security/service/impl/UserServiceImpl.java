@@ -6,16 +6,23 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import by.kovzov.uis.common.exception.AlreadyExistsException;
+import by.kovzov.uis.common.exception.InvalidPasswordException;
 import by.kovzov.uis.common.exception.NotFoundException;
+import by.kovzov.uis.common.validator.unique.UniqueValidationService;
+import by.kovzov.uis.security.dto.UserCreateDto;
 import by.kovzov.uis.security.dto.UserDto;
 import by.kovzov.uis.security.repository.api.UserRepository;
 import by.kovzov.uis.security.repository.entity.Role;
 import by.kovzov.uis.security.repository.entity.User;
 import by.kovzov.uis.security.repository.specification.UserSpecifications;
+import by.kovzov.uis.security.service.api.PasswordService;
 import by.kovzov.uis.security.service.api.RoleService;
 import by.kovzov.uis.security.service.api.UserService;
 import by.kovzov.uis.security.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
+import org.passay.RuleResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,8 +35,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
-
     private final UserMapper userMapper;
+    private final UniqueValidationService uniqueValidationService;
+    private final PasswordService passwordService;
 
     @Override
     public UserDto getDtoById(Long id) {
@@ -47,6 +55,15 @@ public class UserServiceImpl implements UserService {
         Specification<User> userSpecification = UserSpecifications.usernameLike(username);
         return userRepository.findAll(userSpecification, pageable)
             .map(userMapper::toDto);
+    }
+
+    @Override
+    public UserDto create(UserCreateDto userDto) {
+        User entity = userMapper.toEntity(userDto);
+        entity.setCreationTime(LocalDateTime.now());
+        entity.setPassword(passwordService.validateAndEncodePassword(entity.getPassword()));
+        uniqueValidationService.checkEntity(entity, userRepository);
+        return userMapper.toDto(userRepository.save(entity));
     }
 
     @Override

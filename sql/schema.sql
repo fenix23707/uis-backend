@@ -24,9 +24,9 @@ create table roles (
 
 create table users (
     id bigserial,
-    username varchar(100) not null unique,
+    username text not null unique,
     password varchar(100) not null,
-    last_activity timestamp not null,
+    last_activity timestamp null,
     creation_time timestamp not null,
 
     primary key (id)
