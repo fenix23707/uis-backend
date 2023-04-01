@@ -6,17 +6,17 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: specialization-server-master-pull-request-pipeline
+name: academic-server-master-pull-request-pipeline
 
 on:
   pull_request:
     branches: [ "main" ]
     paths: 
-      - specialization-server/**
+      - academic-server/**
 
 defaults:
   run:
-    working-directory: specialization-server
+    working-directory: academic-server
 
 jobs:
   build-dependencies:
@@ -45,5 +45,5 @@ jobs:
     - name: Build and Push to DockerHub
       run: |
         mvn clean install
-        docker build -t fenix23707/specialization-server:dev .
-        docker push fenix23707/specialization-server:dev
+        docker build -t fenix23707/academic-server:dev .
+        docker push fenix23707/academic-server:dev

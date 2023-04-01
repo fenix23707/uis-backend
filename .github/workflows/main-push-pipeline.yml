@@ -55,8 +55,8 @@ jobs:
 
     - name: Specialization Server Build and Push to DockerHub
       run: |
-        cd specialization-server
+        cd academic-server
         mvn clean install
-        docker build -t fenix23707/specialization-server .
-        docker push fenix23707/specialization-server
+        docker build -t fenix23707/academic-server .
+        docker push fenix23707/academic-server
         cd ..

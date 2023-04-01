@@ -14,9 +14,9 @@ services:
       postgres-uis:
         condition: service_healthy
 
-  specialization-server:
-    container_name: specialization-server
-    image: fenix23707/specialization-server:latest
+  academic-server:
+    container_name: academic-server
+    image: fenix23707/academic-server:latest
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-uis:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
@@ -33,11 +33,11 @@ services:
     container_name: gateway-server
     image: fenix23707/gateway-server:latest
     environment:
-      - SPECIALIZATION_SERVER_URL=http://specialization-server:8080
+      - SPECIALIZATION_SERVER_URL=http://academic-server:8080
       - SECURITY_SERVER_URL=http://security-server:8080
     ports:
       - "8080:8080"
-    depends_on: [specialization-server, security-server]
+    depends_on: [academic-server, security-server]
 
   postgres-uis:
     container_name: postgres-uis
