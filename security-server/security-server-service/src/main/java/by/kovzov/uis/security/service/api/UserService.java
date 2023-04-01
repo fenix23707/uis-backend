@@ -12,10 +12,11 @@ public interface UserService {
 
     User getByUsername(String username);
 
-
     Page<UserDto> search(String username, Pageable pageable);
 
     void grantRole(Long userId, Long roleId);
 
     void revokeRole(Long userId, Long roleId);
+
+    void updateUserLastActivity(Long userId);
 }

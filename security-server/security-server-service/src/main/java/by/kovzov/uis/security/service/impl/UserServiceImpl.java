@@ -2,6 +2,7 @@ package by.kovzov.uis.security.service.impl;
 
 import static java.text.MessageFormat.format;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import by.kovzov.uis.common.exception.AlreadyExistsException;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +71,13 @@ public class UserServiceImpl implements UserService {
         Role role = roleService.getById(roleId);
         user.getRoles().remove(role);
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateUserLastActivity(Long userId) {
+        User user = getById(userId);
+        user.setLastActivity(LocalDateTime.now());
     }
 
     private User getById(Long id) {
