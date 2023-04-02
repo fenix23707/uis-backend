@@ -30,6 +30,7 @@ public class UserSecurity implements UserDetails {
             .flatMap(Collection::stream)
             .distinct()
             .map(permission -> "%s_%s".formatted(permission.getScope(), permission.getAction()))
+            .map(String::toUpperCase)
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
