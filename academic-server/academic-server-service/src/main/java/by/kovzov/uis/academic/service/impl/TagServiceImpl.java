@@ -44,7 +44,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto create(TagDto tagDto) {
-        if (Objects.isNull(tagDto.getId())) {
+        if (Objects.nonNull(tagDto.getId())) {
             throw new IdSpecifiedException();
         }
 

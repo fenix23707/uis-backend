@@ -45,7 +45,7 @@ public class StartUpServiceImpl implements StartUpService {
     public void updateAdminUser() {
         userRepository.findByUsername(adminUsername)
             .ifPresentOrElse(
-                user -> user.setPassword(passwordEncoder.encode(adminPassword)),
+                user -> user.setPassword(adminPassword),
                 () -> userRepository.save(buildAdminUser())
             );
     }

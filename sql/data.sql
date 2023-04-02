@@ -12,7 +12,9 @@ insert into permissions(scope, action) values
     ('user',           'create'),
     ('user',           'manage_roles'),
     ('role',           'create'),
-    ('role',           'read');
+    ('role',           'read'),
+    ('tag',            'read'),
+    ('tag',            'create');
 
 insert into roles(name) values
     ('admin');
@@ -36,7 +38,9 @@ insert into roles_permissions(role_id, permission_id) values
     (1,11),
     (1,12),
     (1,13),
-    (1,14);
+    (1,14),
+    (1,15),
+    (1,16);
 
 insert into users_roles(user_id, role_id) values
     (1,1);
