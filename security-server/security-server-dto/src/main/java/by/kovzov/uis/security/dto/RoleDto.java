@@ -16,7 +16,7 @@ import lombok.Value;
 public class RoleDto {
 
     @Nullable
-    Integer id;
+    Long id;
 
     @NotBlank
     String name;

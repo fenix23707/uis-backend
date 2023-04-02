@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import by.kovzov.uis.common.exception.AlreadyExistsException;
-import by.kovzov.uis.common.exception.InvalidPasswordException;
 import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import by.kovzov.uis.security.dto.UserCreateDto;
@@ -20,9 +19,6 @@ import by.kovzov.uis.security.service.api.RoleService;
 import by.kovzov.uis.security.service.api.UserService;
 import by.kovzov.uis.security.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.RuleResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
