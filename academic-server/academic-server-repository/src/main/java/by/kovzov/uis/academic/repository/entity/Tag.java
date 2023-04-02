@@ -5,46 +5,47 @@ import java.util.Objects;
 import java.util.Set;
 
 import by.kovzov.uis.common.validator.unique.Unique;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
 
+@Entity
+@Table(name = "tags")
 @Getter
 @Setter
-@Entity
-@Table(name = "disciplines")
 @ToString
-public class Discipline {
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NaturalId
     @Unique
     private String name;
 
-    @Unique
-    private String shortName;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "disciplines_tags",
-        joinColumns = @JoinColumn(name = "discipline_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
     @ToString.Exclude
-    private Set<Tag> tags = new HashSet<>();
+    private Tag parent;
+
+    @ManyToMany(mappedBy = "tags")
+    @ToString.Exclude
+    private Set<Discipline> disciplines = new HashSet<>();
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, shortName);
+        return Objects.hashCode(name);
     }
 
     @Override
@@ -52,10 +53,9 @@ public class Discipline {
         if (this == that) {
             return true;
         }
-        if (!(that instanceof Discipline discipline)) {
+        if (!(that instanceof Tag tag)) {
             return false;
         }
-        return Objects.equals(name, discipline.name)
-            && Objects.equals(shortName, discipline.shortName);
+        return Objects.equals(name, tag.name);
     }
 }
