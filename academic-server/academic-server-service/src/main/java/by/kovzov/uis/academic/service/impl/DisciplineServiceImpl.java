@@ -2,21 +2,23 @@ package by.kovzov.uis.academic.service.impl;
 
 import static java.text.MessageFormat.format;
 
-import by.kovzov.uis.academic.service.api.DisciplineService;
-import by.kovzov.uis.common.validator.unique.UniqueValidationService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import static by.kovzov.uis.academic.service.util.PageableUtils.pageableWithoutSort;
 
-import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.academic.dto.DisciplineDto;
 import by.kovzov.uis.academic.repository.api.DisciplineRepository;
 import by.kovzov.uis.academic.repository.entity.Discipline;
 import by.kovzov.uis.academic.repository.specification.DisciplineSpecifications;
+import by.kovzov.uis.academic.service.api.DisciplineService;
 import by.kovzov.uis.academic.service.mapper.DisciplineMapper;
+import by.kovzov.uis.common.exception.NotFoundException;
+import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -38,11 +40,14 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
     public Page<DisciplineDto> search(String query, Pageable pageable) {
-        Specification<Discipline> specification = DisciplineSpecifications.mameLike(query)
+        var specification = DisciplineSpecifications.mameLike(query)
             .or(DisciplineSpecifications.shortNameLike(query));
-        return disciplineRepository.findAll(specification, pageable)
+        var ids = disciplineRepository.findAll(specification, pageableWithoutSort(pageable))
+            .map(Discipline::getId);
+        var content = disciplineRepository.findAllWithTagsByIds(ids.toSet(), pageable.getSort());
+        return PageableExecutionUtils.getPage(content, pageable, ids::getTotalElements)
             .map(disciplineMapper::toDto);
     }
 

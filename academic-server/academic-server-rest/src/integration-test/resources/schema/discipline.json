@@ -11,17 +11,31 @@
     "shortName": {
       "type": "string"
     },
-    "categories": {
+    "tags": {
       "type": "array",
-      "items": {
-        "type": "integer"
-      }
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        }
+      ]
     }
   },
   "required": [
     "id",
     "name",
     "shortName",
-    "categories"
+    "tags"
   ]
 }
