@@ -9,3 +9,8 @@ logging:
 
 server:
   port: 8080
+
+uis:
+  security:
+    admin-username: ${UIS_ADMIN_USERNAME:admin}
+    admin-password: ${UIS_ADMIN_PASSWORD:admin}

@@ -1,5 +1,8 @@
+
 drop table if exists specializations;
+drop table if exists disciplines_tags;
 drop table if exists disciplines;
+drop table if exists tags;
 
 create table specializations (
     id bigserial,
@@ -14,8 +17,26 @@ create table specializations (
 
 create table disciplines (
     id bigserial,
-    name varchar(200) not null unique,
+    name text not null unique,
     short_name varchar(50) not null unique,
 
     primary key(id)
+);
+
+create table tags (
+  id serial,
+  name varchar(255) not null unique,
+  parent_id bigint,
+
+  primary key(id),
+  foreign key (parent_id) references tags(id)
+);
+
+create table disciplines_tags (
+  discipline_id bigint not null,
+  tag_id bigint not null,
+
+  primary key (discipline_id, tag_id),
+  foreign key (discipline_id) references disciplines(id),
+  foreign key (tag_id) references tags(id)
 );

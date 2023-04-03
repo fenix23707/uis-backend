@@ -1,10 +1,8 @@
-drop table IF EXISTS roles_permissions;
-drop table IF EXISTS users_roles;
-drop table IF EXISTS permissions;
-drop table IF EXISTS users;
-drop table IF EXISTS roles;
-drop table if exists specializations;
-drop table if exists disciplines;
+drop table if exists roles_permissions;
+drop table if exists users_roles;
+drop table if exists permissions;
+drop table if exists users;
+drop table if exists roles;
 
 create table permissions (
     id serial,
@@ -50,6 +48,12 @@ create table users_roles (
     foreign key (role_id) references roles (id) on delete cascade on update cascade
 );
 
+
+drop table if exists specializations;
+drop table if exists disciplines_tags;
+drop table if exists disciplines;
+drop table if exists tags;
+
 create table specializations (
     id bigserial,
     name varchar(100) not null unique,
@@ -63,14 +67,26 @@ create table specializations (
 
 create table disciplines (
     id bigserial,
-    name varchar(200) not null unique,
+    name text not null unique,
     short_name varchar(50) not null unique,
 
     primary key(id)
 );
 
--- sequence
+create table tags (
+  id serial,
+  name varchar(255) not null unique,
+  parent_id bigint,
 
-drop sequence if exists specializations_seq;
+  primary key(id),
+  foreign key (parent_id) references tags(id)
+);
 
---create sequence specializations_seq start 1 increment 50;
+create table disciplines_tags (
+  discipline_id bigint not null,
+  tag_id bigint not null,
+
+  primary key (discipline_id, tag_id),
+  foreign key (discipline_id) references disciplines(id),
+  foreign key (tag_id) references tags(id)
+);
