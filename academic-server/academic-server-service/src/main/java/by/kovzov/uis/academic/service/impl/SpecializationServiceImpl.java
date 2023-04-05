@@ -5,22 +5,22 @@ import static java.text.MessageFormat.format;
 import static by.kovzov.uis.academic.repository.specification.SpecializationSpecifications.cipherLike;
 import static by.kovzov.uis.academic.repository.specification.SpecializationSpecifications.mameLike;
 import static by.kovzov.uis.academic.repository.specification.SpecializationSpecifications.shortNameLike;
+import static by.kovzov.uis.academic.service.util.PageableUtils.pageableWithoutSort;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import by.kovzov.uis.academic.service.api.SpecializationService;
-import by.kovzov.uis.common.exception.NotFoundException;
-import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import by.kovzov.uis.academic.dto.SpecializationDto;
 import by.kovzov.uis.academic.dto.SpecializationRequestDto;
 import by.kovzov.uis.academic.repository.api.SpecializationRepository;
 import by.kovzov.uis.academic.repository.entity.Specialization;
+import by.kovzov.uis.academic.service.api.SpecializationService;
 import by.kovzov.uis.academic.service.mapper.SpecializationMapper;
+import by.kovzov.uis.common.exception.NotFoundException;
+import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -123,9 +123,5 @@ public class SpecializationServiceImpl implements SpecializationService {
         return specializationMapper.toDto(entity).toBuilder()
             .hasChildren(!entity.getChildren().isEmpty())
             .build();
-    }
-
-    private Pageable pageableWithoutSort(Pageable pageable) {
-        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.unsorted());
     }
 }
