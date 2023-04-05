@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 @UtilityClass
 public class PageableUtils {
 
-    public Pageable pageableWithoutSort(Pageable pageable) {
+    public static Pageable pageableWithoutSort(Pageable pageable) {
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.unsorted());
     }
 
