@@ -90,3 +90,13 @@ create table disciplines_tags (
   foreign key (discipline_id) references disciplines(id),
   foreign key (tag_id) references tags(id)
 );
+
+create table curriculums (
+    id serial,
+    approval_date date not null,
+    admission_year integer not null,
+    specialization_id bigint not null,
+
+    primary key(id),
+    foreign key (specialization_id) references specializations (id)
+);
