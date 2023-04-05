@@ -14,7 +14,7 @@ spring:
         - id: academic-server
           uri: ${SPECIALIZATION_SERVER_URL:http://localhost:8082}/
           predicates:
-            - Path=/api/specializations/**, /api/disciplines/**, /api/tags/**
+            - Path=/api/specializations/**, /api/disciplines/**, /api/tags/**, /api/curriculums/**
         - id: security-server
           uri: ${SECURITY_SERVER_URL:http://localhost:8081}/
           predicates:

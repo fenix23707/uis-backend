@@ -14,7 +14,9 @@ insert into permissions(scope, action) values
     ('role',           'create'),
     ('role',           'read'),
     ('tag',            'read'),
-    ('tag',            'create');
+    ('tag',            'create'),
+    ('curriculum',     'get'),
+    ('curriculum',     'create');
 
 insert into roles(name) values
     ('admin');
@@ -40,7 +42,9 @@ insert into roles_permissions(role_id, permission_id) values
     (1,13),
     (1,14),
     (1,15),
-    (1,16);
+    (1,16),
+    (1,17),
+    (1,18);
 
 insert into users_roles(user_id, role_id) values
     (1,1);
@@ -185,3 +189,31 @@ INSERT INTO disciplines_tags (discipline_id, tag_id) VALUES
     (19, 30),
     (20, 30),
     (21, 30);
+
+
+insert into curriculums (approval_date, admission_year, specialization_id) values
+    ('2022-02-10', 2022, 2),
+    ('2020-05-18', 2020, 1),
+    ('2021-01-07', 2021, 3),
+    ('2023-02-28', 2023, 4),
+    ('2020-12-30', 2020, 1),
+    ('2023-03-15', 2023, 3),
+    ('2022-09-01', 2022, 5),
+    ('2023-01-22', 2023, 2),
+    ('2021-11-09', 2021, 4),
+    ('2022-06-14', 2022, 1),
+    ('2020-09-12', 2020, 3),
+    ('2022-05-01', 2022, 4),
+    ('2023-08-18', 2023, 5),
+    ('2021-04-30', 2021, 1),
+    ('2020-08-27', 2020, 2),
+    ('2022-03-08', 2022, 3),
+    ('2021-07-11', 2021, 4),
+    ('2023-04-22', 2023, 1),
+    ('2020-11-05', 2020, 5),
+    ('2022-12-19', 2022, 2),
+    ('2023-06-30', 2023, 3),
+    ('2020-06-25', 2020, 4),
+    ('2021-10-17', 2021, 5),
+    ('2022-08-02', 2022, 1),
+    ('2023-01-05', 2023, 4);
