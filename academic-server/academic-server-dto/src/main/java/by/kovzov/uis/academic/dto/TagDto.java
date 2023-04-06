@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Value;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 @JsonInclude(Include.NON_NULL)
 public class TagDto {
 
@@ -19,5 +19,7 @@ public class TagDto {
     String name;
 
     @Nullable
-    TagDto parent;
+    Long parentId;
+
+    boolean hasChildren;
 }

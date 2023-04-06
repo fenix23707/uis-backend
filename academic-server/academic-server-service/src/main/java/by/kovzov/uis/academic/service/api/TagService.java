@@ -5,6 +5,7 @@ import java.util.List;
 import by.kovzov.uis.academic.dto.TagDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public interface TagService {
 
@@ -12,7 +13,7 @@ public interface TagService {
 
     Page<TagDto> getAllParents(Pageable pageable);
 
-    List<TagDto> getAllChildren(Long parentId);
+    List<TagDto> getAllChildren(Long parentId, Sort sort);
 
     TagDto create(TagDto tagDto);
 }
