@@ -16,4 +16,8 @@ public interface TagService {
     List<TagDto> getAllChildren(Long parentId, Sort sort);
 
     TagDto create(TagDto tagDto);
+
+    TagDto getDtoById(Long id);
+
+    TagDto update(Long id, TagDto tagDto);
 }

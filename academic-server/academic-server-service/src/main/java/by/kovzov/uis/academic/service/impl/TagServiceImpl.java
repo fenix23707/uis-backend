@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
 
+    private static final String NOT_FOUND_MESSAGE = "Tag with id = %d not found.";
     private final TagRepository tagRepository;
     private final TagMapper tagMapper;
     private final UniqueValidationService uniqueValidationService;
@@ -45,13 +46,20 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDto> getAllChildren(Long parentId, Sort sort) {
-        getById(parentId);
+        verifyThatTagExists(parentId);
         var ids = tagRepository.findAllChildrenByParentId(parentId, sort).stream()
             .map(Tag::getId)
             .collect(Collectors.toSet());
-        return tagRepository.findAllWithChildrenByIds(ids, sort).stream()
+        return tagRepository.findAllByIdsWithChildren(ids, sort).stream()
             .map(this::mapToDto)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public TagDto getDtoById(Long id) {
+        return tagRepository.findByIdWithChildren(id)
+            .map(this::mapToDto)
+            .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(id)));
     }
 
     @Override
@@ -63,16 +71,31 @@ public class TagServiceImpl implements TagService {
         Tag entity = tagMapper.toEntity(tagDto);
         uniqueValidationService.checkEntity(entity, tagRepository);
 
-        return tagMapper.toDto(tagRepository.save(entity));
+        return tagMapper.toDto(tagRepository.save(entity)).toBuilder()
+            .hasChildren(false)
+            .build();
     }
 
-    private Tag getById(Long id) {
-        return tagRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Tag with id = %d not found.".formatted(id)));
+    @Override
+    public TagDto update(Long id, TagDto tagDto) {
+        TagDto existedTag = getDtoById(id);
+        Tag entity = tagMapper.toEntity(tagDto);
+        entity.setId(id);
+        uniqueValidationService.checkEntity(entity, tagRepository);
+
+        return tagMapper.toDto(tagRepository.save(entity)).toBuilder()
+            .hasChildren(existedTag.isHasChildren())
+            .build();
+    }
+
+    private void verifyThatTagExists(Long id) {
+        if (tagRepository.existsById(id)) {
+            throw new NotFoundException(NOT_FOUND_MESSAGE.formatted(id));
+        }
     }
 
     private Page<TagDto> getTagPage(Page<Long> ids, Pageable pageable) {
-        var content = tagRepository.findAllWithChildrenByIds(ids.toSet(), pageable.getSort());
+        var content = tagRepository.findAllByIdsWithChildren(ids.toSet(), pageable.getSort());
         return PageableExecutionUtils.getPage(content, pageable, ids::getTotalElements)
             .map(this::mapToDto);
     }

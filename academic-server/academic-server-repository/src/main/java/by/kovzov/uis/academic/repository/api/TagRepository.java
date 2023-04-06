@@ -1,6 +1,7 @@
 package by.kovzov.uis.academic.repository.api;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import by.kovzov.uis.academic.repository.entity.Tag;
@@ -25,5 +26,9 @@ public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificatio
 
     @Query("from Specialization s where s.id in :ids")
     @EntityGraph(attributePaths = "children")
-    List<Tag> findAllWithChildrenByIds(Set<Long> ids,  Sort sort);
+    List<Tag> findAllByIdsWithChildren(Set<Long> ids, Sort sort);
+
+    @Query("from Specialization s where id = :id")
+    @EntityGraph(attributePaths = "children")
+    Optional<Tag> findByIdWithChildren(Long id);
 }

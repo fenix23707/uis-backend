@@ -16,6 +16,6 @@ public interface TagMapper {
     @Mapping(target = "parentId", source = "parent.id")
     List<TagDto> toDto(List<Tag> entity);
 
-    @Mapping(target = "parent.id", source = "parent.id")
+    @Mapping(target = "parent.id", source = "parentId")
     Tag toEntity(TagDto dto);
 }
