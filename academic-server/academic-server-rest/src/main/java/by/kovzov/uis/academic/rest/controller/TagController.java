@@ -8,13 +8,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +34,7 @@ public class TagController {
     @GetMapping("/search")
     @PreAuthorize("hasAuthority('TAG_READ')")
     public Page<TagDto> search(@RequestParam(defaultValue = "") String name,
-                                   @PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
+                               @PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
         return tagService.search(name, pageable);
     }
 
@@ -43,8 +46,14 @@ public class TagController {
 
     @GetMapping("/{parentId}/children")
     @PreAuthorize("hasAuthority('TAG_READ')")
-    public List<TagDto> getChildren(@PathVariable Long parentId) {
-        return tagService.getAllChildren(parentId);
+    public List<TagDto> getChildren(@PathVariable Long parentId, @SortDefault("name") Sort sort) {
+        return tagService.getAllChildren(parentId, sort);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('TAG_READ')")
+    public TagDto getById(@PathVariable Long id) {
+        return tagService.getDtoById(id);
     }
 
     @PostMapping
@@ -52,5 +61,12 @@ public class TagController {
     @ResponseStatus(HttpStatus.CREATED)
     public TagDto create(@RequestBody @Valid TagDto tagDto) {
         return tagService.create(tagDto);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('TAG_UPDATE')")
+    public TagDto update(@PathVariable Long id,
+                         @RequestBody @Valid TagDto tagDto) {
+        return tagService.update(id, tagDto);
     }
 }
