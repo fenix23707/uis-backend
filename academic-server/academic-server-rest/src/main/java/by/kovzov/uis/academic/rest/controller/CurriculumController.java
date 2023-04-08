@@ -45,7 +45,7 @@ public class CurriculumController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('CURRICULUM_UPDATEE')")
+    @PreAuthorize("hasAuthority('CURRICULUM_UPDATE')")
     public CurriculumDto update(@PathVariable Long id,
                                 @RequestBody @Valid CurriculumDto curriculumDto) {
         return curriculumService.update(id, curriculumDto);
