@@ -17,7 +17,8 @@ insert into permissions(scope, action) values
     ('tag',            'create'),
     ('tag',            'update'),
     ('curriculum',     'get'),
-    ('curriculum',     'create');
+    ('curriculum',     'create'),
+    ('curriculum',     'update');
 
 insert into roles(name) values
     ('admin');
