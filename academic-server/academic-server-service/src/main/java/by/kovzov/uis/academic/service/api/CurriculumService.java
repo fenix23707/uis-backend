@@ -14,4 +14,6 @@ public interface CurriculumService {
     CurriculumDto update(Long id, CurriculumDto curriculumDto);
 
     Page<CurriculumDto> search(SearchDto searchDto, Pageable pageable);
+
+    CurriculumDto getById(Long id);
 }

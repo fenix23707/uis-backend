@@ -31,6 +31,12 @@ public class CurriculumController {
         return curriculumService.getAll(pageable);
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('CURRICULUM_GET')")
+    public CurriculumDto getById(@PathVariable Long id) {
+        return curriculumService.getById(id);
+    }
+
     @GetMapping("/search")
     @PreAuthorize("hasAuthority('CURRICULUM_GET')")
     public Page<CurriculumDto> search(@RequestBody SearchDto searchDto,

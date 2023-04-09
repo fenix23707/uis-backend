@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CurriculumServiceImpl implements CurriculumService {
 
+    private static final String NOT_FOUND_MESSAGE = "Curriculum with id = %d not found";
+
     private final CurriculumRepository curriculumRepository;
     private final CurriculumMapper curriculumMapper;
     private final UniqueValidationService uniqueValidationService;
@@ -25,6 +27,13 @@ public class CurriculumServiceImpl implements CurriculumService {
     public Page<CurriculumDto> getAll(Pageable pageable) {
         return curriculumRepository.findAll(pageable)
             .map(curriculumMapper::toDto);
+    }
+
+    @Override
+    public CurriculumDto getById(Long id) {
+        var entity = curriculumRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(id)));
+        return curriculumMapper.toDto(entity);
     }
 
     @Override
@@ -49,7 +58,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 
     private void verifyThatCurriculumExists(Long id) {
         if (!curriculumRepository.existsById(id)) {
-            throw new NotFoundException("Curriculum with id = %d not found".formatted(id));
+            throw new NotFoundException(NOT_FOUND_MESSAGE.formatted(id));
         }
     }
 
