@@ -16,19 +16,19 @@ import org.springframework.data.repository.query.Param;
 
 public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificationExecutor<Tag> {
 
-    @Query("select t from Tag t where lower(t.name) like lower(concat('%', :name, '%'))")
+    @Query("from Tag t where lower(t.name) like lower(concat('%', :name, '%'))")
     Page<Tag> findAllByNameLike(@Param("name") String name, Pageable pageable);
 
-    @Query("select t from Tag t where t.parent.id is null")
+    @Query("from Tag t where t.parent.id is null")
     Page<Tag> findAllParents(Pageable pageable);
 
     List<Tag> findAllChildrenByParentId(Long parentId, Sort sort);
 
-    @Query("from Specialization s where s.id in :ids")
+    @Query("from Tag t where t.id in :ids")
     @EntityGraph(attributePaths = "children")
     List<Tag> findAllByIdsWithChildren(Set<Long> ids, Sort sort);
 
-    @Query("from Specialization s where id = :id")
+    @Query("from Tag t where t.id = :id")
     @EntityGraph(attributePaths = "children")
     Optional<Tag> findByIdWithChildren(Long id);
 }
