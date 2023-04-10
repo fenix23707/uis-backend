@@ -27,14 +27,14 @@ public interface RoleMapper {
     Role toEntity(RoleDto roleDto);
 
     @Named("toPermissionIds")
-    default List<Integer> toPermissionIds(Set<Permission> permissions) {
+    default List<Long> toPermissionIds(Set<Permission> permissions) {
         return permissions.stream()
             .map(Permission::getId)
             .collect(Collectors.toList());
     }
 
     @Named("toPermissions")
-    default Set<Permission> toPermissions(List<Integer> permissionIds) {
+    default Set<Permission> toPermissions(List<Long> permissionIds) {
         return permissionIds.stream()
             .map(id -> {
                 Permission permission = new Permission();
