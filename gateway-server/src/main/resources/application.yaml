@@ -18,7 +18,7 @@ spring:
         - id: security-server
           uri: ${SECURITY_SERVER_URL:http://localhost:8081}/
           predicates:
-            - Path=/api/security/**, /api/users/**, /api/roles/**
+            - Path=/api/security/**, /api/users/**, /api/roles/**, api/permissions/**
 
 logging:
   level:

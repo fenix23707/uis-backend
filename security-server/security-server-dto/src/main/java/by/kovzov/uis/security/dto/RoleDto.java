@@ -22,5 +22,5 @@ public class RoleDto {
     String name;
 
     @NotNull
-    List<Integer> permissionIds;
+    List<Long> permissionIds;
 }

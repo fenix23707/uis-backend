@@ -1,5 +1,7 @@
 package by.kovzov.uis.security.repository.entity;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,14 +18,30 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String scope;
 
     private String action;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(scope, action);
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        }
+        if (!(that instanceof Permission permission)) {
+            return false;
+        }
+        return Objects.equals(scope, permission.scope)
+            && Objects.equals(action, permission.action);
+    }
 }

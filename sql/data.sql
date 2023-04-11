@@ -18,7 +18,8 @@ insert into permissions(scope, action) values
     ('tag',            'update'),
     ('curriculum',     'get'),
     ('curriculum',     'create'),
-    ('curriculum',     'update');
+    ('curriculum',     'update'),
+    ('permission',     'get');
 
 insert into roles(name) values
     ('admin');
@@ -47,7 +48,10 @@ insert into roles_permissions(role_id, permission_id) values
     (1,16),
     (1,17),
     (1,18),
-    (1,19);
+    (1,19),
+    (1,20),
+    (1,21);
+
 
 insert into users_roles(user_id, role_id) values
     (1,1);
