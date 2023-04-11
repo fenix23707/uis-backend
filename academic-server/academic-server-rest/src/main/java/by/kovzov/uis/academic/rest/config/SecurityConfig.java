@@ -1,6 +1,8 @@
 package by.kovzov.uis.academic.rest.config;
 
 import by.kovzov.uis.academic.rest.converter.JwtAuthenticationTokenConverter;
+import by.kovzov.uis.common.exception.handler.security.AccessDeniedExceptionHandler;
+import by.kovzov.uis.common.exception.handler.security.AuthenticationExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,15 +18,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    JwtAuthenticationTokenConverter jwtAuthenticationTokenConverter,
-                                                   @Value("${jwk-set-uri}") String jwkSetUri) throws Exception {
+                                                   @Value("${jwk-set-uri}") String jwkSetUri,
+                                                   AccessDeniedExceptionHandler accessDeniedExceptionHandler,
+                                                   AuthenticationExceptionHandler authenticationExceptionHandler) throws Exception {
         http.authorizeHttpRequests()
             .anyRequest()
             .authenticated();
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .oauth2ResourceServer()
+            .authenticationEntryPoint(authenticationExceptionHandler)
+            .accessDeniedHandler(accessDeniedExceptionHandler)
             .jwt()
             .jwtAuthenticationConverter(jwtAuthenticationTokenConverter)
             .jwkSetUri(jwkSetUri);
+        http.exceptionHandling((exceptions) -> exceptions
+            .authenticationEntryPoint(authenticationExceptionHandler)
+            .accessDeniedHandler(accessDeniedExceptionHandler)
+        );
         http.httpBasic().disable();
 
         return http.build();
