@@ -31,7 +31,7 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId
+    @NaturalId(mutable = true)
     @Unique
     private String name;
 

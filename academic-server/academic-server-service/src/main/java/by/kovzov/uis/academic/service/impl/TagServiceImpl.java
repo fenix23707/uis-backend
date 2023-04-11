@@ -7,11 +7,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import by.kovzov.uis.academic.dto.TagDto;
+import by.kovzov.uis.academic.dto.TagRequestDto;
 import by.kovzov.uis.academic.repository.api.TagRepository;
 import by.kovzov.uis.academic.repository.entity.Tag;
 import by.kovzov.uis.academic.service.api.TagService;
 import by.kovzov.uis.academic.service.mapper.TagMapper;
-import by.kovzov.uis.common.exception.IdSpecifiedException;
 import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,29 +64,32 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDto create(TagDto tagDto) {
-        if (Objects.nonNull(tagDto.getId())) {
-            throw new IdSpecifiedException();
-        }
-
+    public TagDto create(TagRequestDto tagDto) {
         Tag entity = tagMapper.toEntity(tagDto);
         uniqueValidationService.checkEntity(entity, tagRepository);
-
+        setParent(entity, tagDto.getParentId());
         return tagMapper.toDto(tagRepository.save(entity)).toBuilder()
             .hasChildren(false)
             .build();
     }
 
     @Override
-    public TagDto update(Long id, TagDto tagDto) {
+    @Transactional
+    public TagDto update(Long id, TagRequestDto tagDto) {
         TagDto existedTag = getDtoById(id);
         Tag entity = tagMapper.toEntity(tagDto);
         entity.setId(id);
         uniqueValidationService.checkEntity(entity, tagRepository);
 
+        setParent(entity, tagDto.getParentId());
         return tagMapper.toDto(tagRepository.save(entity)).toBuilder()
             .hasChildren(existedTag.isHasChildren())
             .build();
+    }
+
+    private Tag getById(Long id) {
+        return tagRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(id)));
     }
 
     private void verifyThatTagExists(Long id) {
@@ -104,5 +108,13 @@ public class TagServiceImpl implements TagService {
         return tagMapper.toDto(entity).toBuilder()
             .hasChildren(!entity.getChildren().isEmpty())
             .build();
+    }
+
+    private void setParent(Tag entity, Long parentId) {
+        entity.setParent(null);
+        if (Objects.nonNull(parentId)) {
+            Tag parent = getById(parentId);
+            entity.setParent(parent);
+        }
     }
 }

@@ -3,6 +3,7 @@ package by.kovzov.uis.academic.rest.controller;
 import java.util.List;
 
 import by.kovzov.uis.academic.dto.TagDto;
+import by.kovzov.uis.academic.dto.TagRequestDto;
 import by.kovzov.uis.academic.service.api.TagService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -59,14 +60,14 @@ public class TagController {
     @PostMapping
     @PreAuthorize("hasAuthority('TAG_CREATE')")
     @ResponseStatus(HttpStatus.CREATED)
-    public TagDto create(@RequestBody @Valid TagDto tagDto) {
+    public TagDto create(@RequestBody @Valid TagRequestDto tagDto) {
         return tagService.create(tagDto);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('TAG_UPDATE')")
     public TagDto update(@PathVariable Long id,
-                         @RequestBody @Valid TagDto tagDto) {
+                         @RequestBody @Valid TagRequestDto tagDto) {
         return tagService.update(id, tagDto);
     }
 }
