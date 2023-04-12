@@ -93,7 +93,7 @@ public class TagServiceImpl implements TagService {
     }
 
     private void verifyThatTagExists(Long id) {
-        if (tagRepository.existsById(id)) {
+        if (!tagRepository.existsById(id)) {
             throw new NotFoundException(NOT_FOUND_MESSAGE.formatted(id));
         }
     }
