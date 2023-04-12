@@ -1,8 +1,9 @@
 package by.kovzov.uis.security.rest.config;
 
+import by.kovzov.uis.common.exception.handler.security.AccessDeniedExceptionHandler;
+import by.kovzov.uis.common.exception.handler.security.AuthenticationExceptionHandler;
 import by.kovzov.uis.security.rest.security.converter.JwtAuthenticationTokenConverter;
 import by.kovzov.uis.security.rest.security.converter.JwtRefreshTokenAuthenticationConverter;
-import by.kovzov.uis.security.rest.security.exception.AccessDeniedExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -29,23 +29,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                        @Qualifier("jwtAccessTokenDecoder") JwtDecoder jwtAccessTokenDecoder,
-                                                        JwtAuthenticationTokenConverter converter,
-                                                        AccessDeniedExceptionHandler accessDeniedExceptionHandler,
-                                                        AuthenticationEntryPoint authenticationEntryPoint) throws Exception {
+                                                   @Qualifier("jwtAccessTokenDecoder") JwtDecoder jwtAccessTokenDecoder,
+                                                   JwtAuthenticationTokenConverter converter,
+                                                   AccessDeniedExceptionHandler accessDeniedExceptionHandler,
+                                                   AuthenticationExceptionHandler authenticationExceptionHandler) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
             .requestMatchers(EXPOSED_ENDPOINTS).permitAll()
             .anyRequest().authenticated()
         );
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .oauth2ResourceServer()
-            .authenticationEntryPoint(authenticationEntryPoint)
+            .authenticationEntryPoint(authenticationExceptionHandler)
             .accessDeniedHandler(accessDeniedExceptionHandler)
             .jwt()
             .jwtAuthenticationConverter(converter)
             .decoder(jwtAccessTokenDecoder);
         http.exceptionHandling((exceptions) -> exceptions
-            .authenticationEntryPoint(authenticationEntryPoint)
+            .authenticationEntryPoint(authenticationExceptionHandler)
             .accessDeniedHandler(accessDeniedExceptionHandler)
         );
         http.csrf().disable()

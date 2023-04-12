@@ -1,8 +1,5 @@
-package by.kovzov.uis.security.rest.security.exception;
+package by.kovzov.uis.common.exception.handler.security;
 
-import java.io.IOException;
-
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +17,7 @@ public class AccessDeniedExceptionHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
-                       org.springframework.security.access.AccessDeniedException accessDeniedException)
-        throws IOException, ServletException {
+                       org.springframework.security.access.AccessDeniedException accessDeniedException) {
         resolver.resolveException(request, response, null, accessDeniedException);
     }
 }
