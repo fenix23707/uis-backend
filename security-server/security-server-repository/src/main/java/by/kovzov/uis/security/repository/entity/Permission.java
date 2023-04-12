@@ -30,7 +30,7 @@ public class Permission {
 
     @Override
     public int hashCode() {
-        return Objects.hash(scope, action);
+        return getClass().hashCode();
     }
 
     @Override
@@ -41,7 +41,6 @@ public class Permission {
         if (!(that instanceof Permission permission)) {
             return false;
         }
-        return Objects.equals(scope, permission.scope)
-            && Objects.equals(action, permission.action);
+        return Objects.equals(id, permission.id);
     }
 }
