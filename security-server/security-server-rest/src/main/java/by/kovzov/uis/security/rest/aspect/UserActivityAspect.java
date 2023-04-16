@@ -14,7 +14,7 @@ public class UserActivityAspect {
 
     private final UserService userService;
 
-    @AfterReturning(pointcut = "execution(* by.kovzov.uis.security.rest.security.service.TokenServiceImpl.createTokens(..))",
+    @AfterReturning(pointcut = "execution(* by.kovzov.uis.security.service.impl.TokenServiceImpl.createTokens(..))",
         returning = "jwtAuthenticationDto")
     public void updateLastActivity(JwtAuthenticationDto jwtAuthenticationDto) {
         userService.updateUserLastActivity(jwtAuthenticationDto.getId());

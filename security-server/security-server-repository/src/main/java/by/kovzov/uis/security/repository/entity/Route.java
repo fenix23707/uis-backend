@@ -1,41 +1,51 @@
 package by.kovzov.uis.security.repository.entity;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
+import by.kovzov.uis.security.dto.HttpMethod;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "permissions")
+@Table(name = "routes")
+@ToString
+@Builder
 @Getter
 @Setter
-@ToString
-public class Permission {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Route {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String scope;
+    private String pattern;
 
-    private String action;
+    @Enumerated(EnumType.STRING)
+    private HttpMethod method;
+
+    private String applicationId;
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "permissions")
-    private Set<Role> roles;
+    @ManyToOne
+    @JoinColumn(name = "permission_id")
+    private Permission permission;
 
     @Override
     public int hashCode() {
@@ -47,9 +57,9 @@ public class Permission {
         if (this == that) {
             return true;
         }
-        if (!(that instanceof Permission permission)) {
+        if (!(that instanceof Route route)) {
             return false;
         }
-        return Objects.equals(id, permission.id);
+        return Objects.equals(id, route.id);
     }
 }

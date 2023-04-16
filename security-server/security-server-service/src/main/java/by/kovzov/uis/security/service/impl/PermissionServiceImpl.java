@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,11 @@ public class PermissionServiceImpl implements PermissionService {
             .entrySet().stream()
             .map(this::toPermissionDto)
             .toList();
+    }
+
+    @Override
+    public Set<Permission> getAllByRolesIds(List<Long> roleIds) {
+        return null;
     }
 
     private ActionDto toActionDto(Permission permission) {

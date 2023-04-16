@@ -1,6 +1,6 @@
 package by.kovzov.uis.security.rest.config;
 
-import by.kovzov.uis.security.rest.security.service.SecurityKeysService;
+import by.kovzov.uis.security.service.impl.SecurityKeysService;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;

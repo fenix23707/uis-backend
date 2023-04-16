@@ -2,8 +2,8 @@ package by.kovzov.uis.security.rest.config;
 
 import by.kovzov.uis.common.exception.handler.security.AccessDeniedExceptionHandler;
 import by.kovzov.uis.common.exception.handler.security.AuthenticationExceptionHandler;
-import by.kovzov.uis.security.rest.security.converter.JwtAuthenticationTokenConverter;
-import by.kovzov.uis.security.rest.security.converter.JwtRefreshTokenAuthenticationConverter;
+import by.kovzov.uis.security.rest.converter.JwtAuthenticationTokenConverter;
+import by.kovzov.uis.security.rest.converter.JwtRefreshTokenAuthenticationConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -24,8 +24,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private static final String[] EXPOSED_ENDPOINTS =
-        {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/security/tokens/**", "/api/security/jwk-set-uri"};
+    private static final String[] EXPOSED_ENDPOINTS = {
+        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
+        "/api/security/tokens/**", "/api/security/jwk-set-uri",
+        "/api/authorization/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,

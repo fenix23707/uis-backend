@@ -47,3 +47,14 @@ create table users_roles (
     foreign key (user_id) references users (id) on delete cascade on update cascade,
     foreign key (role_id) references roles (id) on delete cascade on update cascade
 );
+
+
+create table permission_routes (
+    id serial,
+    route text not null,
+    permission_id serial not null,
+
+    unique(route, permission_id),
+    primary key (id),
+    foreign key (permission_id) references permissions (id) on delete cascade on update cascade
+);
