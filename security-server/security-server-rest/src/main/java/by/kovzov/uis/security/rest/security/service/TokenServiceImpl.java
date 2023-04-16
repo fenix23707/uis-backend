@@ -10,6 +10,7 @@ import by.kovzov.uis.security.dto.JwtAuthenticationDto;
 import by.kovzov.uis.security.rest.security.model.UserSecurity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,15 +21,23 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
     private static final String ISSUER = "uis";
     private static final long ACCESS_TOKEN_EXPIRATION_MINUTES = 10;
     private static final long REFRESH_TOKEN_EXPIRATION_DAYS = 1;
 
-    private final @Qualifier("jwtAccessTokenEncoder") JwtEncoder jwtAccessTokenEncoder;
-    private final @Qualifier("jwtRefreshTokenEncoder") JwtEncoder jwtRefreshTokenEncoder;
+    private final String userIdClaimName;
+    private final JwtEncoder jwtAccessTokenEncoder;
+    private final JwtEncoder jwtRefreshTokenEncoder;
+
+    public TokenServiceImpl(@Value("${uis.claim-name.user-id}") String userIdClaimName,
+                            @Qualifier("jwtAccessTokenEncoder") JwtEncoder jwtAccessTokenEncoder,
+                            @Qualifier("jwtRefreshTokenEncoder") JwtEncoder jwtRefreshTokenEncoder) {
+        this.userIdClaimName = userIdClaimName;
+        this.jwtAccessTokenEncoder = jwtAccessTokenEncoder;
+        this.jwtRefreshTokenEncoder = jwtRefreshTokenEncoder;
+    }
 
     public JwtAuthenticationDto createTokens(Authentication authentication) {
         if (!(authentication.getPrincipal() instanceof UserSecurity userSecurity)) {
@@ -53,7 +62,7 @@ public class TokenServiceImpl implements TokenService {
             .expiresAt(now.plus(ACCESS_TOKEN_EXPIRATION_MINUTES, ChronoUnit.MINUTES))
             .subject(userSecurity.getUsername())
             .claim("authorities", authorities)
-            .claim("user_id", userSecurity.getId())
+            .claim(userIdClaimName, userSecurity.getId())
             .build();
         return jwtAccessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
