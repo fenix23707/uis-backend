@@ -18,6 +18,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>by.kovzov.uis.security</groupId>
+            <artifactId>security-server-dto</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>by.kovzov.uis.common</groupId>
             <artifactId>common-validator</artifactId>
             <version>0.0.1-SNAPSHOT</version>

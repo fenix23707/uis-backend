@@ -1,8 +1,7 @@
-package by.kovzov.uis.security.rest.security.service;
+package by.kovzov.uis.security.service.impl;
 
 import by.kovzov.uis.security.repository.entity.User;
-import by.kovzov.uis.security.rest.security.model.UserSecurity;
-import by.kovzov.uis.security.service.impl.UserServiceImpl;
+import by.kovzov.uis.security.service.model.UserSecurity;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -4,7 +4,7 @@ package by.kovzov.uis.security.rest.controller;
 import by.kovzov.uis.security.dto.JwtAuthenticationDto;
 import by.kovzov.uis.security.dto.LoginDto;
 import by.kovzov.uis.security.dto.RefreshTokenDto;
-import by.kovzov.uis.security.rest.security.service.TokenService;
+import by.kovzov.uis.security.service.api.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

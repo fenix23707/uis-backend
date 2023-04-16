@@ -1,7 +1,7 @@
-package by.kovzov.uis.security.rest.security.converter;
+package by.kovzov.uis.security.rest.converter;
 
-import by.kovzov.uis.security.rest.security.model.UserSecurity;
-import by.kovzov.uis.security.rest.security.service.UserDetailsServiceImpl;
+import by.kovzov.uis.security.service.model.UserSecurity;
+import by.kovzov.uis.security.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.rest.security.converter;
+package by.kovzov.uis.security.rest.converter;
 
 import java.util.List;
 

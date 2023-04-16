@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.rest.security.service;
+package by.kovzov.uis.security.service.impl;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

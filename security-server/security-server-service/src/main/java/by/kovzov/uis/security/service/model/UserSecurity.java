@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.rest.security.model;
+package by.kovzov.uis.security.service.model;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -17,6 +17,7 @@ public class UserSecurity implements UserDetails {
     @Getter
     private final Long id;
 
+    @Getter
     private final User user;
 
     public UserSecurity(User user) {
