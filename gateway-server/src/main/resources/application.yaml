@@ -16,7 +16,7 @@ spring:
           predicates:
             - Path=/api/specializations/**, /api/disciplines/**, /api/tags/**, /api/curriculums/**
         - id: security-server
-          uri: ${SECURITY_SERVER_URL:http://localhost:8081}/
+          uri: ${uis.security-host}/
           predicates:
             - Path=/api/security/**, /api/users/**, /api/roles/**, /api/permissions/**
 
@@ -24,3 +24,6 @@ logging:
   level:
     org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: TRACE
     org.springframework.cloud.gateway: INFO
+
+uis:
+  security-host: ${SECURITY_SERVER_URL:http://localhost:8081}

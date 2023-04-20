@@ -5,12 +5,24 @@ drop table if exists users;
 drop table if exists roles;
 
 create table permissions (
-    id serial,
+    id bigserial,
     scope varchar(50) not null,
     action varchar(50) not null,
 
     unique(scope, action),
     primary key (id)
+);
+
+create table routes (
+    id bigserial,
+    pattern text not null,
+    method varchar(10) not null,
+    application_id text not null,
+    permission_id bigint null unique,
+
+    unique(pattern, method),
+    primary key (id),
+    foreign key (permission_id) references permissions (id) on delete cascade on update cascade
 );
 
 create table roles (

@@ -2,7 +2,7 @@ version: "3.9"
 services:
   security-server:
     container_name: security-server
-    image: fenix23707/security-server:latest
+    image: fenix23707/security-server:dev
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-uis:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
