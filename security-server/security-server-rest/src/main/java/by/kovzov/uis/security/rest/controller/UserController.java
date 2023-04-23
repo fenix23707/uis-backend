@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_READ')")
+    @PreAuthorize("hasAuthority('USER_READ') or @authorizationService.hasSameId(#id)")
     public UserDto getById(@PathVariable Long id) {
         return userService.getDtoById(id);
     }
