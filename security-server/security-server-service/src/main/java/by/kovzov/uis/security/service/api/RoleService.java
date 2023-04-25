@@ -10,9 +10,13 @@ public interface RoleService {
 
     Role getById(Long id);
 
+    Role getByName(String name);
+
     Page<RoleDto> search(String name, Pageable pageable);
 
     RoleDto create(RoleEditDto requestDto);
 
     RoleDto update(Long id, RoleEditDto dto);
+
+    void updateAdminRole();
 }

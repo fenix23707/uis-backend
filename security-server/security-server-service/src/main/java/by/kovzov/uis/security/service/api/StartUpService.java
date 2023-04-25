@@ -4,4 +4,6 @@ public interface StartUpService {
 
     void updateAdminUser();
 
+    void updatePermissions();
+
 }

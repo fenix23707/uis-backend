@@ -2,7 +2,7 @@ package by.kovzov.uis.security.rest.controller;
 
 import java.util.List;
 
-import by.kovzov.uis.security.dto.PermissionDto;
+import by.kovzov.uis.security.dto.GroupedPermission;
 import by.kovzov.uis.security.service.api.PermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -21,7 +21,7 @@ public class PermissionController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('PERMISSION_GET')")
-    public List<PermissionDto> getAll(@SortDefault("scope") Sort sort) {
-        return permissionService.getAll(sort);
+    public List<GroupedPermission> getAll(@SortDefault("scope") Sort sort) {
+        return permissionService.getAllGroupedPermissions(sort);
     }
 }

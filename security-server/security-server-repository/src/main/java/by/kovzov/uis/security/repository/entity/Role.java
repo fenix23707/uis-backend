@@ -14,6 +14,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
@@ -23,6 +24,7 @@ import org.hibernate.annotations.NaturalId;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class Role {
 
     @Id
@@ -41,6 +43,11 @@ public class Role {
     )
     @ToString.Exclude
     private Set<Permission> permissions;
+
+    public Role(String name, Set<Permission> permissions) {
+        this.name = name;
+        this.permissions = permissions;
+    }
 
     @Override
     public int hashCode() {

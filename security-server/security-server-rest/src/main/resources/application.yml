@@ -14,6 +14,7 @@ uis:
   security:
     admin-username: ${UIS_ADMIN_USERNAME:admin}
     admin-password: ${UIS_ADMIN_PASSWORD:admin}
+    admin-role-name: ${UIS_ADMIN_PASSWORD:admin}
   claim-name:
       user-id: user_id
 

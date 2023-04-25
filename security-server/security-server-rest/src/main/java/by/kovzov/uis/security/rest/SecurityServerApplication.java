@@ -26,6 +26,7 @@ public class SecurityServerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        startUpService.updatePermissions();
         try {
             startUpService.updateAdminUser();
         } catch (Exception e) {
