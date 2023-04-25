@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import by.kovzov.uis.security.dto.RoleDto;
+import by.kovzov.uis.security.dto.RoleEditDto;
 import by.kovzov.uis.security.repository.entity.Permission;
 import by.kovzov.uis.security.repository.entity.Role;
 import org.mapstruct.Mapper;
@@ -24,7 +25,7 @@ public interface RoleMapper {
     @Mappings({
         @Mapping(source = "permissionIds", target = "permissions", qualifiedByName = "toPermissions")
     })
-    Role toEntity(RoleDto roleDto);
+    Role toEntity(RoleEditDto roleDto);
 
     @Named("toPermissionIds")
     default List<Long> toPermissionIds(Set<Permission> permissions) {
