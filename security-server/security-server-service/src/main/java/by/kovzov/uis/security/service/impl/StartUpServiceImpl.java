@@ -12,7 +12,7 @@ import by.kovzov.uis.security.repository.entity.User;
 import by.kovzov.uis.security.service.api.PermissionService;
 import by.kovzov.uis.security.service.api.RoleService;
 import by.kovzov.uis.security.service.api.StartUpService;
-import by.kovzov.uis.security.service.extract.PermissionProducer;
+import by.vsu.uis.common.permission.PermissionProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;

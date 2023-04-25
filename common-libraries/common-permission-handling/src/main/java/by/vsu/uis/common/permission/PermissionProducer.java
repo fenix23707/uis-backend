@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.service.extract;
+package by.vsu.uis.common.permission;
 
 import java.util.List;
 
