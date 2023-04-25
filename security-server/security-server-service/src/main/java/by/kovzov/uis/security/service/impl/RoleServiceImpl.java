@@ -4,6 +4,7 @@ package by.kovzov.uis.security.service.impl;
 import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import by.kovzov.uis.security.dto.RoleDto;
+import by.kovzov.uis.security.dto.RoleEditDto;
 import by.kovzov.uis.security.repository.api.RoleRepository;
 import by.kovzov.uis.security.repository.entity.Role;
 import by.kovzov.uis.security.service.api.RoleService;
@@ -34,8 +35,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDto create(RoleDto requestDto) {
+    public RoleDto create(RoleEditDto requestDto) {
         Role entity = roleMapper.toEntity(requestDto);
+        uniqueValidationService.checkEntity(entity, roleRepository);
+        return roleMapper.toDto(roleRepository.save(entity));
+    }
+
+    @Override
+    public RoleDto update(Long id, RoleEditDto dto) {
+        getById(id);
+        Role entity = roleMapper.toEntity(dto);
+        entity.setId(id);
         uniqueValidationService.checkEntity(entity, roleRepository);
         return roleMapper.toDto(roleRepository.save(entity));
     }
