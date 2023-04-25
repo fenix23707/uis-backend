@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.rest.controller;
+package by.kovzov.uis.security.rest.controller.internal;
 
 import java.util.Map;
 
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/security/")
+@RequestMapping("/api/internal/security")
 @RequiredArgsConstructor
-public class JwkSetController {
+public class JwkSetInternalController {
 
     private final @Qualifier("accessTokenJwkSet") JWKSet accessTokenJwkSet;
 
-    @GetMapping("jwk-set-uri")
+    @GetMapping("/jwk-set-uri")
     public Map<String, Object> jwtSet() {
         return accessTokenJwkSet.toPublicJWKSet().toJSONObject();
     }
