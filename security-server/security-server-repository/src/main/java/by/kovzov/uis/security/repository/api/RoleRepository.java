@@ -1,5 +1,7 @@
 package by.kovzov.uis.security.repository.api;
 
+import java.util.Optional;
+
 import by.kovzov.uis.security.repository.entity.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +14,6 @@ public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificat
 
     @Query("select r from Role r where lower(r.name) like lower(concat('%', :name, '%'))")
     Page<Role> findAllByNameLike(@Param("name") String name, Pageable pageable);
+
+    Optional<Role> findByName(String name);
 }

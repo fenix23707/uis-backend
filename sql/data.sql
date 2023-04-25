@@ -1,62 +1,62 @@
-insert into permissions(scope, action) values
-    ('specialization', 'get'),
-    ('specialization', 'search'),
-    ('specialization', 'create'),
-    ('specialization', 'update'),
-    ('discipline',     'get'),
-    ('discipline',     'search'),
-    ('discipline',     'create'),
-    ('discipline',     'update'),
-    ('user',           'read'),
-    ('user',           'search'),
-    ('user',           'create'),
-    ('user',           'manage_roles'),
-    ('role',           'create'),
-    ('role',           'update'),
-    ('role',           'read'),
-    ('tag',            'read'),
-    ('tag',            'create'),
-    ('tag',            'update'),
-    ('curriculum',     'get'),
-    ('curriculum',     'create'),
-    ('curriculum',     'update'),
-    ('permission',     'get');
+--insert into permissions(scope, action) values
+--    ('specialization', 'get'),
+--    ('specialization', 'search'),
+--    ('specialization', 'create'),
+--    ('specialization', 'update'),
+--    ('discipline',     'get'),
+--    ('discipline',     'search'),
+--    ('discipline',     'create'),
+--    ('discipline',     'update'),
+--    ('user',           'read'),
+--    ('user',           'search'),
+--    ('user',           'create'),
+--    ('user',           'manage_roles'),
+--    ('role',           'create'),
+--    ('role',           'update'),
+--    ('role',           'read'),
+--    ('tag',            'read'),
+--    ('tag',            'create'),
+--    ('tag',            'update'),
+--    ('curriculum',     'get'),
+--    ('curriculum',     'create'),
+--    ('curriculum',     'update'),
+--    ('permission',     'get');
+--
+--insert into roles(name) values
+--    ('admin');
+--
+--insert into users(username, password,last_activity, creation_time) values
+--    ('admin', '$2a$10$g8zjne897r0qqr1pcsjarun8qvgs8xtmqkbjnnbrlm6.w11p2bt.m',timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'), -- pass admin
+--    ('root', '$2a$10$v.tpymlerguzxnmiae6yqee2mlckhxtyc5vcgqlreghqb/6.esojo', timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'), -- pass root
+--    ('test', '$2a$10$makl04wklsnl93zwedecnesadnwxfhwgn9yv.qm0mblhtrvey.wlu', timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'); -- pass test
+--
+--insert into roles_permissions(role_id, permission_id) values
+--    (1,1),
+--    (1,2),
+--    (1,3),
+--    (1,4),
+--    (1,5),
+--    (1,6),
+--    (1,7),
+--    (1,8),
+--    (1,9),
+--    (1,10),
+--    (1,11),
+--    (1,12),
+--    (1,13),
+--    (1,14),
+--    (1,15),
+--    (1,16),
+--    (1,17),
+--    (1,18),
+--    (1,19),
+--    (1,20),
+--    (1,21),
+--    (1,22);
 
-insert into roles(name) values
-    ('admin');
 
-insert into users(username, password,last_activity, creation_time) values
-    ('admin', '$2a$10$g8zjne897r0qqr1pcsjarun8qvgs8xtmqkbjnnbrlm6.w11p2bt.m',timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'), -- pass admin
-    ('root', '$2a$10$v.tpymlerguzxnmiae6yqee2mlckhxtyc5vcgqlreghqb/6.esojo', timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'), -- pass root
-    ('test', '$2a$10$makl04wklsnl93zwedecnesadnwxfhwgn9yv.qm0mblhtrvey.wlu', timestamp '2015-01-10 00:51:14', timestamp '2015-01-10 00:51:14'); -- pass test
-
-insert into roles_permissions(role_id, permission_id) values
-    (1,1),
-    (1,2),
-    (1,3),
-    (1,4),
-    (1,5),
-    (1,6),
-    (1,7),
-    (1,8),
-    (1,9),
-    (1,10),
-    (1,11),
-    (1,12),
-    (1,13),
-    (1,14),
-    (1,15),
-    (1,16),
-    (1,17),
-    (1,18),
-    (1,19),
-    (1,20),
-    (1,21),
-    (1,22);
-
-
-insert into users_roles(user_id, role_id) values
-    (1,1);
+--insert into users_roles(user_id, role_id) values
+--    (1,1);
 
 INSERT INTO specializations (name, short_name, cipher, parent_id) VALUES
     ('Computer Science', 'CS', 'CS-101', null),

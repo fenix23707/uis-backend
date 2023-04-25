@@ -1,4 +1,5 @@
 server:
   port: 8080
-
-jwk-set-uri: ${SECURITY_SERVER_URL:http://localhost:8081}/api/security/jwk-set-uri
+uis:
+  security-server-url: ${SECURITY_SERVER_URL:http://localhost:8081}
+jwk-set-uri: ${uis.security-server-url}/api/internal/security/jwk-set-uri
