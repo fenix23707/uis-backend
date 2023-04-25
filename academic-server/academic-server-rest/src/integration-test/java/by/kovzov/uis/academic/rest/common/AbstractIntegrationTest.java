@@ -73,7 +73,8 @@ public abstract class AbstractIntegrationTest {
         registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
         registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
         registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
-        registry.add("jwk-set-uri", () -> "%s/api/security/jwk-set-uri".formatted(securityServerUri));
+        registry.add("uis.security-server-url", () -> securityServerUri);
+        registry.add("jwk-set-uri", () -> "%s/api/internal/security/jwk-set-uri".formatted(securityServerUri));
     }
 
 
