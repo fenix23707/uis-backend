@@ -1,7 +1,7 @@
 package by.kovzov.uis.security.rest;
 
 import by.kovzov.uis.security.service.api.StartUpService;
-import by.vsu.uis.common.permission.PermissionHandlingConfig;
+import by.vsu.uis.security.permission.PermissionHandlingConfig;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package by.kovzov.uis.academic.rest;
 
-import by.vsu.uis.common.permission.PermissionHandlingConfig;
+import by.vsu.uis.security.permission.PermissionHandlingConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

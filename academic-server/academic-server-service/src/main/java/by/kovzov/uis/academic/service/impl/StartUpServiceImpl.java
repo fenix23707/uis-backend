@@ -5,14 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import by.kovzov.uis.academic.service.api.StartUpService;
-import by.vsu.uis.common.permission.PermissionProducer;
+import by.vsu.uis.security.permission.PermissionProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor

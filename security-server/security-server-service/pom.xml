@@ -23,9 +23,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>by.kovzov.uis.common</groupId>
-            <artifactId>common-permission-handling</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>by.kovzov.uis.security</groupId>
+            <artifactId>permission-handling</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>by.kovzov.uis.security</groupId>

@@ -1,9 +1,9 @@
-package by.vsu.uis.common.permission;
+package by.vsu.uis.security.permission;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan("by.vsu.uis.common.permission")
+@ComponentScan("by.vsu.uis.security.permission")
 public class PermissionHandlingConfig {
 }

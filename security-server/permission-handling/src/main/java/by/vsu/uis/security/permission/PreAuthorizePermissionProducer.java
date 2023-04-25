@@ -1,4 +1,4 @@
-package by.vsu.uis.common.permission;
+package by.vsu.uis.security.permission;
 
 import java.util.List;
 import java.util.Map;
