@@ -67,7 +67,7 @@ public abstract class AbstractIntegrationTest {
             "SPRING_DATASOURCE_PASSWORD=" + postgreSQLContainer.getPassword()
         ));
         securityServerContainer.start();
-        securityServerContainer.waitingFor(Wait.forHttp("/api/security/jwk-set-uri"));
+        securityServerContainer.waitingFor(Wait.forHttp("/api/internal/security/jwk-set-uri"));
         securityServerUri = "http://%s:%s".formatted(securityServerContainer.getHost(), securityServerContainer.getFirstMappedPort());
 
         registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
