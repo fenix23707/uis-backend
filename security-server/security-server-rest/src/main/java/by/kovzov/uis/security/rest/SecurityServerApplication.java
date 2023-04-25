@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Import;
 })
 @OpenAPIDefinition
 @AllArgsConstructor
-@Slf4j
 @Import(value = {
     PermissionHandlingConfig.class
 })
@@ -31,11 +30,6 @@ public class SecurityServerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        startUpService.updatePermissions();
-        try {
-            startUpService.updateAdminUser();
-        } catch (Exception e) {
-            log.warn("Unable to update admin user: " + e.getMessage());
-        }
+
     }
 }
