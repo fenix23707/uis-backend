@@ -18,12 +18,12 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @RequiredArgsConstructor
 public class PreAuthorizePermissionProducer implements PermissionProducer {
 
-    private static final Pattern PATTERN = Pattern.compile("hasAuthority\\('([A-Z]+)_([A-Z_]+)'\\)");
+    private static final Pattern PATTERN = Pattern.compile(".*hasAuthority\\('([A-Z]+)_([A-Z_]+)'\\).*");
 
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
 
     @Override
-    public List<PermissionDto> producePermissions() {
+    public List<PermissionDto>  producePermissions() {
         Map<RequestMappingInfo, HandlerMethod> mappings = requestMappingHandlerMapping.getHandlerMethods();
         return mappings.values().stream()
             .map(HandlerMethod::getMethod)
