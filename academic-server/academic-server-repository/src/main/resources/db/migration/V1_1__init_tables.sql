@@ -1,12 +1,6 @@
-
-drop table if exists specializations;
-drop table if exists disciplines_tags;
-drop table if exists disciplines;
-drop table if exists tags;
-
-create table specializations (
+create table if not exists specializations (
     id bigserial,
-    name varchar(100) not null unique,
+    name text not null unique,
     short_name varchar(50) not null unique,
     cipher varchar(100) not null,
     parent_id bigint null,
@@ -15,7 +9,7 @@ create table specializations (
     foreign key (parent_id) references specializations (id) on delete cascade on update cascade
 );
 
-create table disciplines (
+create table if not exists disciplines (
     id bigserial,
     name text not null unique,
     short_name varchar(50) not null unique,
@@ -23,7 +17,7 @@ create table disciplines (
     primary key(id)
 );
 
-create table tags (
+create table if not exists tags (
   id serial,
   name varchar(255) not null unique,
   parent_id bigint,
@@ -32,7 +26,7 @@ create table tags (
   foreign key (parent_id) references tags(id)
 );
 
-create table disciplines_tags (
+create table if not exists disciplines_tags (
   discipline_id bigint not null,
   tag_id bigint not null,
 
@@ -41,7 +35,7 @@ create table disciplines_tags (
   foreign key (tag_id) references tags(id)
 );
 
-create table curriculums (
+create table if not exists curriculums (
     id serial,
     approval_date date not null,
     admission_year integer not null,

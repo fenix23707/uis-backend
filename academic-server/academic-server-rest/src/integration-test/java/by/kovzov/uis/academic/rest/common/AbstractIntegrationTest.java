@@ -35,7 +35,6 @@ public abstract class AbstractIntegrationTest {
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15-alpine")
         .withNetwork(network)
         .withNetworkAliases("postgresql")
-        .withCopyFileToContainer(MountableFile.forClasspathResource("schema.sql"), "/docker-entrypoint-initdb.d/1-schema.sql")
         .withCopyFileToContainer(MountableFile.forClasspathResource("data/sql/auth-user.sql"), "/docker-entrypoint-initdb.d/2-auth-user.sql");
 
     static GenericContainer<?> securityServerContainer = new GenericContainer<>("fenix23707/security-server")
