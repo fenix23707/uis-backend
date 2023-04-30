@@ -34,8 +34,7 @@ public abstract class AbstractIntegrationTest {
 
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15-alpine")
         .withNetwork(network)
-        .withNetworkAliases("postgresql")
-        .withCopyFileToContainer(MountableFile.forClasspathResource("data/sql/auth-user.sql"), "/docker-entrypoint-initdb.d/2-auth-user.sql");
+        .withNetworkAliases("postgresql");
 
     static GenericContainer<?> securityServerContainer = new GenericContainer<>("fenix23707/security-server")
         .withNetwork(network)
@@ -63,7 +62,9 @@ public abstract class AbstractIntegrationTest {
         securityServerContainer.setEnv(List.of(
             "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql/test",
             "SPRING_DATASOURCE_USERNAME=" + postgreSQLContainer.getUsername(),
-            "SPRING_DATASOURCE_PASSWORD=" + postgreSQLContainer.getPassword()
+            "SPRING_DATASOURCE_PASSWORD=" + postgreSQLContainer.getPassword(),
+            "UIS_ADMIN_USERNAME=admin",
+            "UIS_ADMIN_PASSWORD=admin"
         ));
         securityServerContainer.start();
         securityServerContainer.waitingFor(Wait.forHttp("/api/internal/security/jwk-set-uri"));
@@ -97,7 +98,7 @@ public abstract class AbstractIntegrationTest {
     }
 
     private static String getJwtAccessToken() {
-        LoginDto loginDto = LoginDto.builder().username("test").password("test").build();
+        LoginDto loginDto = LoginDto.builder().username("admin").password("admin").build();
         return given()
             .baseUri(securityServerUri)
             .body(loginDto)
