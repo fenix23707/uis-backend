@@ -64,7 +64,7 @@ public class UserControllerIT extends AbstractIntegrationTest {
 
     @ParameterizedTest
     @CsvSource({
-        "US, 1",
+        "US, 2",
     })
     void searchShouldReturnSizeAccordingToFilters(String username, int expectedSize) {
         requestSpecification.when()

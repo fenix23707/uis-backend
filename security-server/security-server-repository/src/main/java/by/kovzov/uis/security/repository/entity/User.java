@@ -24,7 +24,7 @@ import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "security")
 @Getter
 @Setter
 @ToString
@@ -48,6 +48,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
+        schema = "security",
         name = "users_roles",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")

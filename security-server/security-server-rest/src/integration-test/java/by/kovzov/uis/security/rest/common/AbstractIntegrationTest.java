@@ -25,8 +25,7 @@ import org.testcontainers.utility.MountableFile;
 public abstract class AbstractIntegrationTest {
 
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15-alpine")
-        .withCopyFileToContainer(MountableFile.forClasspathResource("schema.sql"), "/docker-entrypoint-initdb.d/1-schema.sql")
-        .withCopyFileToContainer(MountableFile.forClasspathResource("data/sql/auth-user.sql"), "/docker-entrypoint-initdb.d/2-auth-user.sql");
+        .withCopyFileToContainer(MountableFile.forClasspathResource("data/sql/auth-user.sql"), "/docker-entrypoint-initdb.d/1-auth-user.sql");
 
     @LocalServerPort
     protected int localServerPort;
@@ -55,8 +54,8 @@ public abstract class AbstractIntegrationTest {
 
     protected String getJwtAccessToken() {
         LoginDto loginDto = LoginDto.builder()
-            .username("test")
-            .password("test")
+            .username("admin")
+            .password("admin")
             .build();
         return given()
             .when()

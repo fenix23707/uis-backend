@@ -20,7 +20,7 @@ import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "roles", schema = "security")
 @Getter
 @Setter
 @ToString
@@ -37,6 +37,7 @@ public class Role {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
+        schema = "security",
         name = "roles_permissions",
         joinColumns = @JoinColumn(name = "role_id"),
         inverseJoinColumns = @JoinColumn(name = "permission_id")

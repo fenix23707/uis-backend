@@ -1,13 +1,7 @@
-drop table if exists permissions;
-drop table if exists roles;
-drop table if exists users;
-drop table if exists roles_permissions;
-drop table if exists users_roles;
-
 create table permissions (
     id serial,
-    scope varchar(50) not null,
-    action varchar(50) not null,
+    scope varchar(100) not null,
+    action varchar(100) not null,
 
     unique(scope, action),
     primary key (id)
@@ -15,16 +9,16 @@ create table permissions (
 
 create table roles (
     id serial,
-    name varchar(100) not null unique,
+    name text not null unique,
 
     primary key (id)
 );
 
 create table users (
     id bigserial,
-    username varchar(100) not null unique,
+    username text not null unique,
     password varchar(100) not null,
-    last_activity timestamp not null,
+    last_activity timestamp null,
     creation_time timestamp not null,
 
     primary key (id)

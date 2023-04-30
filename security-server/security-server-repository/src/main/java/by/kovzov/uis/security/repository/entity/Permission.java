@@ -14,7 +14,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "permissions")
+@Table(name = "permissions", schema = "security")
 @Getter
 @Setter
 @ToString

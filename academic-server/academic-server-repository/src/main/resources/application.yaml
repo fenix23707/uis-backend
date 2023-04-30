@@ -1,4 +1,8 @@
 spring:
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/uis}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
@@ -8,3 +12,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: validate
+
+logging:
+  level:
+    flyway: debug
