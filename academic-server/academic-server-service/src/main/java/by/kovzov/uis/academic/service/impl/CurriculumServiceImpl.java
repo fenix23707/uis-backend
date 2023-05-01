@@ -50,17 +50,16 @@ public class CurriculumServiceImpl implements CurriculumService {
 
     @Override
     public CurriculumDto update(Long id, CurriculumDto curriculumDto) {
-        verifyThatCurriculumExists(id);
+        verifyThatExistsById(id);
         Curriculum entity = curriculumMapper.toEntity(curriculumDto);
         entity.setId(id);
         return curriculumMapper.toDto(curriculumRepository.save(entity));
     }
 
-    private void verifyThatCurriculumExists(Long id) {
+    @Override
+    public void verifyThatExistsById(Long id) {
         if (!curriculumRepository.existsById(id)) {
             throw new NotFoundException(NOT_FOUND_MESSAGE.formatted(id));
         }
     }
-
-
 }

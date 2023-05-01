@@ -16,4 +16,6 @@ public interface CurriculumService {
     Page<CurriculumDto> search(SearchDto searchDto, Pageable pageable);
 
     CurriculumDto getById(Long id);
+
+    void verifyThatExistsById(Long id);
 }

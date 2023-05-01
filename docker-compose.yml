@@ -60,5 +60,3 @@ services:
       timeout: 45s
       interval: 10s
       retries: 10
-
-# TODO: Try flyway https://porter.codes/2021/04/28/Docker-Compose-conditions.html

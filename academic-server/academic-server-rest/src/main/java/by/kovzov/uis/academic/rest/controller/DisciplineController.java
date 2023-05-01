@@ -1,5 +1,9 @@
 package by.kovzov.uis.academic.rest.controller;
 
+import by.kovzov.uis.academic.dto.DisciplineDto;
+import by.kovzov.uis.academic.service.api.DisciplineService;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -15,11 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import by.kovzov.uis.academic.dto.DisciplineDto;
-import by.kovzov.uis.academic.service.api.DisciplineService;
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/disciplines")

@@ -179,3 +179,24 @@ insert into curriculums (approval_date, admission_year, specialization_id) value
     ('2021-10-17', 2021, 5),
     ('2022-08-02', 2022, 1),
     ('2023-01-05', 2023, 4);
+
+insert into curriculum_discipline (curriculum_id, discipline_id, semester, total_hours, lecture_hours, practice_hours, lab_hours, self_study_hours, test_count, has_credit, has_exam, credit_units) values
+    (1, 1, 1, 100, 30, 20, 10, 40, 3, true, true, 5.0),
+    (1, 2, 2, 120, 40, 30, 20, 30, 4, false, true, 6.0),
+    (1, 3, 2, 80, 25, 15, 10, 30, 2, true, false, 4.5),
+    (1, 4, 3, 90, 30, 20, 15, 25, 3, false, true, 4.0),
+    (1, 5, 3, 70, 20, 15, 10, 25, 2, true, false, 3.5),
+    (2, 6, 1, 80, 25, 20, 10, 25, 3, true, true, 4.0),
+    (2, 7, 1, 60, 20, 10, 5, 25, 2, false, false, 3.0),
+    (2, 8, 2, 90, 30, 25, 15, 20, 3, true, true, 5.0),
+    (2, 9, 2, 70, 20, 15, 10, 25, 2, false, false, 3.5),
+    (2, 10, 3, 80, 25, 20, 10, 25, 3, true, true, 4.0),
+    (3, 11, 1, 90, 30, 20, 15, 25, 3, false, true, 4.0),
+    (3, 12, 1, 70, 20, 15, 10, 25, 2, true, false, 3.5),
+    (3, 13, 2, 100, 30, 25, 10, 35, 4, true, true, 6.0),
+    (3, 14, 2, 80, 25, 20, 10, 25, 3, false, false, 4.0),
+    (3, 15, 3, 60, 20, 10, 5, 25, 2, true, true, 3.0),
+    (4, 16, 1, 70, 20, 15, 10, 25, 2, true, false, 3.5),
+    (4, 17, 1, 90, 30, 20, 15, 25, 3, false, true, 4.0),
+    (4, 18, 2, 80, 25, 20, 10, 25, 3, true, true, 4.0),
+    (4, 19, 2, 70, 20, 15, 10, 25, 2, false, false, 3.5);

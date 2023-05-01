@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: main-push-pipeline
+name: ci-pull-request
 
 on:
   pull_request:
