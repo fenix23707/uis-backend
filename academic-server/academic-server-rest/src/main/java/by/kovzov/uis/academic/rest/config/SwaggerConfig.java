@@ -1,4 +1,4 @@
-package by.kovzov.uis.security.rest.config;
+package by.kovzov.uis.academic.rest.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -32,7 +32,7 @@ public class SwaggerConfig {
 
     private Info info() {
         return new Info()
-            .title("University Information System: Security Server")
+            .title("University Information System: Academic Server")
             .contact(contact());
     }
 
