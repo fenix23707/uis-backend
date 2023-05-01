@@ -6,17 +6,11 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: gateway-server-master-pull-request-pipeline
+name: main-push-pipeline
 
 on:
   pull_request:
     branches: [ "main" ]
-    paths: 
-      - gateway-server/**
-
-defaults:
-  run:
-    working-directory: gateway-server
 
 jobs:
   build-dependencies:
@@ -25,7 +19,7 @@ jobs:
   continuous-integration:
     runs-on: ubuntu-latest
     needs: build-dependencies
-
+    
     steps:
     - name: Clone Repo
       uses: actions/checkout@v3
@@ -43,8 +37,26 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Build and Push to DockerHub
+    - name: Gateway Server Build and Push to DockerHub
       run: |
+        cd gateway-server
         mvn clean install
         docker build -t fenix23707/gateway-server:dev .
         docker push fenix23707/gateway-server:dev
+        cd ..
+
+    - name: Security Server Build and Push to DockerHub
+      run: |
+        cd security-server
+        mvn clean install
+        docker build -t fenix23707/security-server:dev .
+        docker push fenix23707/security-server:dev
+        cd ..
+
+    - name: Specialization Server Build and Push to DockerHub
+      run: |
+        cd academic-server
+        mvn clean install
+        docker build -t fenix23707/academic-server:dev .
+        docker push fenix23707/academic-server:dev
+        cd ..
