@@ -37,12 +37,23 @@ public class CurriculumDisciplineServiceImpl implements CurriculumDisciplineServ
 
     @Override
     @Transactional
-    public CurriculumDisciplineDto create(CurriculumDisciplineDto dto) {
-        curriculumService.verifyThatExistsById(dto.getCurriculumId());
-        disciplineService.verifyThatExistsById(dto.getDisciplineId());
+    public CurriculumDisciplineDto create(CurriculumDisciplineId id, CurriculumDisciplineDto dto) {
+        curriculumService.verifyThatExistsById(id.getCurriculumId());
+        disciplineService.verifyThatExistsById(id.getDisciplineId());
         var entity = curriculumDisciplineMapper.toEntity(dto);
+        entity.setId(id);
         var savedEntity = curriculumDisciplineRepository.save(entity);
         return curriculumDisciplineMapper.toDto(savedEntity);
+    }
+
+    @Override
+    @Transactional
+    public CurriculumDisciplineDto update(CurriculumDisciplineId id, CurriculumDisciplineDto dto) {
+        verifyThatExists(id);
+        var entity = curriculumDisciplineMapper.toEntity(dto);
+        entity.setId(id);
+        var updatedEntity = curriculumDisciplineRepository.save(entity);
+        return curriculumDisciplineMapper.toDto(updatedEntity);
     }
 
     @Override
@@ -51,5 +62,11 @@ public class CurriculumDisciplineServiceImpl implements CurriculumDisciplineServ
         var entity = curriculumDisciplineRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(id)));
         curriculumDisciplineRepository.delete(entity);
+    }
+
+    private void verifyThatExists(CurriculumDisciplineId id) {
+        if (!curriculumDisciplineRepository.existsById(id)) {
+            throw new NotFoundException(NOT_FOUND_MESSAGE.formatted(id));
+        }
     }
 }

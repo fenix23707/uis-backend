@@ -10,7 +10,9 @@ public interface CurriculumDisciplineService {
 
     List<CurriculumDisciplineDto> getAllByCurriculumId(Long curriculumId, Sort sort);
 
-    CurriculumDisciplineDto create(CurriculumDisciplineDto dto);
+    CurriculumDisciplineDto create(CurriculumDisciplineId id, CurriculumDisciplineDto dto);
+
+    CurriculumDisciplineDto update(CurriculumDisciplineId id, CurriculumDisciplineDto dto);
 
     void delete(CurriculumDisciplineId id);
 }

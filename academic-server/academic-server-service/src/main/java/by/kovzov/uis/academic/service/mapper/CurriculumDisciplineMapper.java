@@ -18,7 +18,7 @@ public interface CurriculumDisciplineMapper {
     @Mapping(target = "disciplineId", source = "id.disciplineId")
     List<CurriculumDisciplineDto> toDtos(List<CurriculumDiscipline> entities);
 
-    @Mapping(target = "id.curriculumId", source = "curriculumId")
-    @Mapping(target = "id.disciplineId", source = "disciplineId")
+    @Mapping(target = "id.curriculumId", ignore = true)
+    @Mapping(target = "id.disciplineId", ignore = true)
     CurriculumDiscipline toEntity(CurriculumDisciplineDto dto);
 }

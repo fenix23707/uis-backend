@@ -13,10 +13,8 @@ import lombok.Value;
 @TotalHoursCheck
 public class CurriculumDisciplineDto {
 
-    @NotNull(message = "Curriculum id can not be null")
     Long curriculumId;
 
-    @NotNull(message = "Discipline id can not be null")
     Long disciplineId;
 
     @Min(value = 1, message = "Semester can not be less than 1")

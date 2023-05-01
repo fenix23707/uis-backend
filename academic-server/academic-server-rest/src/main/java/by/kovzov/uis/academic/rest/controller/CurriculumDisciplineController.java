@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,10 +35,22 @@ public class CurriculumDisciplineController {
         return curriculumDisciplineService.getAllByCurriculumId(curriculumId, sort);
     }
 
-    @PostMapping("/disciplines")
+    @PostMapping("/{curriculumId}/disciplines/{disciplineId}")
     @PreAuthorize("hasAuthority('CURRICULUM_CREATE')")
-    public CurriculumDisciplineDto create(@RequestBody @Valid CurriculumDisciplineDto dto) {
-        return curriculumDisciplineService.create(dto);
+    public CurriculumDisciplineDto create(@PathVariable Long curriculumId,
+                                          @PathVariable Long disciplineId,
+                                          @RequestBody @Valid CurriculumDisciplineDto dto) {
+        var id = new CurriculumDisciplineId(curriculumId, disciplineId);
+        return curriculumDisciplineService.create(id, dto);
+    }
+
+    @PutMapping("/{curriculumId}/disciplines/{disciplineId}")
+    @PreAuthorize("hasAuthority('CURRICULUM_UPDATE')")
+    public CurriculumDisciplineDto update(@PathVariable Long curriculumId,
+                                          @PathVariable Long disciplineId,
+                                          @RequestBody @Valid CurriculumDisciplineDto dto) {
+        var id = new CurriculumDisciplineId(curriculumId, disciplineId);
+        return curriculumDisciplineService.update(id, dto);
     }
 
     @DeleteMapping("/{curriculumId}/disciplines/{disciplineId}")
