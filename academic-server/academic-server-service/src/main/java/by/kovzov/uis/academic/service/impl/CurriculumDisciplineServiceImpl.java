@@ -8,11 +8,9 @@ import by.kovzov.uis.academic.service.api.CurriculumDisciplineService;
 import by.kovzov.uis.academic.service.api.CurriculumService;
 import by.kovzov.uis.academic.service.api.DisciplineService;
 import by.kovzov.uis.academic.service.mapper.CurriculumDisciplineMapper;
-import by.kovzov.uis.academic.service.mapper.CurriculumMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

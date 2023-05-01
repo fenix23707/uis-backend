@@ -1,11 +1,7 @@
 package by.kovzov.uis.academic.rest.controller;
 
-import java.util.List;
-
-import by.kovzov.uis.academic.dto.CurriculumDisciplineDto;
 import by.kovzov.uis.academic.dto.CurriculumDto;
 import by.kovzov.uis.academic.dto.SearchDto;
-import by.kovzov.uis.academic.service.api.CurriculumDisciplineService;
 import by.kovzov.uis.academic.service.api.CurriculumService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
