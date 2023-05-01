@@ -67,4 +67,11 @@ public class DisciplineServiceImpl implements DisciplineService {
         uniqueValidationService.checkEntity(entity, disciplineRepository);
         return disciplineMapper.toDto(disciplineRepository.save(entity));
     }
+
+    @Override
+    public void verifyThatExistsById(Long id) {
+        if (!disciplineRepository.existsById(id)) {
+            throw new NotFoundException(NOT_FOUND_MESSAGE.formatted(id));
+        }
+    }
 }

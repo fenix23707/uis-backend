@@ -14,4 +14,6 @@ public interface DisciplineService {
     DisciplineDto create(DisciplineDto disciplineDto);
 
     DisciplineDto update(Long id, DisciplineDto disciplineDto);
+
+    void verifyThatExistsById(Long id);
 }
