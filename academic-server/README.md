@@ -20,4 +20,4 @@
 1. ``cd academic-server-rest``
 2. ``mvn spring-boot:run`` optionally ``-Dspring.profiles.active=dev``
 
-To test that it works, open a browser at http://localhost:8080/swagger-ui/index.html .
+To test that it works, open a browser at http://localhost:8082/swagger-ui/index.html .
