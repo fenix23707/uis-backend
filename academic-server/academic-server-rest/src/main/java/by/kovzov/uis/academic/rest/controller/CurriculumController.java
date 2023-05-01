@@ -1,7 +1,11 @@
 package by.kovzov.uis.academic.rest.controller;
 
+import java.util.List;
+
+import by.kovzov.uis.academic.dto.CurriculumDisciplineDto;
 import by.kovzov.uis.academic.dto.CurriculumDto;
 import by.kovzov.uis.academic.dto.SearchDto;
+import by.kovzov.uis.academic.service.api.CurriculumDisciplineService;
 import by.kovzov.uis.academic.service.api.CurriculumService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CurriculumController {
 
     private final CurriculumService curriculumService;
+    private final CurriculumDisciplineService curriculumDisciplineService;
 
     @GetMapping()
     @PreAuthorize("hasAuthority('CURRICULUM_GET')")
@@ -42,6 +47,12 @@ public class CurriculumController {
     public Page<CurriculumDto> search(@RequestBody SearchDto searchDto,
                                       @PageableDefault(sort = "approvalDate", direction = Direction.DESC) Pageable pageable) {
         return curriculumService.search(searchDto, pageable);
+    }
+
+    @GetMapping("/{curriculumId}/disciplines")
+    @PreAuthorize("hasAuthority('CURRICULUM_GET')")
+    public List<CurriculumDisciplineDto> getDisciplinesById(@PathVariable Long curriculumId) {
+        return curriculumDisciplineService.getAllByCurriculumId(curriculumId);
     }
 
     @PostMapping
