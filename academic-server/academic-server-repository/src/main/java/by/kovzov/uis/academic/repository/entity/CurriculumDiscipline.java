@@ -3,6 +3,7 @@ package by.kovzov.uis.academic.repository.entity;
 import java.io.Serializable;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -50,6 +52,9 @@ public class CurriculumDiscipline {
     private double creditUnits;
 
    @Data
+   @AllArgsConstructor
+   @NoArgsConstructor
+   @Embeddable
     public static class CurriculumDisciplineId implements Serializable {
 
         private Long curriculumId;
