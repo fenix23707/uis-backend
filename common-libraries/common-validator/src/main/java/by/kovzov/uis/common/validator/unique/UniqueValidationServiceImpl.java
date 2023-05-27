@@ -34,7 +34,9 @@ public class UniqueValidationServiceImpl implements UniqueValidationService {
     private <T> String generateMessage(T entity, T existedEntity) {
         String prefix = format("{0} with ", entity.getClass().getSimpleName());
         String suffix = " already exists.";
+        var uniqueFields = getFieldsWithAnnotation(entity, Unique.class);
         return Arrays.stream(entity.getClass().getDeclaredFields())
+            .filter(uniqueFields::contains)
             .filter(field -> Objects.equals(getFieldValue(field, entity), (getFieldValue(field, existedEntity))))
             .map(field -> "%s = '%s'".formatted( field.getName(), getFieldValue(field, entity)))
             .collect(Collectors.joining(", and ", prefix, suffix));
