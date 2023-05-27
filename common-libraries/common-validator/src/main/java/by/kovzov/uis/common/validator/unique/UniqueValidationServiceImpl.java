@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -24,6 +25,9 @@ public class UniqueValidationServiceImpl implements UniqueValidationService {
 
     @Override
     public <T> void checkEntity(T entity, JpaSpecificationExecutor<T> jpaSpecificationExecutor) {
+        if (getFieldsWithAnnotation(entity, Unique.class).isEmpty()) {
+            return;
+        }
         jpaSpecificationExecutor.findOne(constructQuery(entity))
             .map(existedEntity -> generateMessage(entity, existedEntity))
             .ifPresent(msg -> {
