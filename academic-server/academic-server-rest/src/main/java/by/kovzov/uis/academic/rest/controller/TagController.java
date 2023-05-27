@@ -33,7 +33,7 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping("/search")
-    @PreAuthorize("hasAuthority('TAG_READ')")
+    @PreAuthorize("hasAuthority('TAG_SEARCH')")
     public Page<TagDto> search(@RequestParam(defaultValue = "") String name,
                                @PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
         return tagService.search(name, pageable);

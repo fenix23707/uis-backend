@@ -20,8 +20,8 @@ public class PermissionController {
     private final PermissionService permissionService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('PERMISSION_GET')")
-    public List<GroupedPermission> getAll(@SortDefault("scope") Sort sort) {
+    @PreAuthorize("hasAuthority('PERMISSION_READ')")
+    public List<GroupedPermission> getAll(@SortDefault("scope") @SortDefault("action") Sort sort) {
         return permissionService.getAllGroupedPermissions(sort);
     }
 }

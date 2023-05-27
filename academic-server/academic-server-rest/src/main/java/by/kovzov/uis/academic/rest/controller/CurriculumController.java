@@ -26,19 +26,19 @@ public class CurriculumController {
     private final CurriculumService curriculumService;
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('CURRICULUM_GET')")
+    @PreAuthorize("hasAuthority('CURRICULUM_READ')")
     public Page<CurriculumDto> getAll(@PageableDefault(sort = "approvalDate", direction = Direction.DESC) Pageable pageable) {
         return curriculumService.getAll(pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('CURRICULUM_GET')")
+    @PreAuthorize("hasAuthority('CURRICULUM_READ')")
     public CurriculumDto getById(@PathVariable Long id) {
         return curriculumService.getById(id);
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAuthority('CURRICULUM_GET')")
+    @PreAuthorize("hasAuthority('CURRICULUM_SEARCH')")
     public Page<CurriculumDto> search(@RequestBody SearchDto searchDto,
                                       @PageableDefault(sort = "approvalDate", direction = Direction.DESC) Pageable pageable) {
         return curriculumService.search(searchDto, pageable);

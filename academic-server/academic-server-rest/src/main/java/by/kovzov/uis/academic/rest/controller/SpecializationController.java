@@ -34,19 +34,19 @@ public class SpecializationController {
     private final SpecializationService specializationService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('SPECIALIZATION_GET')")
+    @PreAuthorize("hasAuthority('SPECIALIZATION_READ')")
     public SpecializationDto getById(@PathVariable Long id) {
         return specializationService.getById(id);
     }
 
     @GetMapping("/parents")
-    @PreAuthorize("hasAuthority('SPECIALIZATION_GET')")
+    @PreAuthorize("hasAuthority('SPECIALIZATION_READ')")
     public Page<SpecializationDto> getAllParents(@PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
         return specializationService.getAllParents(pageable);
     }
 
     @GetMapping("/{parentId}/children")
-    @PreAuthorize("hasAuthority('SPECIALIZATION_GET')")
+    @PreAuthorize("hasAuthority('SPECIALIZATION_READ')")
     public List<SpecializationDto> getAllChildren(@PathVariable Long parentId, @SortDefault("name") Sort sort) {
         return specializationService.getAllChildrenByParentId(parentId, sort);
     }
