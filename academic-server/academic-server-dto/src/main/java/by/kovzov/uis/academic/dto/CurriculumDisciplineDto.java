@@ -22,22 +22,21 @@ public class CurriculumDisciplineDto {
     int semester;
 
     @NotNull(message = "Total hours can not be null")
-    @Positive(message = "Total hours must be positive number")
     Integer totalHours;
 
-    @Positive(message = "Lecture hours must be positive")
+    @Min(value = 0, message = "Lecture hours can not be negative")
     int lectureHours;
 
-    @Positive(message = "Practice hours must be positive")
+    @Min(value = 0, message = "Practice hours can not be negative")
     int practiceHours;
 
-    @Positive( message = "Lab hours must be positive")
+    @Min(value = 0, message = "Lab hours can not be negative")
     int labHours;
 
-    @Positive(message = "Self study hours must be positive")
+    @Min(value = 0, message = "Self study hours can not be negative")
     int selfStudyHours;
 
-    @Positive(message = "Test count hours must be positive")
+    @Min(value = 0, message = "Test count can not be negative")
     int testCount;
 
     @NotNull(message = "Has credit can not be null")
