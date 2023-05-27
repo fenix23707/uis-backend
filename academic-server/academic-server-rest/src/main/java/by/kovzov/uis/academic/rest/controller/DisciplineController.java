@@ -28,7 +28,7 @@ public class DisciplineController {
     private final DisciplineService disciplineService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('DISCIPLINE_GET')")
+    @PreAuthorize("hasAuthority('DISCIPLINE_READ')")
     public DisciplineDto getById(@PathVariable Long id) {
         return disciplineService.getById(id);
     }

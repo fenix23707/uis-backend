@@ -29,7 +29,7 @@ public class CurriculumDisciplineController {
     private final CurriculumDisciplineService curriculumDisciplineService;
 
     @GetMapping("/{curriculumId}/disciplines")
-    @PreAuthorize("hasAuthority('CURRICULUM_GET')")
+    @PreAuthorize("hasAuthority('CURRICULUM_READ')")
     public List<CurriculumDisciplineDto> getByCurriculumId(@PathVariable Long curriculumId,
                                                            @SortDefault("semester") Sort sort) {
         return curriculumDisciplineService.getAllByCurriculumId(curriculumId, sort);
