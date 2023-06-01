@@ -69,6 +69,12 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        verifyThatExistsById(id);
+        disciplineRepository.deleteById(id);
+    }
+
+    @Override
     public void verifyThatExistsById(Long id) {
         if (!disciplineRepository.existsById(id)) {
             throw new NotFoundException(NOT_FOUND_MESSAGE.formatted(id));

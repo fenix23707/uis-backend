@@ -16,4 +16,6 @@ public interface DisciplineService {
     DisciplineDto update(Long id, DisciplineDto disciplineDto);
 
     void verifyThatExistsById(Long id);
+
+    void deleteById(Long id);
 }
