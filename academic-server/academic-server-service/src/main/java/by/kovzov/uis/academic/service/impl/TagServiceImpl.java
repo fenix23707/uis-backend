@@ -12,8 +12,8 @@ import by.kovzov.uis.academic.repository.api.TagRepository;
 import by.kovzov.uis.academic.repository.entity.Tag;
 import by.kovzov.uis.academic.service.api.TagService;
 import by.kovzov.uis.academic.service.mapper.TagMapper;
+import by.kovzov.uis.common.exception.DependencyException;
 import by.kovzov.uis.common.exception.NotFoundException;
-import by.kovzov.uis.common.exception.ParentDependencyException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -93,7 +93,7 @@ public class TagServiceImpl implements TagService {
     public void deleteById(Long id) {
         var dto = getDtoById(id);
         if (dto.isHasChildren()) {
-            throw new ParentDependencyException("Parent with id = {0} has children and con not be deleted".formatted(id));
+            throw new DependencyException("Parent with id = %s has children and con not be deleted".formatted(id));
         }
         tagRepository.deleteById(id);
     }
