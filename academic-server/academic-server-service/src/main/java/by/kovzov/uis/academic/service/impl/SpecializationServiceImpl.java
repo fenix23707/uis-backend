@@ -18,6 +18,7 @@ import by.kovzov.uis.academic.repository.entity.Specialization;
 import by.kovzov.uis.academic.service.api.SpecializationService;
 import by.kovzov.uis.academic.service.mapper.SpecializationMapper;
 import by.kovzov.uis.common.exception.NotFoundException;
+import by.kovzov.uis.common.exception.ParentDependencyException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -105,6 +106,15 @@ public class SpecializationServiceImpl implements SpecializationService {
         return specializationMapper.toDto(entity).toBuilder()
             .hasChildren(specializationDto.isHasChildren())
             .build();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        var dto = getById(id);
+        if (dto.isHasChildren()) {
+            throw new ParentDependencyException("Specialization with id = {0} has children and con not be deleted.".formatted(id));
+        }
+        specializationRepository.deleteById(id);
     }
 
     private Specialization findById(Long id) {

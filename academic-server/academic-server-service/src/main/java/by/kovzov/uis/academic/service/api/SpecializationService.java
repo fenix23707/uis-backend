@@ -27,4 +27,6 @@ public interface SpecializationService {
     SpecializationDto create(SpecializationRequestDto specializationRequestDto);
 
     SpecializationDto update(Long id, SpecializationRequestDto specializationRequestDto);
+
+    void deleteById(Long id);
 }
