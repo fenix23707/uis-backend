@@ -13,6 +13,7 @@ import by.kovzov.uis.academic.repository.entity.Tag;
 import by.kovzov.uis.academic.service.api.TagService;
 import by.kovzov.uis.academic.service.mapper.TagMapper;
 import by.kovzov.uis.common.exception.NotFoundException;
+import by.kovzov.uis.common.exception.ParentDependencyException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TagServiceImpl implements TagService {
 
     private static final String NOT_FOUND_MESSAGE = "Tag with id = %d not found.";
+
     private final TagRepository tagRepository;
     private final TagMapper tagMapper;
     private final UniqueValidationService uniqueValidationService;
@@ -85,6 +87,15 @@ public class TagServiceImpl implements TagService {
         return tagMapper.toDto(tagRepository.save(entity)).toBuilder()
             .hasChildren(existedTag.isHasChildren())
             .build();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        var dto = getDtoById(id);
+        if (dto.isHasChildren()) {
+            throw new ParentDependencyException("Parent with id = {0} has children and con not be deleted".formatted(id));
+        }
+        tagRepository.deleteById(id);
     }
 
     private Tag getById(Long id) {

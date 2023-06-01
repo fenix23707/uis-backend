@@ -21,4 +21,6 @@ public interface TagService {
     TagDto getDtoById(Long id);
 
     TagDto update(Long id, TagRequestDto tagDto);
+
+    void deleteById(Long id);
 }

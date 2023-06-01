@@ -15,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,5 +70,12 @@ public class TagController {
     public TagDto update(@PathVariable Long id,
                          @RequestBody @Valid TagRequestDto tagDto) {
         return tagService.update(id, tagDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('TAG_DELETE')")
+    public void delete(@PathVariable Long id) {
+        tagService.deleteById(id);
     }
 }
