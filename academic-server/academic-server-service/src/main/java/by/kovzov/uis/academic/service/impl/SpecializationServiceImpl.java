@@ -108,9 +108,9 @@ public class SpecializationServiceImpl implements SpecializationService {
         updatedEntity.setId(id);
 
         uniqueValidationService.checkEntity(updatedEntity, specializationRepository);
+        verifyTreeNotContainsNode(id, requestDto.getParentId());
 
         updateParent(updatedEntity, requestDto.getParentId());
-        verifyTreeNotContainsNode(id, requestDto.getParentId());
 
         specializationRepository.save(updatedEntity);
 
