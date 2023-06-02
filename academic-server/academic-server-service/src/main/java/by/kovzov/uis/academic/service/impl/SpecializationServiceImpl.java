@@ -19,8 +19,10 @@ import by.kovzov.uis.academic.service.api.SpecializationService;
 import by.kovzov.uis.academic.service.mapper.SpecializationMapper;
 import by.kovzov.uis.common.exception.DependencyException;
 import by.kovzov.uis.common.exception.NotFoundException;
+import by.kovzov.uis.common.exception.TreeStructureException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -87,9 +89,12 @@ public class SpecializationServiceImpl implements SpecializationService {
     public SpecializationDto create(SpecializationRequestDto requestDto) {
         Specialization entity = specializationMapper.toEntity(requestDto);
         entity.setId(null);
+
         uniqueValidationService.checkEntity(entity, specializationRepository);
+
         updateParent(entity, requestDto.getParentId());
         specializationRepository.save(entity);
+
         return specializationMapper.toDto(entity).toBuilder()
             .hasChildren(false)
             .build();
@@ -97,14 +102,20 @@ public class SpecializationServiceImpl implements SpecializationService {
 
     @Override
     public SpecializationDto update(Long id, SpecializationRequestDto requestDto) {
-        SpecializationDto specializationDto = getById(id);
-        Specialization entity = specializationMapper.toEntity(requestDto);
-        entity.setId(id);
-        uniqueValidationService.checkEntity(entity, specializationRepository);
-        updateParent(entity, requestDto.getParentId());
-        specializationRepository.save(entity);
-        return specializationMapper.toDto(entity).toBuilder()
-            .hasChildren(specializationDto.isHasChildren())
+        SpecializationDto oldDto = getById(id);
+
+        Specialization updatedEntity = specializationMapper.toEntity(requestDto);
+        updatedEntity.setId(id);
+
+        uniqueValidationService.checkEntity(updatedEntity, specializationRepository);
+
+        updateParent(updatedEntity, requestDto.getParentId());
+        verifyTreeNotContainsNode(id, requestDto.getParentId());
+
+        specializationRepository.save(updatedEntity);
+
+        return specializationMapper.toDto(updatedEntity).toBuilder()
+            .hasChildren(oldDto.isHasChildren())
             .build();
     }
 
@@ -134,4 +145,37 @@ public class SpecializationServiceImpl implements SpecializationService {
             .hasChildren(!entity.getChildren().isEmpty())
             .build();
     }
+
+    private void verifyTreeNotContainsNode(Long rootId, Long nodeId) {
+        if (Objects.isNull(rootId) || Objects.isNull(nodeId)) {
+            return;
+        }
+        var parent = findById(rootId);
+        var node = findById(nodeId);
+        if (isTreeHasNode(parent, node)) {
+            throw new TreeStructureException("Tree with parent id = %d already has node with id = %d".formatted(rootId, nodeId));
+        }
+    }
+
+    private boolean isTreeHasNode(Specialization root, Specialization node) {
+        if (root == null) {
+            return false;
+        }
+
+        if (EqualsBuilder.reflectionEquals(root, node, "id", "children", "parent")) {
+            return true;
+        }
+        var children = specializationRepository.findWithChildrenById(root.getId())
+            .map(Specialization::getChildren)
+            .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(root.getId())));
+
+        for (Specialization child : children) {
+            if (isTreeHasNode(child, node)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

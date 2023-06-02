@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 // HELP: https://medium.com/@kthsingh.ms/modeling-a-child-parent-relationship-in-the-same-table-using-jpa-spring-boot-and-representing-it-15e5a6256dab
 
@@ -34,6 +35,7 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "specializations")
+@ToString
 public class Specialization {
 
     @Id
@@ -51,8 +53,10 @@ public class Specialization {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+    @ToString.Exclude
     private Specialization parent;
 
     @OneToMany(mappedBy = "parent")
+    @ToString.Exclude
     private Set<Specialization> children;
 }
