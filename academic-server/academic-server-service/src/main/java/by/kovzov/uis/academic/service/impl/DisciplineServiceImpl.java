@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class DisciplineServiceImpl implements DisciplineService {
 
-    private static final String NOT_FOUND_MESSAGE = "Discipline with id = {0} not found.";
+    private static final String NOT_FOUND_MESSAGE = "Discipline with id = %s not found.";
 
     private final DisciplineMapper disciplineMapper;
     private final DisciplineRepository disciplineRepository;
@@ -66,6 +66,12 @@ public class DisciplineServiceImpl implements DisciplineService {
         entity.setId(id);
         uniqueValidationService.checkEntity(entity, disciplineRepository);
         return disciplineMapper.toDto(disciplineRepository.save(entity));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        verifyThatExistsById(id);
+        disciplineRepository.deleteById(id);
     }
 
     @Override

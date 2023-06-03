@@ -9,12 +9,16 @@ import java.util.stream.Collectors;
 import by.kovzov.uis.academic.dto.TagDto;
 import by.kovzov.uis.academic.dto.TagRequestDto;
 import by.kovzov.uis.academic.repository.api.TagRepository;
+import by.kovzov.uis.academic.repository.entity.Specialization;
 import by.kovzov.uis.academic.repository.entity.Tag;
 import by.kovzov.uis.academic.service.api.TagService;
 import by.kovzov.uis.academic.service.mapper.TagMapper;
+import by.kovzov.uis.common.exception.DependencyException;
 import by.kovzov.uis.common.exception.NotFoundException;
+import by.kovzov.uis.common.exception.TreeStructureException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TagServiceImpl implements TagService {
 
     private static final String NOT_FOUND_MESSAGE = "Tag with id = %d not found.";
+
     private final TagRepository tagRepository;
     private final TagMapper tagMapper;
     private final UniqueValidationService uniqueValidationService;
@@ -77,14 +82,26 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public TagDto update(Long id, TagRequestDto tagDto) {
         TagDto existedTag = getDtoById(id);
+
         Tag entity = tagMapper.toEntity(tagDto);
         entity.setId(id);
+
         uniqueValidationService.checkEntity(entity, tagRepository);
+        verifyTreeNotContainsNode(id, tagDto.getParentId());
 
         setParent(entity, tagDto.getParentId());
         return tagMapper.toDto(tagRepository.save(entity)).toBuilder()
             .hasChildren(existedTag.isHasChildren())
             .build();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        var dto = getDtoById(id);
+        if (dto.isHasChildren()) {
+            throw new DependencyException("Parent with id = %s has children and con not be deleted".formatted(id));
+        }
+        tagRepository.deleteById(id);
     }
 
     private Tag getById(Long id) {
@@ -116,5 +133,37 @@ public class TagServiceImpl implements TagService {
             Tag parent = getById(parentId);
             entity.setParent(parent);
         }
+    }
+
+    private void verifyTreeNotContainsNode(Long rootId, Long nodeId) {
+        if (Objects.isNull(rootId) || Objects.isNull(nodeId)) {
+            return;
+        }
+        var parent = getById(rootId);
+        var node = getById(nodeId);
+        if (isTreeHasNode(parent, node)) {
+            throw new TreeStructureException("Tree with parent id = %d already has node with id = %d".formatted(rootId, nodeId));
+        }
+    }
+
+    private boolean isTreeHasNode(Tag root, Tag node) {
+        if (root == null) {
+            return false;
+        }
+
+        if (EqualsBuilder.reflectionEquals(root, node, "id", "children", "parent", "disciplines")) {
+            return true;
+        }
+        var children = tagRepository.findByIdWithChildren(root.getId())
+            .map(Tag::getChildren)
+            .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(root.getId())));
+
+        for (Tag child : children) {
+            if (isTreeHasNode(child, node)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

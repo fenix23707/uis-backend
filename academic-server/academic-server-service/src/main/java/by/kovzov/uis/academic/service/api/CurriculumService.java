@@ -18,4 +18,6 @@ public interface CurriculumService {
     CurriculumDto getById(Long id);
 
     void verifyThatExistsById(Long id);
+
+    void deleteById(Long id);
 }

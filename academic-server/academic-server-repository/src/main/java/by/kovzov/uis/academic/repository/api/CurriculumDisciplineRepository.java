@@ -12,4 +12,7 @@ public interface CurriculumDisciplineRepository extends JpaRepository<Curriculum
 
     @Query("from CurriculumDiscipline cd where cd.id.curriculumId = :curriculumId ")
     List<CurriculumDiscipline> findAllByCurriculumId(Long curriculumId, Sort sort);
+
+    @Query("select count(cd) > 0 from CurriculumDiscipline cd where cd.id.curriculumId = :curriculumId")
+    boolean existsByCurriculumId(Long curriculumId);
 }
