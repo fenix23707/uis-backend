@@ -1,6 +1,7 @@
 package by.kovzov.uis.academic.rest.controller;
 
 import by.kovzov.uis.academic.dto.CurriculumDto;
+import by.kovzov.uis.academic.dto.CurriculumSearchDto;
 import by.kovzov.uis.academic.dto.SearchDto;
 import by.kovzov.uis.academic.service.api.CurriculumService;
 import jakarta.validation.Valid;
@@ -40,9 +41,9 @@ public class CurriculumController {
         return curriculumService.getById(id);
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     @PreAuthorize("hasAuthority('CURRICULUM_SEARCH')")
-    public Page<CurriculumDto> search(@RequestBody SearchDto searchDto,
+    public Page<CurriculumDto> search(@RequestBody @Valid CurriculumSearchDto searchDto,
                                       @PageableDefault(sort = "approvalDate", direction = Direction.DESC) Pageable pageable) {
         return curriculumService.search(searchDto, pageable);
     }
