@@ -15,7 +15,6 @@ on:
 jobs:
   continuous-integration:
     runs-on: ubuntu-latest
-    needs: build-dependencies
     
     steps:
     - name: Clone Repo
