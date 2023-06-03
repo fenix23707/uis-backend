@@ -1,7 +1,5 @@
 package by.kovzov.uis.academic.service.impl;
 
-import static java.text.MessageFormat.format;
-
 import static by.kovzov.uis.academic.service.util.PageableUtils.pageableWithoutSort;
 
 import by.kovzov.uis.academic.dto.DisciplineDto;
@@ -36,7 +34,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     public DisciplineDto getById(Long id) {
         return disciplineRepository.findById(id)
             .map(disciplineMapper::toDto)
-            .orElseThrow(() -> new NotFoundException(format(NOT_FOUND_MESSAGE, id)));
+            .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(id)));
     }
 
     @Override

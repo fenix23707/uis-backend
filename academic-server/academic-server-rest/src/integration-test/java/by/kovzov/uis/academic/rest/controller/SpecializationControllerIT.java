@@ -94,7 +94,6 @@ class SpecializationControllerIT extends AbstractIntegrationTest {
     void updateShouldReturnValidJsonSchema() {
         String path = generateUpdatePath();
         SpecializationRequestDto dto = buildSpecializationRequestDto().toBuilder()
-            .parentId(specializationId)
             .build();
 
         requestSpecification

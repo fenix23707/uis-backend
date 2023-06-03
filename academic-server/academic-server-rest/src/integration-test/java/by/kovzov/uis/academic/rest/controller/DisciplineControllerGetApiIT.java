@@ -67,7 +67,7 @@ class DisciplineControllerGetApiIT extends AbstractIntegrationTest {
             .get(BASE_URL + id)
             .then()
             .statusCode(404)
-            .body("message", is(format("Discipline with id = {0} not found.", id)))
+            .body("message", is("Discipline with id = %d not found.".formatted(id)))
             .body("path", is(BASE_URL + id));
     }
 

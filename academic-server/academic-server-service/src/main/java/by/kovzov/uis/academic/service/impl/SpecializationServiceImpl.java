@@ -1,6 +1,5 @@
 package by.kovzov.uis.academic.service.impl;
 
-import static java.text.MessageFormat.format;
 
 import static by.kovzov.uis.academic.repository.specification.SpecializationSpecifications.cipherLike;
 import static by.kovzov.uis.academic.repository.specification.SpecializationSpecifications.mameLike;
@@ -55,7 +54,7 @@ public class SpecializationServiceImpl implements SpecializationService {
     @Transactional(readOnly = true)
     public List<SpecializationDto> getAllChildrenByParentId(Long parentId, Sort sort) {
         if (!specializationRepository.existsById(parentId)) {
-            throw new NotFoundException(format(NOT_FOUND_MESSAGE, parentId));
+            throw new NotFoundException(NOT_FOUND_MESSAGE.formatted(parentId));
         }
         return specializationRepository.findAllChildrenByParentId(parentId, sort).stream()
             .map(this::mapToDto)
@@ -81,7 +80,7 @@ public class SpecializationServiceImpl implements SpecializationService {
     public SpecializationDto getById(Long id) {
         return specializationRepository.findWithChildrenById(id)
             .map(this::mapToDto)
-            .orElseThrow(() -> new NotFoundException(format(NOT_FOUND_MESSAGE, id)));
+            .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(id)));
     }
 
     @Override
@@ -130,7 +129,7 @@ public class SpecializationServiceImpl implements SpecializationService {
 
     private Specialization findById(Long id) {
         return specializationRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException(format(NOT_FOUND_MESSAGE, id)));
+            .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE.formatted(id)));
     }
 
     private void updateParent(Specialization entity, Long parentId) {
