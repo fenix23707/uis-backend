@@ -13,12 +13,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-dependencies:
-    uses: ./.github/workflows/build-dependencies.yml
-
   continuous-integration:
     runs-on: ubuntu-latest
-    needs: build-dependencies
     
     steps:
     - name: Clone Repo
@@ -30,7 +26,13 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    
+
+    - name: Build common libraries
+      run: |
+        cd common-libraries
+        mvn clean install
+        cd ..
+
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
@@ -53,7 +55,7 @@ jobs:
         docker push fenix23707/security-server:dev
         cd ..
 
-    - name: Specialization Server Build and Push to DockerHub
+    - name: Academic Server Build and Push to DockerHub
       run: |
         cd academic-server
         mvn clean install

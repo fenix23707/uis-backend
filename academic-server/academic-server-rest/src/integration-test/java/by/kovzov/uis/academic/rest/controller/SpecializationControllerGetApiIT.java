@@ -68,7 +68,7 @@ public class SpecializationControllerGetApiIT extends AbstractIntegrationTest {
             .get(BASE_URL + id)
             .then()
             .statusCode(404)
-            .body("message", is(format("Specialization with id = {0} not found.", id)))
+            .body("message", is("Specialization with id = %d not found.".formatted(id)))
             .body("path", is(BASE_URL + id));
     }
 
