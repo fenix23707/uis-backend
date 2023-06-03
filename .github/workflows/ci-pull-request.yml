@@ -55,7 +55,7 @@ jobs:
         docker push fenix23707/security-server:dev
         cd ..
 
-    - name: Specialization Server Build and Push to DockerHub
+    - name: Academic Server Build and Push to DockerHub
       run: |
         cd academic-server
         mvn clean install
