@@ -1,11 +1,23 @@
 package by.kovzov.uis.academic.service.impl;
 
+import static java.util.Optional.ofNullable;
+
+import static by.kovzov.uis.academic.repository.specification.SpecializationSpecifications.cipherLike;
+import static by.kovzov.uis.academic.repository.specification.SpecializationSpecifications.mameLike;
+import static by.kovzov.uis.academic.repository.specification.SpecializationSpecifications.shortNameLike;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+
 import by.kovzov.uis.academic.dto.CurriculumDto;
-import by.kovzov.uis.academic.dto.SearchDto;
+import by.kovzov.uis.academic.dto.CurriculumSearchDto;
 import by.kovzov.uis.academic.repository.api.CurriculumDisciplineRepository;
 import by.kovzov.uis.academic.repository.api.CurriculumRepository;
 import by.kovzov.uis.academic.repository.entity.Curriculum;
-import by.kovzov.uis.academic.service.api.CurriculumDisciplineService;
+import by.kovzov.uis.academic.repository.entity.Specialization;
+import by.kovzov.uis.academic.repository.specification.CurriculumSpecifications;
 import by.kovzov.uis.academic.service.api.CurriculumService;
 import by.kovzov.uis.academic.service.mapper.CurriculumMapper;
 import by.kovzov.uis.common.exception.DependencyException;
@@ -14,6 +26,7 @@ import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,8 +55,16 @@ public class CurriculumServiceImpl implements CurriculumService {
     }
 
     @Override
-    public Page<CurriculumDto> search(SearchDto searchDto, Pageable pageable) {
-        throw new UnsupportedOperationException("the search has not been implemented yet");
+    public Page<CurriculumDto> search(CurriculumSearchDto searchDto, Pageable pageable) {
+        Specification<Curriculum> specification = Specification.allOf(
+            ofNullable(searchDto.getAdmissionYearBegin()).map(CurriculumSpecifications::admissionYearGte).orElse(null),
+            ofNullable(searchDto.getAdmissionYearEnd()).map(CurriculumSpecifications::admissionYearLt).orElse(null),
+            ofNullable(searchDto.getApprovalDateBegin()).map(CurriculumSpecifications::approvalDateGte).orElse(null),
+            ofNullable(searchDto.getApprovalDateEnd()).map(CurriculumSpecifications::approvalDateLt).orElse(null)
+        );
+
+        return curriculumRepository.findAll(specification, pageable)
+            .map(curriculumMapper::toDto);
     }
 
     @Override
