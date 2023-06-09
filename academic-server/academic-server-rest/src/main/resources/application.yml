@@ -1,3 +1,6 @@
+spring:
+  application:
+    name: academic-server
 server:
   port: 8080
 uis:

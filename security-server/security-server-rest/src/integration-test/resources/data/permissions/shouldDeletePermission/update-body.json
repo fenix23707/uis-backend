@@ -1,0 +1,38 @@
+[
+  {
+    "scope": "user",
+    "action": "read",
+    "methods": [
+      {
+        "description": "1"
+      },
+      {
+        "description": "2"
+      },
+      {
+        "description": "3"
+      },
+      {
+        "description": "4"
+      }
+    ]
+  },
+  {
+    "scope": "user",
+    "action": "create",
+    "methods": [
+      {
+        "description": "5"
+      },
+      {
+        "description": "7"
+      },
+      {
+        "description": "8"
+      },
+      {
+        "description": "9"
+      }
+    ]
+  }
+]

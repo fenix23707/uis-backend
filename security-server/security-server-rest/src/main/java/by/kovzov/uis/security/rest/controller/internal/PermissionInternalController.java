@@ -22,7 +22,7 @@ public class PermissionInternalController {
 
     @PostMapping
     public void save(@RequestBody @Valid List<PermissionDto> permissions) {
-        permissionService.saveIfNotExists(permissions);
+        permissionService.update(permissions, "security-server");
         roleService.updateAdminRole(); // temp solution (this line should not be here)
     }
 }

@@ -1,0 +1,14 @@
+[
+  {
+    "scope": "user",
+    "action": "get",
+    "methods": [
+      {
+        "description": "1"
+      },
+      {
+        "description": "2"
+      }
+    ]
+  }
+]

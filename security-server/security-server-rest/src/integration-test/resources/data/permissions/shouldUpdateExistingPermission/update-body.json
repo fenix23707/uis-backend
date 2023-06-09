@@ -1,0 +1,58 @@
+[
+  {
+    "scope": "user",
+    "action": "read",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "user desc 1"
+      },
+      {
+        "description": "user desc 3"
+      }
+    ]
+  },
+  {
+    "scope": "user",
+    "action": "search",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "user desc 2"
+      }
+    ]
+  },
+  {
+    "scope": "permission",
+    "action": "read",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "permission desc 1"
+      }
+    ]
+  },
+  {
+    "scope": "role",
+    "action": "read",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "role desc 1"
+      },
+      {
+        "description": "role desc 2"
+      }
+    ]
+  },
+  {
+    "scope": "role",
+    "action": "update",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "role desc 3"
+      }
+    ]
+  }
+]

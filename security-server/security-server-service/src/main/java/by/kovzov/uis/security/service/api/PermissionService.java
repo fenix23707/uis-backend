@@ -13,7 +13,5 @@ public interface PermissionService {
 
     List<Permission> getAllPermissions();
 
-    void saveIfNotExists(PermissionDto permissionDto);
-
-    void saveIfNotExists(List<PermissionDto> permissions);
+    void update(List<PermissionDto> permissions, String applicationName);
 }

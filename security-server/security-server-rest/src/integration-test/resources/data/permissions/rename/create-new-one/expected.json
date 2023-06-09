@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1002,
+    "scope": "user",
+    "action": "search",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "5"
+      },
+      {
+        "description": "6"
+      }
+    ]
+  },
+  {
+    "scope": "user",
+    "action": "manage",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "7"
+      }
+    ]
+  }
+]

@@ -1,23 +1,27 @@
 package by.kovzov.uis.security.repository.entity;
 
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 @Entity
 @Table(name = "permissions", schema = "security")
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class Permission {
 
     @Id
@@ -28,9 +32,19 @@ public class Permission {
 
     private String action;
 
+    private String applicationName;
+
+    @OneToMany(mappedBy = "permission")
+    @ToString.Exclude
+    private Set<Method> methods = Collections.emptySet();
+
+    public Permission(Long id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(scope, action);
     }
 
     @Override
@@ -41,6 +55,9 @@ public class Permission {
         if (!(that instanceof Permission permission)) {
             return false;
         }
-        return Objects.equals(id, permission.id);
+        return new EqualsBuilder()
+            .append(scope, permission.scope)
+            .append(action, permission.action)
+            .isEquals();
     }
 }

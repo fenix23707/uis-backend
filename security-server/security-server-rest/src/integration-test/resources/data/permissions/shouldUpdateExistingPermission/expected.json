@@ -1,0 +1,73 @@
+[
+  {
+    "id": 100,
+    "scope": "user",
+    "action": "read",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "user desc 1"
+      },
+      {
+        "description": "user desc 3"
+      }
+    ]
+  },
+  {
+    "scope": "user",
+    "action": "search",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "user desc 2"
+      }
+    ]
+  },
+  {
+    "id": 200,
+    "scope": "permission",
+    "action": "read",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "permission desc 1"
+      }
+    ]
+  },
+  {
+    "id": 400,
+    "scope": "role",
+    "action": "read",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "role desc 1"
+      },
+      {
+        "description": "role desc 2"
+      }
+    ]
+  },
+  {
+    "id": 500,
+    "scope": "role",
+    "action": "update",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "role desc 3"
+      }
+    ]
+  },
+  {
+    "id": 600,
+    "scope": "specialization",
+    "action": "create",
+    "applicationName": "academic-server",
+    "methods": [
+      {
+        "description": "specialization desc 3"
+      }
+    ]
+  }
+]
