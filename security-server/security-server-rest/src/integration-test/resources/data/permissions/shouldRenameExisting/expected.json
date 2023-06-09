@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1,
+    "scope": "user",
+    "action": "search",
+    "applicationName": "security-server",
+    "methods": [
+      {
+        "description": "1"
+      },
+      {
+        "description": "2"
+      },
+      {
+        "description": "3"
+      }
+    ]
+  }
+]

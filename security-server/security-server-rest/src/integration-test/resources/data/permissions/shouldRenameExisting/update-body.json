@@ -1,0 +1,17 @@
+[
+  {
+    "scope": "user",
+    "action": "search",
+    "methods": [
+      {
+        "description": "1"
+      },
+      {
+        "description": "2"
+      },
+      {
+        "description": "3"
+      }
+    ]
+  }
+]

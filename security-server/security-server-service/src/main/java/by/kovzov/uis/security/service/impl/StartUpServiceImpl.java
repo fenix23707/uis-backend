@@ -33,6 +33,7 @@ public class StartUpServiceImpl implements StartUpService {
     private String adminUsername;
     private String adminPassword;
     private String adminRoleName;
+    private String applicationName;
 
     @Value("${uis.security.admin-username}")
     public void setAdminUsername(String adminUsername) {
@@ -48,6 +49,11 @@ public class StartUpServiceImpl implements StartUpService {
     @Value("${uis.security.admin-role-name}")
     public void setAdminRoleName(String adminRoleName) {
         this.adminRoleName = notBlank(adminRoleName, "adminRoleName can not be blank");;
+    }
+
+    @Value("${spring.application.name:undefined}")
+    public void setApplicationName(String applicationName) {
+        this.applicationName = notBlank(applicationName, "application name can not be blank");
     }
 
     @Override
@@ -68,7 +74,7 @@ public class StartUpServiceImpl implements StartUpService {
             .map(PermissionProducer::producePermissions)
             .flatMap(Collection::stream)
             .toList();
-        permissionService.saveIfNotExists(permissions);
+        permissionService.update(permissions, applicationName);
     }
 
     private User buildAdminUser() {
