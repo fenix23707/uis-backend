@@ -1,4 +1,4 @@
-alter table permissions add column application_name varchar(255) not null default 'undefined';
+alter table permissions add column application_name varchar(255) not null default 'security-server';
 alter table permissions alter column application_name drop default;
 
 create table methods (
