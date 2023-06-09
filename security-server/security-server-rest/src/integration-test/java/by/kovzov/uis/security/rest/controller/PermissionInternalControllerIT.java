@@ -25,7 +25,7 @@ import org.springframework.test.context.DynamicPropertySource;
 
 public class PermissionInternalControllerIT extends AbstractIntegrationTest {
 
-    private static final String BASE_URL = "/api/internal/permissions";
+    private static final String BASE_URL = "/api/internal/permissions/security-server";
     private static final String CLEAR_SQL = "/data/permissions/clear.sql";
 
     private static final RecursiveComparisonConfiguration LENIENT_CONFIG = RecursiveComparisonConfiguration.builder()
