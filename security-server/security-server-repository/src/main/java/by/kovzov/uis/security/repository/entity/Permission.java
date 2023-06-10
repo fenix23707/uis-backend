@@ -44,11 +44,21 @@ public class Permission {
 
     @Override
     public int hashCode() {
-        return Objects.hash(scope, action);
+        return getClass().hashCode();
     }
 
     @Override
     public boolean equals(Object that) {
+        if (this == that) {
+            return true;
+        }
+        if (!(that instanceof Permission permission)) {
+            return false;
+        }
+        return Objects.equals(id, permission.id);
+    }
+
+    public boolean equalsByScopeAndAction(Object that) {
         if (this == that) {
             return true;
         }
