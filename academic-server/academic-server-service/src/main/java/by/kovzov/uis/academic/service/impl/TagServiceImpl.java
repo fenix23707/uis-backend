@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import by.kovzov.uis.academic.dto.TagDto;
 import by.kovzov.uis.academic.dto.TagRequestDto;
 import by.kovzov.uis.academic.repository.api.TagRepository;
-import by.kovzov.uis.academic.repository.entity.Specialization;
 import by.kovzov.uis.academic.repository.entity.Tag;
 import by.kovzov.uis.academic.service.api.TagService;
 import by.kovzov.uis.academic.service.mapper.TagMapper;
@@ -101,6 +100,11 @@ public class TagServiceImpl implements TagService {
         if (dto.isHasChildren()) {
             throw new DependencyException("Parent with id = %s has children and con not be deleted".formatted(id));
         }
+
+        if (tagRepository.existsDisciplinesByTagId(id)) {
+            throw new DependencyException("Tag with id = %s cannot be deleted because it has dependent disciplines".formatted(id));
+        }
+
         tagRepository.deleteById(id);
     }
 

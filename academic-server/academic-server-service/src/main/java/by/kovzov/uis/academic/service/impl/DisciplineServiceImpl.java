@@ -8,6 +8,7 @@ import by.kovzov.uis.academic.repository.entity.Discipline;
 import by.kovzov.uis.academic.repository.specification.DisciplineSpecifications;
 import by.kovzov.uis.academic.service.api.DisciplineService;
 import by.kovzov.uis.academic.service.mapper.DisciplineMapper;
+import by.kovzov.uis.common.exception.DependencyException;
 import by.kovzov.uis.common.exception.NotFoundException;
 import by.kovzov.uis.common.validator.unique.UniqueValidationService;
 import lombok.AllArgsConstructor;
@@ -69,6 +70,11 @@ public class DisciplineServiceImpl implements DisciplineService {
     @Override
     public void deleteById(Long id) {
         verifyThatExistsById(id);
+
+        if (disciplineRepository.existsTagsByDisciplineId(id)) {
+            throw new DependencyException("Discipline with id = %s cannot be deleted because it has dependent tags".formatted(id));
+        }
+
         disciplineRepository.deleteById(id);
     }
 
