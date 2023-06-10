@@ -36,7 +36,7 @@ public class CurriculumController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('CURRICULUM_READ')")
+    @PreAuthorize("hasAuthority('CURRICULUM_READ') or hasAnyAuthority('CURRICULUM_UPDATE')")
     public CurriculumDto getById(@PathVariable Long id) {
         return curriculumService.getById(id);
     }

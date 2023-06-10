@@ -35,7 +35,7 @@ public class SpecializationController {
     private final SpecializationService specializationService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('SPECIALIZATION_READ')")
+    @PreAuthorize("hasAuthority('SPECIALIZATION_READ') or hasAnyAuthority('SPECIALIZATION_UPDATE')")
     public SpecializationDto getById(@PathVariable Long id) {
         return specializationService.getById(id);
     }
@@ -53,7 +53,7 @@ public class SpecializationController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAuthority('SPECIALIZATION_SEARCH') or hasAnyAuthority('SPECIALIZATION_CREATE', 'CURRICULUM_CREATE')")
+    @PreAuthorize("hasAuthority('SPECIALIZATION_SEARCH') or hasAnyAuthority('SPECIALIZATION_CREATE', 'SPECIALIZATION_UPDATE', 'CURRICULUM_CREATE', 'CURRICULUM_UPDATE')")
     public Page<SpecializationDto> search(@RequestParam String query,
                                           @PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
         return specializationService.search(query, pageable);

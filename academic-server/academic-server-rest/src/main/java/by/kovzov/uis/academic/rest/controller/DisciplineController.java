@@ -29,13 +29,13 @@ public class DisciplineController {
     private final DisciplineService disciplineService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('DISCIPLINE_READ')")
+    @PreAuthorize("hasAuthority('DISCIPLINE_READ') or hasAnyAuthority('DISCIPLINE_UPDATE')")
     public DisciplineDto getById(@PathVariable Long id) {
         return disciplineService.getById(id);
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAuthority('DISCIPLINE_SEARCH')")
+    @PreAuthorize("hasAuthority('DISCIPLINE_SEARCH') or hasAnyAuthority('CURRICULUM_UPDATE')")
     public Page<DisciplineDto> search(@RequestParam String query,
                                       @PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable ) {
         return disciplineService.search(query, pageable);

@@ -34,7 +34,7 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping("/search") // not join in just hasAnyAuthority due to permissions generation mechanism
-    @PreAuthorize("hasAuthority('TAG_SEARCH')  or hasAnyAuthority('TAG_CREATE', 'DISCIPLINE_CREATE')")
+    @PreAuthorize("hasAuthority('TAG_SEARCH')  or hasAnyAuthority('TAG_CREATE', 'TAG_UPDATE', 'DISCIPLINE_CREATE', 'DISCIPLINE_UPDATE')")
     public Page<TagDto> search(@RequestParam(defaultValue = "") String name,
                                @PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
         return tagService.search(name, pageable);
@@ -53,7 +53,7 @@ public class TagController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('TAG_READ')")
+    @PreAuthorize("hasAuthority('TAG_READ') or hasAnyAuthority('TAG_UPDATE')")
     public TagDto getById(@PathVariable Long id) {
         return tagService.getDtoById(id);
     }
