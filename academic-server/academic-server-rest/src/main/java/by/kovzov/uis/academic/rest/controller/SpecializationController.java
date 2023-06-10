@@ -53,7 +53,7 @@ public class SpecializationController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAuthority('SPECIALIZATION_SEARCH')")
+    @PreAuthorize("hasAuthority('SPECIALIZATION_SEARCH' or hasAnyAuthority('SPECIALIZATION_CREATE', 'CURRICULUM_CREATE'))")
     public Page<SpecializationDto> search(@RequestParam String query,
                                           @PageableDefault(sort = "name", direction = Direction.ASC) Pageable pageable) {
         return specializationService.search(query, pageable);
