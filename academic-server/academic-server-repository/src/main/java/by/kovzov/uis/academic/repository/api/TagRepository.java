@@ -31,4 +31,7 @@ public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificatio
     @Query("from Tag t where t.id = :id")
     @EntityGraph(attributePaths = "children")
     Optional<Tag> findByIdWithChildren(Long id);
+
+    @Query(value = "select count(*) > 0 from disciplines_tags dt where dt.tag_id = :tagId", nativeQuery = true)
+    boolean existsDisciplinesByTagId(Long tagId);
 }

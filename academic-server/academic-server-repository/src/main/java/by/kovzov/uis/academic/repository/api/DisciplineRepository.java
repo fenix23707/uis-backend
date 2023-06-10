@@ -15,4 +15,7 @@ public interface DisciplineRepository extends JpaRepository<Discipline, Long>, J
     @EntityGraph(attributePaths = "tags")
     @Query("from Discipline d where d.id in :ids")
     List<Discipline> findAllWithTagsByIds(Set<Long> ids, Sort sort);
+
+    @Query(value = "select count(*) > 0 from disciplines_tags dt where dt.discipline_id = :disciplineId", nativeQuery = true)
+    boolean existsTagsByDisciplineId(Long disciplineId);
 }
